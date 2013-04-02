@@ -179,11 +179,6 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 
 	}
 
-	public boolean pipeConnected()
-	{
-		return false;
-	}
-
 	public void pressCoins(boolean isDust)
 	{
 		if (!canPress())

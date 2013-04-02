@@ -49,7 +49,7 @@ public class MurderCoins
 	public static MurderCoins instance = new MurderCoins();
 	private GuiHandler guiHandler = new GuiHandler();
 
-	@SidedProxy(clientSide = "murder.MurderCoins.ClientProxyMurderCoins", serverSide = "murder.MurderCoins.CommonProxyMurderCoins")
+	@SidedProxy(clientSide = "murder.murdercoin.client.ClientProxyMurderCoins", serverSide = "murder.murdercoin.common.CommonProxyMurderCoins")
 	public static CommonProxyMurderCoins proxy;
 	public static CreativeTabs murderTab = new TabsMurderTab(CreativeTabs.getNextID(), "MurderCoins");
 
