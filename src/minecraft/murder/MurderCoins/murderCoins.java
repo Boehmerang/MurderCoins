@@ -18,10 +18,13 @@ import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import universalelectricity.prefab.network.ConnectionHandler;
+import universalelectricity.prefab.network.PacketManager;
 
 @Mod(modid="MurderCoins", name="Murder Coins", version="1.0.4a", dependencies="after:Mekanism;after:BasicComponents")
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" }, packetHandler = ClientPacketHandler.class),
-serverPacketHandlerSpec =@SidedPacketHandler(channels = {"MurderCoins" }, packetHandler = ServerPacketHandler.class))
+@NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+/*clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" }, packetHandler = ClientPacketHandler.class),
+serverPacketHandlerSpec =@SidedPacketHandler(channels = {"MurderCoins" }, packetHandler = ServerPacketHandler.class))*/
 
 public class murderCoins 
 {
@@ -49,6 +52,9 @@ public class murderCoins
 	 public static Item coinMold2;
 	 public static Block coinPress;
 	 public static Block goldForge;
+	 public static Block GoldStill;
+	 public static Block GoldFlowing;
+	 
 	 
 	 public static int generatorID = 3005;
 	 
@@ -86,7 +92,12 @@ public class murderCoins
 		 goldForge = new BlockGoldForge(255).setUnlocalizedName("goldForge");
 		 GameRegistry.registerBlock(goldForge);
 		 LanguageRegistry.addName(goldForge,"Gold Forge");
-		 
+		/* GoldStill = new BlockGoldStill(cc.GoldStillID).setUnlocalizedName("GoldStill");
+		 GameRegistry.registerBlock(GoldStill, "Gold_Still");
+		 LanguageRegistry.addName(GoldStill, "Gold Still");
+		 GoldFlowing = new BlockGoldFlowing(cc.GoldFlowingID).setUnlocalizedName("GoldFlowing");
+		 GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
+		 LanguageRegistry.addName(GoldFlowing, "Gold Flowing");*/
 		 //register itemBlocks
 		 
 		 //Item.itemsList[generatorID] = new ItemBlockGoldForge(generatorID-256, goldForge).setItemName("goldForge").setIconIndex(32);
