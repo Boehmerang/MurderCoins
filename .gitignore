@@ -8,12 +8,10 @@ CHANGELOG
 
 !/src/
 /src/minecraft/*
-!/src/minecraft/fluidmech/
-!/src/minecraft/hydraulic/
+!/src/minecraft/murder/
 !/resources/
 !/models/
 !info.txt
-!AssemblyLineStandard.xml
 !publish.bat
 !publish_obf.bat
 !include.bat
