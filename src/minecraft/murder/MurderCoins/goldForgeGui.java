@@ -30,13 +30,10 @@ public class goldForgeGui extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String capacityInfo = ElectricityDisplay.getDisplay(
-				this.tileentity.getJoules(), ElectricUnit.JOULES);
+		String capacityInfo = ElectricityDisplay.getDisplay(tileentity.getJoules(), ElectricUnit.JOULES);
 		String displayText = "";
 		fontRenderer.drawString("Gold Forge", 6, 6, 0xffffff);
-		fontRenderer.drawString(
-				StatCollector.translateToLocal("container.inventory"), 6,
-				ySize - 96, 0xffffff);
+		fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6,ySize - 96, 0xffffff);
 		if (this.tileentity.isDisabled()) {
 			displayText = "Disabled!";
 		} else if (this.tileentity.processTicks > 0) {
@@ -71,12 +68,11 @@ public class goldForgeGui extends GuiContainer {
 			this.drawTexturedModalRect(containerWidth + 77,
 					containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
-		if (this.tileentity.getJoules() > 0) {
-			int scale2 = (int) (((double) this.tileentity.getJoules() / (double) this.tileentity
-					.getMaxJoules()) * 48);
+		if (this.tileentity.getJoules() > 0) 
+		{
+			int scale2 = (int) (((double) this.tileentity.getJoules() / (double) this.tileentity.getMaxJoules()) * 48);
 			this.drawTexturedModalRect(containerWidth + 118,
-					containerHeight + 70, 176, 31, /* 48 - scale2 */
-					0 + scale2, 8);
+					containerHeight + 70, 176, 31, 0 + scale2, 8);
 		}
 	}
 }

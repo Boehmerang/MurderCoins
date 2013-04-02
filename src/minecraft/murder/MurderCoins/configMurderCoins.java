@@ -22,6 +22,8 @@ public class configMurderCoins
 	 public static int eDustID;
 	 public static int coinPressID;
 	 public static int itemGoldForgeID;
+	 public static int GoldStillID;
+	 public static int GoldFlowingID;
 	 
 	 
 	 public static void loadConfig(FMLPreInitializationEvent e){
@@ -59,6 +61,9 @@ public class configMurderCoins
 		 goldForgeID = config.getItem("goldForge", 313).getInt();
 		 itemGoldForgeID = config.getItem("goldForge", 314).getInt();
 		 eCoinID = config.getItem("eCoin", 315).getInt();
+		 GoldStillID = config.getItem("GoldStill", 1001).getInt();
+		 GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();
+		 
 		 config.save(); //Saves the file
 
 		 }

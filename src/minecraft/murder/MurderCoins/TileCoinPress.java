@@ -194,7 +194,7 @@ public class TileCoinPress extends TileEntityElectricityRunnable implements IInv
 		try
 		{
 			this.setJoules(dataStream.readDouble());
-			this.disabledTicks = dataStream.readInt();
+			//this.disabledTicks = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
