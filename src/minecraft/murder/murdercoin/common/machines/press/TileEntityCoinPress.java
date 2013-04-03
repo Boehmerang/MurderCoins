@@ -54,7 +54,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			this.wattsReceived += ElectricItemHelper.dechargeItem(this.inventory[0], this.getWattBuffer() - this.wattsReceived, getVoltage());
 
-			if (canPress() && this.wattsReceived >= joulesPerSmelt)
+			if (canPress() && this.wattsReceived >= WATTS_PER_TICK)
 			{
 				if (this.processTicks == 0)
 				{
@@ -414,6 +414,11 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public double getJoules()
 	{
 		return this.wattsReceived;
+	}
+	@Override
+	public double getWattBuffer()
+	{
+		return this.getRequest().getWatts() * 10;
 	}
 
 }

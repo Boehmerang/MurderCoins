@@ -71,7 +71,6 @@ public class MurderCoins
 	public static Block GoldStill;
 	public static Block GoldFlowing;
 
-	public static int generatorID = 3005;
 
 	configMurderCoins comfigLoader = new configMurderCoins();
 

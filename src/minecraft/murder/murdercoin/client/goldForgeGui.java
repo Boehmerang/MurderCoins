@@ -28,7 +28,7 @@ public class goldForgeGui extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String capacityInfo = ElectricityDisplay.getDisplay(tileentity.getJoules(), ElectricUnit.JOULES);
+		String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
 		String displayText = "";
 		fontRenderer.drawString("Gold Forge", 6, 6, 0xffffff);
 		fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6,ySize - 96, 0xffffff);

@@ -26,6 +26,13 @@ import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 
 import com.google.common.io.ByteArrayDataInput;
 
+/*
+ * 
+ * 		Old version of the GoldForge, kept for reference.
+ * 		Does not work right, but some functions will be
+ * 		transfered to new tile.
+ * 
+ */
 public class TileGoldForge2 extends TileEntityElectricityRunnable implements IInventory, IPacketReceiver, IElectricityStorage, IDisableable//, ISidedInventory
 {
 	public final double WATTS_PER_TICK = 500.0D;

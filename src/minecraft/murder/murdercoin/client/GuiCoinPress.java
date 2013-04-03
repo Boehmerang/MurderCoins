@@ -51,7 +51,7 @@ public class GuiCoinPress extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j)
     {
-    	String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity2.getJoules(), ElectricUnit.JOULES);
+    	String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity2.wattsReceived, ElectricUnit.JOULES);
 	    String displayText = "";
         fontRenderer.drawString("Coin Press", 6, 6, 0xffffff);
         //fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 , 0xffffff);

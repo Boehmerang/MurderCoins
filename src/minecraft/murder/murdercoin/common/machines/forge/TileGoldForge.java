@@ -1,8 +1,10 @@
 package murder.murdercoin.common.machines.forge;
 
+import murder.murdercoin.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,8 +36,8 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	private int playersUsing = 0;
 	public static double joulesPerSmelt = 50000.0D;
 	public static int meltingTicks = 500;
-	public static final double WATTS_PER_TICK = 500;
-	public static final int PROCESS_TIME_REQUIRED = 130;
+	//public static final double WATTS_PER_TICK = 500;
+	//public static final int PROCESS_TIME_REQUIRED = 130;
 
 	@Override
 	public void updateEntity()
@@ -45,7 +47,8 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 		 * Attempts to charge using batteries.
 		 */
 		//this.wattsReceived += ElectricItemHelper.dechargeItem(this.inventory[0], WATTS_PER_TICK, this.getVoltage());
-		this.setJoules(getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], getJoules() - this.joulesPerSmelt, getVoltage()));
+		//this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getJoules() - this.joulesPerSmelt, getVoltage()));
+		setJoules(getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], getMaxJoules() - getJoules(), getVoltage()));
 		/**
 		 * Attempts to smelt an item.
 		 */
@@ -53,7 +56,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 		{
 			if (this.canProcess())
 			{
-				if (this.getJoules() >= this.getMaxJoules())
+				if (getJoules() >= joulesPerSmelt) //(this.getJoules() >= this.getMaxJoules())
 				{
 					if (this.processTicks == 0)
 					{
@@ -68,9 +71,18 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 						 */
 						if (this.processTicks < 1)
 						{
-							this.smeltItem();
-							this.processTicks = 0;
-							this.setJoules(this.getJoules() - joulesPerSmelt);
+							if(this.inventory[1].isItemEqual(new ItemStack(Item.goldNugget)))
+							{
+								this.smeltItem(true);
+								this.processTicks = 0;
+								setJoules(getJoules() - joulesPerSmelt);
+							}
+							if(this.inventory[1].isItemEqual(new ItemStack(Item.ingotGold)))
+							{
+								this.smeltItem(false);
+								this.processTicks = 0;
+								setJoules(getJoules() - joulesPerSmelt);
+							}
 						}
 					}
 					else
@@ -91,10 +103,10 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 				this.processTicks = 0;
 			}
 
-			//if (this.ticks % 3 == 0 && this.playersUsing > 0)
-			//{
+			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-			//}
+			}
 		}
 	}
 
@@ -107,7 +119,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
+		return new ElectricityPack((getMaxJoules() - getJoules()) / getVoltage(), getVoltage());
 	}
 
 	@Override
@@ -125,12 +137,12 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			}
 		}
 
-		this.setJoules(this.getJoules() + electricityPack.getWatts());
+		setJoules(getJoules() + electricityPack.getWatts());
 	}
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.disabledTicks, this.joulesStored, this.getJoules());
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.disabledTicks, this.joulesStored, getJoules());
 	}
 
 	@Override
@@ -168,27 +180,27 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	 */
 	public boolean canProcess()
 	{
-		if (FurnaceRecipes.smelting().getSmeltingResult(this.inventory[1]) == null)
+		if(inventory[1] == null)
 		{
+			this.processTicks = 0;
 			return false;
 		}
-
-		if (this.inventory[1] == null)
+		if(inventory[2] == null)
 		{
+			this.processTicks = 0;
 			return false;
 		}
-
-		if (this.inventory[3] != null)
+	//	if(inventory[3].stackSize >= 64)
+	//	{
+	//		return false;
+	//	}
+		if (inventory[1].isItemEqual(new ItemStack(Item.goldNugget))) 
 		{
-			if (!this.inventory[3].isItemEqual(FurnaceRecipes.smelting().getSmeltingResult(this.inventory[1])))
-			{
-				return false;
-			}
-
-			if (this.inventory[3].stackSize + 1 > 64)
-			{
-				return false;
-			}
+			return true;
+		}
+		if(inventory[1].isItemEqual(new ItemStack(Item.ingotGold)))
+		{
+			return true;
 		}
 
 		return true;
@@ -198,29 +210,46 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace
 	 * result stack
 	 */
-	public void smeltItem()
+	public void smeltItem(boolean isNuggets)
 	{
-		if (this.canProcess())
 		{
-			ItemStack resultItemStack = FurnaceRecipes.smelting().getSmeltingResult(this.inventory[1]);
-
-			if (this.inventory[3] == null)
+			if(!canProcess())
 			{
-				this.inventory[3] = resultItemStack.copy();
+				return;
 			}
-			else if (this.inventory[3].isItemEqual(resultItemStack))
+			if(!isNuggets)
 			{
-				this.inventory[3].stackSize++;
+			ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+			if(this.inventory[3]==null)
+			{
+				this.inventory[3] = itemstack;
 			}
-
-			this.inventory[1].stackSize--;
-
-			if (this.inventory[1].stackSize <= 0)
+			else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemMeltedGoldBuket)))
 			{
-				this.inventory[1] = null;
+				this.inventory[3].stackSize += 1;
+			}
+			this.decrStackSize(1, 1);
+	    	this.decrStackSize(2, 1);
+	    	//setJoules(getJoules() - joulesPerSmelt);
+			}
+			else 
+			{
+				ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+				if(this.inventory[3]==null)
+				{
+					this.inventory[3] = itemstack;
+				}
+				else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemMeltedGoldBuket)))
+				{
+					this.inventory[3].stackSize += 1;
+				}
+				this.decrStackSize(1, 8);
+		    	this.decrStackSize(2, 1);
+		    	//setJoules(getJoules() - joulesPerSmelt);
 			}
 		}
 	}
+
 
 	/**
 	 * Reads a tile entity from NBT.
