@@ -1,6 +1,7 @@
 package murder.murdercoin.common;
 
 import murder.murdercoin.client.GuiHandler;
+import murder.murdercoin.common.items.ItemBrokenMold;
 import murder.murdercoin.common.items.ItemCoinMold;
 import murder.murdercoin.common.items.ItemDDust;
 import murder.murdercoin.common.items.ItemDclump;
@@ -17,10 +18,15 @@ import murder.murdercoin.common.machines.forge.BlockGoldForge;
 import murder.murdercoin.common.machines.forge.TileGoldForge;
 import murder.murdercoin.common.machines.press.BlockCoinPress;
 import murder.murdercoin.common.machines.press.TileEntityCoinPress;
+import murder.murdercoin.common.machines.still.BlockGoldStill;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.liquids.LiquidContainerData;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidDictionary;
+import net.minecraftforge.liquids.LiquidStack;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.Mod;
@@ -63,14 +69,14 @@ public class MurderCoins
 	public static Item dirtyEDust;
 	public static Item itemEmeraldDust;
 	public static Item itemCoinMold;
-	public static Item itemGoldNubBucket;
+	public static Item itemGoldNugBucket;
 	public static Item itemMeltedGoldBuket;
-	public static Item coinMold2;
+	public static Item brokenMold;
 	public static Block coinPress;
 	public static Block goldForge;
 	public static Block GoldStill;
 	public static Block GoldFlowing;
-
+	public static LiquidStack goldLiquid;
 
 	configMurderCoins comfigLoader = new configMurderCoins();
 
@@ -81,7 +87,7 @@ public class MurderCoins
 		// UniversalElectricity.register(this, 1, 2, 6, false);
 		configMurderCoins.loadConfig(e);
 		itemRegistration();
-
+		
 	}
 
 	@Init
@@ -94,7 +100,9 @@ public class MurderCoins
 		addMekanismRecipes();
 		networkRegisters();
 		tileEntityRegisters();
-
+		goldLiquid = LiquidDictionary.getOrCreateLiquid("MoltenGold", new LiquidStack(GoldStill.blockID, 1));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("MoltenGold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(Item.bucketMilk), new ItemStack(Item.bucketEmpty)));
+		
 	}
 
 	public void blockRegistration()
@@ -106,13 +114,12 @@ public class MurderCoins
 		goldForge = new BlockGoldForge(255).setUnlocalizedName("goldForge");
 		GameRegistry.registerBlock(goldForge);
 		LanguageRegistry.addName(goldForge, "Gold Forge");
-		/*
-		 * GoldStill = new BlockGoldStill(cc.GoldStillID).setUnlocalizedName("GoldStill");
-		 * GameRegistry.registerBlock(GoldStill, "Gold_Still"); LanguageRegistry.addName(GoldStill,
-		 * "Gold Still"); GoldFlowing = new
-		 * BlockGoldFlowing(cc.GoldFlowingID).setUnlocalizedName("GoldFlowing");
-		 * GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
-		 * LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
+		
+		  GoldStill = new BlockGoldStill(comfigLoader.GoldStillID).setUnlocalizedName("GoldStill");
+		  GameRegistry.registerBlock(GoldStill, "Gold_Still"); LanguageRegistry.addName(GoldStill,"Gold Still");
+		  /*GoldFlowing = new BlockGoldFlowing(cc.GoldFlowingID).setUnlocalizedName("GoldFlowing");
+		 GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
+		 LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
 		 */
 		// register itemBlocks
 
@@ -129,9 +136,10 @@ public class MurderCoins
 		LanguageRegistry.addName(itemDiamondCoin, "Diamond Coin(s)");
 		itemCoinMold = new ItemCoinMold(comfigLoader.coinMoldID).setUnlocalizedName("coinMold");
 		LanguageRegistry.addName(itemCoinMold, "Coin Mold");
-		coinMold2 = itemCoinMold;
-		itemGoldNubBucket = new ItemNugBucket(comfigLoader.nugBucketID).setUnlocalizedName("nugBucket");
-		LanguageRegistry.addName(itemGoldNubBucket, "Bucket of GoldNuggets");
+		brokenMold = new ItemBrokenMold(comfigLoader.brokenMoldID).setUnlocalizedName("brokenMold");
+		LanguageRegistry.addName(brokenMold, "Broken Coin Mold");
+		itemGoldNugBucket = new ItemNugBucket(comfigLoader.nugBucketID).setUnlocalizedName("nugBucket");
+		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
 		itemMeltedGoldBuket = new ItemMeltedBucket(comfigLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setContainerItem(Item.bucketEmpty).setContainerItem(itemCoinMold);
 		LanguageRegistry.addName(itemMeltedGoldBuket, "Bucket of melted Gold");
 		itemDiamondClump = new ItemDclump(comfigLoader.dClumpID).setUnlocalizedName("dClump");
@@ -152,8 +160,8 @@ public class MurderCoins
 
 	public void addCraftingRecipes()
 	{
-		GameRegistry.addSmelting(itemGoldNubBucket.itemID, new ItemStack(itemMeltedGoldBuket, 1), 0.1f);
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNubBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
+		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(itemMeltedGoldBuket, 1), 0.1f);
+		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldCoin, 4), itemCoinMold, itemMeltedGoldBuket);
 		GameRegistry.addRecipe(new ItemStack(itemDiamondCoin, 1), new Object[] { 
 			"XXX", "XYX", "XXX", 
@@ -163,7 +171,7 @@ public class MurderCoins
 			"YXY", "XXX", "YXY", 
 			'X', Item.ingotIron, 
 			'Y', Item.bucketEmpty });
-
+		
 	}
 
 	public void addMekanismRecipes()

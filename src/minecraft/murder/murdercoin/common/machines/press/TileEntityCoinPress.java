@@ -231,7 +231,24 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			this.wattsReceived -= this.joulesPerSmelt;
 		}
 	}
-
+	public void breakMolds()
+	{
+		ItemStack broken = new ItemStack(MurderCoins.brokenMold,1);
+		double moldbreak = Math.random() * 10;
+		if(moldbreak==5)
+		{
+			this.inventory[2] = null;
+			this.inventory[2] = broken;
+		}
+		if(moldbreak ==9)
+		{
+			this.inventory[3] = null;
+			this.inventory[3] = broken;
+		}
+		
+		
+		
+	}
 	/**
 	 * Reads a tile entity from NBT.
 	 */

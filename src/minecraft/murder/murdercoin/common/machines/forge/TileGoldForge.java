@@ -13,6 +13,10 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -22,12 +26,13 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import java.io.*;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class TileGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage
+public class TileGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
 	public int processTicks = 0;
 	public double joulesStored = 0.0D;
@@ -36,6 +41,10 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	private int playersUsing = 0;
 	public static double joulesPerSmelt = 50000.0D;
 	public static int meltingTicks = 500;
+	public int goldStored = 0;
+	public int maxGold = 8 * LiquidContainerRegistry.BUCKET_VOLUME;
+	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
+	
 	//public static final double WATTS_PER_TICK = 500;
 	//public static final int PROCESS_TIME_REQUIRED = 130;
 
@@ -44,19 +53,17 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	{
 		super.updateEntity();
 		/**
-		 * Attempts to charge using batteries.
+		 * Attempts to charge from battery in slot 1.
 		 */
-		//this.wattsReceived += ElectricItemHelper.dechargeItem(this.inventory[0], WATTS_PER_TICK, this.getVoltage());
-		//this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getJoules() - this.joulesPerSmelt, getVoltage()));
-		setJoules(getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], getMaxJoules() - getJoules(), getVoltage()));
+		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
 		/**
-		 * Attempts to smelt an item.
+		 * Trys to melt the gold.
 		 */
 		if (!this.worldObj.isRemote)
 		{
 			if (this.canProcess())
 			{
-				if (getJoules() >= joulesPerSmelt) //(this.getJoules() >= this.getMaxJoules())
+				if (this.getJoules() >= joulesPerSmelt)
 				{
 					if (this.processTicks == 0)
 					{
@@ -75,13 +82,13 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 							{
 								this.smeltItem(true);
 								this.processTicks = 0;
-								setJoules(getJoules() - joulesPerSmelt);
+								this.setJoules(getJoules() - joulesPerSmelt);
 							}
 							if(this.inventory[1].isItemEqual(new ItemStack(Item.ingotGold)))
 							{
 								this.smeltItem(false);
 								this.processTicks = 0;
-								setJoules(getJoules() - joulesPerSmelt);
+								this.setJoules(getJoules() - joulesPerSmelt);
 							}
 						}
 					}
@@ -105,6 +112,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
+				//System.out.println("Debug");
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
@@ -119,7 +127,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((getMaxJoules() - getJoules()) / getVoltage(), getVoltage());
+		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 	}
 
 	@Override
@@ -137,12 +145,12 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			}
 		}
 
-		setJoules(getJoules() + electricityPack.getWatts());
+		this.setJoules(this.getJoules() + electricityPack.getWatts());
 	}
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.disabledTicks, this.joulesStored, getJoules());
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules());
 	}
 
 	@Override
@@ -151,7 +159,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 		try
 		{
 			this.processTicks = dataStream.readInt();
-			this.disabledTicks = dataStream.readInt();
+			this.setJoules(dataStream.readDouble());
 		}
 		catch (Exception e)
 		{
@@ -433,6 +441,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public void setJoules(double joules) 
 	{
+		
 		this.joulesStored = Math.max(Math.min(joules, getMaxJoules()), 0);
 	}
 
@@ -440,5 +449,41 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	public double getMaxJoules()
 	{
 		return this.maxJoules;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank[] getTanks(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -68,7 +68,7 @@ public class goldForgeGui extends GuiContainer {
 		}
 		if (this.tileentity.getJoules() > 0) 
 		{
-			int scale2 = (int) (((double) this.tileentity.getJoules() / (double) this.tileentity.getMaxJoules()) * 48);
+			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 48);
 			this.drawTexturedModalRect(containerWidth + 118,
 					containerHeight + 70, 176, 31, 0 + scale2, 8);
 		}

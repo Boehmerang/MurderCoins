@@ -10,6 +10,7 @@ public class configMurderCoins
 	public static int dCoinID;
 	public static int eCoinID;
 	public static int coinMoldID;
+	public static int brokenMoldID;
 	public static int nugBucketID;
 	public static int meltedBucketID;
 	public static int goldForgeID;
@@ -45,7 +46,7 @@ public class configMurderCoins
 		coinMoldID = config.getItem("coinMold", 202).getInt(); // This gets the value
 		// Property nugBucket; //This is a property, see below
 		// nugBucket = config.getItem("nugBucket", 3003); //This gets the property
-		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment
+		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment		
 		nugBucketID = config.getItem("nugBucket", 203).getInt(); // This gets the value
 		// Property meltedBucket;
 		// meltedBucket = config.getItem("meltedBucket", 3004); //This gets the property
@@ -57,6 +58,7 @@ public class configMurderCoins
 		dirtyEDustID = config.getItem("dirtyEDust", 209).getInt();
 		dDustID = config.getItem("dDust", 210).getInt();
 		eDustID = config.getItem("eDust", 211).getInt();
+		brokenMoldID = config.getItem("brokenMold", 212).getInt();
 		coinPressID = config.getItem("coinPress", 312).getInt();
 		goldForgeID = config.getItem("goldForge", 313).getInt();
 		itemGoldForgeID = config.getItem("goldForge", 314).getInt();
