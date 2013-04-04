@@ -1,20 +1,27 @@
 package murder.murdercoin.common.machines.press;
 
-import java.util.EnumSet;
-
 import murder.murdercoin.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
+import net.minecraftforge.liquids.ILiquidTank;
+import net.minecraftforge.liquids.ITankContainer;
+import net.minecraftforge.liquids.LiquidContainerRegistry;
+import net.minecraftforge.liquids.LiquidStack;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -22,40 +29,38 @@ import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, IPacketReceiver
+import cpw.mods.fml.common.registry.LanguageRegistry;
+
+public class TileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
-	public static final double WATTS_PER_TICK = 500.0D;
-	public static final double joulesPerSmelt = 50000.0D;
-	public double prevJoules = 0;
-
-	private ItemStack[] inventory = new ItemStack[8];
-
-	public static final int meltingTicks = 500;
-	private int playersUsing = 0;
-	private int recipeTicks;
 	public int processTicks = 0;
-
-	@Override
-	public void initiate()
-	{
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, MurderCoins.goldForge.blockID);
-	}
+	public double joulesStored = 0.0D;
+	public static double maxJoules = 1500000.0D;
+	private ItemStack[] inventory = new ItemStack[8];
+	private int playersUsing = 0;
+	public static double joulesPerSmelt = 50000.0D;
+	public static int meltingTicks = 500;
+	public int goldStored = 0;
+	public int maxGold = 8 * LiquidContainerRegistry.BUCKET_VOLUME;
+	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
+	
 
 	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
-
+		/**
+		 * Attempts to charge from battery in slot 1.
+		 */
+		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
+		/**
+		 * Trys to press the coins, if it can, it press the coins, and then checks to see if the molds break.
+		 */
 		if (!this.worldObj.isRemote)
 		{
-			this.prevJoules = this.wattsReceived;
-			/**
-			 * Decharge electric item.
-			 */
-			this.wattsReceived += ElectricItemHelper.dechargeItem(this.inventory[0], this.getWattBuffer() - this.wattsReceived, getVoltage());
-
-			if (canPress() && this.wattsReceived >= WATTS_PER_TICK)
+			if (this.canProcess() && this.getJoules() >= this.joulesPerSmelt)
 			{
+			
 				if (this.processTicks == 0)
 				{
 					this.processTicks = meltingTicks;
@@ -66,14 +71,16 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 
 					if (this.processTicks < 1)
 					{
-						if (this.inventory[5].getItem() == MurderCoins.itemDiamondDust || this.inventory[5].getItem() == MurderCoins.itemEmeraldDust)
+						if (this.inventory[5] == null)
 						{
-							pressCoins(true);
+							pressCoins(false);
+							breakMolds();
 							this.processTicks = 0;
 						}
 						else
 						{
-							pressCoins(false);
+							pressCoins(true);
+							breakMolds();
 							this.processTicks = 0;
 						}
 					}
@@ -91,38 +98,50 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 			}
 		}
+	}
 
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		return direction == ForgeDirection.getOrientation(3);
 	}
 
 	@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((this.wattsReceived - this.WATTS_PER_TICK / this.getVoltage()), this.getVoltage());
+		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 	}
 
 	@Override
-	protected EnumSet<ForgeDirection> getConsumingSides()
+	public void onReceive(ElectricityPack electricityPack)
 	{
-		return ElectricityNetworkHelper.getDirections(this);
-	}
+		/**
+		 * Creates an explosion if the voltage is too high.
+		 */
+		if (UniversalElectricity.isVoltageSensitive)
+		{
+			if (electricityPack.voltage > this.getVoltage())
+			{
+				this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5f, true);
+				return;
+			}
+		}
 
+		this.setJoules(this.getJoules() + electricityPack.getWatts());
+	}
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.wattsReceived, this.processTicks, this.disabledTicks);
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules());
 	}
 
 	@Override
-	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
 		{
-			if (worldObj.isRemote)
-			{
-				this.wattsReceived = dataStream.readDouble();
-				this.processTicks = dataStream.readInt();
-				this.disabledTicks = dataStream.readInt();
-			}
+			this.processTicks = dataStream.readInt();
+			this.setJoules(dataStream.readDouble());
 		}
 		catch (Exception e)
 		{
@@ -130,17 +149,26 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 	}
 
-	/*
-	 * public boolean canPress() { if (inventory[3]==null) { return false; } if(inventory[4] ==
-	 * null) { return false; } if (inventory[5].isItemEqual(new ItemStack(murderCoins.dDust))) { if
-	 * (inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))) { return true; } //if
-	 * (pipeConnected()) // { // return true; // } // return false; } else if
-	 * (inventory[5].isItemEqual(new ItemStack(murderCoins.eDust))) { if
-	 * (inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))){
-	 * 
-	 * return true; } return false; } else { return false; } }
+	@Override
+	public void openChest()
+	{
+		if (!this.worldObj.isRemote)
+		{
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
+		}
+		this.playersUsing++;
+	}
+
+	@Override
+	public void closeChest()
+	{
+		this.playersUsing--;
+	}
+
+	/**
+	 * @return Is this machine able to process its specific task?
 	 */
-	public boolean canPress()
+	public boolean canProcess()
 	{
 		if (this.inventory[3] == null)
 		{
@@ -149,22 +177,19 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		if (this.inventory[4] == null)
 		{
-			// if(pipeConnected())
-			// {
-			// return true;
-			// }
 			this.processTicks = 0;
 			return false;
 		}
-		if (this.inventory[5] == null)
-		{
-			/*
-			 * if(this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))) { return
-			 * true; } /*if (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket)))
-			 * { return true; } /*if (pipeConnected()) { return true; }
-			 */
-			return false;
-		}
+		/*if (this.inventory[5] == null)
+		 *{
+		 *
+		 * if(this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))) { return
+		 * true; } /*if (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket)))
+		 * { return true; } /*if (pipeConnected()) { return true; }
+		 *
+		 *	return false;
+		 *}
+		 */
 		if (this.inventory[6] == null)
 		{
 			return false;
@@ -179,9 +204,13 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 
 	}
 
+	/**
+	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace
+	 * result stack
+	 */
 	public void pressCoins(boolean isDust)
 	{
-		if (!canPress())
+		if (!canProcess())
 		{
 			return;
 		}
@@ -198,7 +227,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			}
 			// this.decrStackSize(5, 1); no dust to downgrade.
 			this.decrStackSize(6, 1);
-			this.wattsReceived -= this.joulesPerSmelt;
+			this.getEmptyBucket();
+			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
 		{
@@ -213,7 +243,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			}
 			this.decrStackSize(5, 1);
 			this.decrStackSize(6, 1);
-			this.wattsReceived -= this.joulesPerSmelt;
+			this.getEmptyBucket();
+			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
 		{
@@ -228,7 +259,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			}
 			this.decrStackSize(5, 1);
 			this.decrStackSize(6, 1);
-			this.wattsReceived -= this.joulesPerSmelt;
+			this.getEmptyBucket();
+			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 	}
 	public void breakMolds()
@@ -237,57 +269,67 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		double moldbreak = Math.random() * 10;
 		if(moldbreak==5)
 		{
-			this.inventory[2] = null;
-			this.inventory[2] = broken;
+			this.inventory[3] = null;
+			this.inventory[3] = broken;
 		}
 		if(moldbreak ==9)
 		{
-			this.inventory[3] = null;
-			this.inventory[3] = broken;
+			this.inventory[4] = null;
+			this.inventory[4] = broken;
 		}
 		
 		
 		
 	}
+	private void getEmptyBucket()  //returns an empty bucket in slot 7.
+	{
+		if(inventory[2] == null)
+		{
+			inventory[2] = new ItemStack(Item.bucketEmpty);
+		}
+		else if (inventory[2] != null)
+		{
+			inventory[2].stackSize += 1;
+		}
+		
+	}
+
 	/**
 	 * Reads a tile entity from NBT.
 	 */
-
 	@Override
-	public void readFromNBT(NBTTagCompound nbt)
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		super.readFromNBT(nbt);
+		super.readFromNBT(par1NBTTagCompound);
+		this.processTicks = par1NBTTagCompound.getInteger("smeltingTicks");
+		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
+		this.inventory = new ItemStack[this.getSizeInventory()];
+		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 
-		this.processTicks = nbt.getInteger("processTicks");
-		this.wattsReceived = nbt.getDouble("joulesStored");
-
-		/* INV LOADER */
-		NBTTagList var2 = nbt.getTagList("Items");
-		this.inventory = new ItemStack[getSizeInventory()];
-		for (int var3 = 0; var3 < var2.tagCount(); var3++)
+		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
 			NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
 			byte var5 = var4.getByte("Slot");
 
-			if ((var5 >= 0) && (var5 < this.inventory.length))
+			if (var5 >= 0 && var5 < this.inventory.length)
+			{
 				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
+			}
 		}
 	}
 
 	/**
 	 * Writes a tile entity to NBT.
 	 */
-
 	@Override
-	public void writeToNBT(NBTTagCompound nbt)
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		super.writeToNBT(nbt);
-		nbt.setInteger("processTicks", this.processTicks);
-		nbt.setDouble("joulesStored", this.wattsReceived);
-
-		/* INV WRITER */
+		super.writeToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setInteger("smeltingTicks", this.processTicks);
+		par1NBTTagCompound.setDouble("joules", this.joulesStored);
 		NBTTagList var2 = new NBTTagList();
-		for (int var3 = 0; var3 < this.inventory.length; var3++)
+
+		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{
 			if (this.inventory[var3] != null)
 			{
@@ -297,7 +339,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				var2.appendTag(var4);
 			}
 		}
-		nbt.setTag("Items", var2);
+
+		par1NBTTagCompound.setTag("Items", var2);
 	}
 
 	@Override
@@ -372,7 +415,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public String getInvName()
 	{
-		return "Coin Press";
+		return LanguageRegistry.instance().getStringLocalization("goldForge");
 	}
 
 	@Override
@@ -388,54 +431,94 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	@Override
-	public void openChest()
-	{
-		if (!this.worldObj.isRemote)
-		{
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
-		}
-		this.playersUsing++;
-	}
-
-	@Override
-	public void closeChest()
-	{
-		this.playersUsing--;
-	}
-
-	public int getProcessTicks()
-	{
-		// TODO Auto-generated method stub
-
-		return processTicks;
-	}
-
-	@Override
-	public boolean canConnect(ForgeDirection direction)
+	public boolean isInvNameLocalized()
 	{
 		return true;
 	}
 
+	/**
+	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
+	 * the given slot.
+	 */
 	@Override
-	public boolean isInvNameLocalized()
+	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return false;
+		return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+	}
+
+	/**
+	 * Get the size of the side inventory.
+	 */
+	@Override
+	public int[] getSizeInventorySide(int side)
+	{
+		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack)
+	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
 	{
-		return false;
+		return this.isStackValidForSlot(slotID, par2ItemStack);
 	}
 
-	public double getJoules()
-	{
-		return this.wattsReceived;
-	}
 	@Override
-	public double getWattBuffer()
+	public boolean func_102008_b(int slotID, ItemStack par2ItemStack, int par3)
 	{
-		return this.getRequest().getWatts() * 10;
+		return slotID == 3;
 	}
 
+	@Override
+	public double getJoules() 
+	{
+		return this.joulesStored;
+	}
+
+	@Override
+	public void setJoules(double joules) 
+	{
+		
+		this.joulesStored = Math.max(Math.min(joules, getMaxJoules()), 0);
+	}
+
+	@Override
+	public double getMaxJoules()
+	{
+		return this.maxJoules;
+	}
+
+	@Override
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank[] getTanks(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

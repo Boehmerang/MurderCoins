@@ -21,6 +21,7 @@ public class configMurderCoins
 	public static int dDustID;
 	public static int eDustID;
 	public static int coinPressID;
+	public static int manPressID;
 	public static int itemGoldForgeID;
 	public static int GoldStillID;
 	public static int GoldFlowingID;
@@ -40,18 +41,19 @@ public class configMurderCoins
 		// dCoin = config.getItem("dCoin", 201); //This gets the property
 		// dCoin.comment = "Diamond Coin ID"; //This adds a comment
 		dCoinID = config.getItem("dCoin", 201).getInt(); // This gets the value
+		eCoinID = config.getItem("eCoin", 202).getInt();
 		// Property coinMold; //This is a property, see below
 		// coinMold = config.getItem("coinMold", 202); //This gets the property
 		// coinMold.comment = "Coin Mold Id"; //This adds a comment
-		coinMoldID = config.getItem("coinMold", 202).getInt(); // This gets the value
+		coinMoldID = config.getItem("coinMold", 203).getInt(); // This gets the value
 		// Property nugBucket; //This is a property, see below
 		// nugBucket = config.getItem("nugBucket", 3003); //This gets the property
 		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment		
-		nugBucketID = config.getItem("nugBucket", 203).getInt(); // This gets the value
+		nugBucketID = config.getItem("nugBucket", 204).getInt(); // This gets the value
 		// Property meltedBucket;
 		// meltedBucket = config.getItem("meltedBucket", 3004); //This gets the property
 		// meltedBucket.comment = "Bucket of Gold ID"; //This adds a comment
-		meltedBucketID = config.getItem("meltedBucket", 204).getInt(); // This gets the value
+		meltedBucketID = config.getItem("meltedBucket", 205).getInt(); // This gets the value
 		dClumpID = config.getItem("dClump", 206).getInt();
 		eClumpID = config.getItem("eClump", 207).getInt();
 		dirtyDDustID = config.getItem("dirtyDDust", 208).getInt();
@@ -62,7 +64,8 @@ public class configMurderCoins
 		coinPressID = config.getItem("coinPress", 312).getInt();
 		goldForgeID = config.getItem("goldForge", 313).getInt();
 		itemGoldForgeID = config.getItem("goldForge", 314).getInt();
-		eCoinID = config.getItem("eCoin", 315).getInt();
+		manPressID = config.getItem("manPress", 315).getInt();
+		
 		GoldStillID = config.getItem("GoldStill", 1001).getInt();
 		GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();
 

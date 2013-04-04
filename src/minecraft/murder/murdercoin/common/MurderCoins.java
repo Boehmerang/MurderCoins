@@ -17,16 +17,20 @@ import murder.murdercoin.common.items.ItemgCoin;
 import murder.murdercoin.common.machines.forge.BlockGoldForge;
 import murder.murdercoin.common.machines.forge.TileGoldForge;
 import murder.murdercoin.common.machines.press.BlockCoinPress;
+import murder.murdercoin.common.machines.press.BlockManPress;
 import murder.murdercoin.common.machines.press.TileEntityCoinPress;
+import murder.murdercoin.common.machines.press.TileEntityManPress;
 import murder.murdercoin.common.machines.still.BlockGoldStill;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.Mod;
@@ -73,6 +77,7 @@ public class MurderCoins
 	public static Item itemMeltedGoldBuket;
 	public static Item brokenMold;
 	public static Block coinPress;
+	public static Block manualCoinPress;
 	public static Block goldForge;
 	public static Block GoldStill;
 	public static Block GoldFlowing;
@@ -108,15 +113,19 @@ public class MurderCoins
 	public void blockRegistration()
 	{
 
-		coinPress = new BlockCoinPress(254).setUnlocalizedName("coinPress");
+		coinPress = new BlockCoinPress(comfigLoader.coinPressID).setUnlocalizedName("coinPress");
 		GameRegistry.registerBlock(coinPress);
 		LanguageRegistry.addName(coinPress, "Coin Press");
-		goldForge = new BlockGoldForge(255).setUnlocalizedName("goldForge");
+		goldForge = new BlockGoldForge(comfigLoader.goldForgeID).setUnlocalizedName("goldForge");
 		GameRegistry.registerBlock(goldForge);
 		LanguageRegistry.addName(goldForge, "Gold Forge");
+		manualCoinPress = new BlockManPress(comfigLoader.manPressID).setUnlocalizedName("manPress");
+		GameRegistry.registerBlock(manualCoinPress);
+		LanguageRegistry.addName(manualCoinPress, "Manual Coin Press");
 		
 		  GoldStill = new BlockGoldStill(comfigLoader.GoldStillID).setUnlocalizedName("GoldStill");
-		  GameRegistry.registerBlock(GoldStill, "Gold_Still"); LanguageRegistry.addName(GoldStill,"Gold Still");
+		  GameRegistry.registerBlock(GoldStill, "Gold_Still"); 
+		  LanguageRegistry.addName(GoldStill,"Gold Still");
 		  /*GoldFlowing = new BlockGoldFlowing(cc.GoldFlowingID).setUnlocalizedName("GoldFlowing");
 		 GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
 		 LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
@@ -163,6 +172,7 @@ public class MurderCoins
 		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(itemMeltedGoldBuket, 1), 0.1f);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldCoin, 4), itemCoinMold, itemMeltedGoldBuket);
+		GameRegistry.addShapelessRecipe(new ItemStack(itemCoinMold, 1), brokenMold, Item.ingotIron);
 		GameRegistry.addRecipe(new ItemStack(itemDiamondCoin, 1), new Object[] { 
 			"XXX", "XYX", "XXX", 
 			'X', itemGoldCoin, 
@@ -171,7 +181,18 @@ public class MurderCoins
 			"YXY", "XXX", "YXY", 
 			'X', Item.ingotIron, 
 			'Y', Item.bucketEmpty });
-		
+        CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.coinPress, 1), new Object[] {
+            "XTX", "OVO", "XTX",
+            'T', new ItemStack(Block.pistonBase, 1),
+            'X', "plateSteel",
+            'O', "basicCircuit",
+            'V', "motor" }));
+        CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.goldForge, 1), new Object[] {
+            "XTX", "OVO", "XTX",
+            'V', new ItemStack(Block.furnaceIdle, 1),
+            'X', "plateSteel",
+            'O', "basicCircuit",
+            'T', new ItemStack(Item.redstone,1) }));
 	}
 
 	public void addMekanismRecipes()
@@ -194,5 +215,6 @@ public class MurderCoins
 	{
 		GameRegistry.registerTileEntity(TileGoldForge.class, "TileGoldForge");
 		GameRegistry.registerTileEntity(TileEntityCoinPress.class, "TileCoinPress");
+		GameRegistry.registerTileEntity(TileEntityManPress.class, "TileManPress");
 	}
 }

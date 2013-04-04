@@ -1,14 +1,18 @@
 package murder.murdercoin.common.machines.press;
 
 import murder.murdercoin.common.MurderCoins;
+import murder.murdercoin.common.items.ItemCoinMold;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.prefab.SlotSpecific;
+import net.minecraft.item.ItemBucket;
+
 
 public class ContainerCoinPress extends Container
 {
@@ -20,13 +24,14 @@ public class ContainerCoinPress extends Container
 
 		// battery Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
-		// upgrade slots
+		// upgrade slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 154, 26, IItemElectric.class));
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 46, IItemElectric.class));
+		//bucket return slot
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 46, ItemBucket.class));
 
 		// CoinMoldslots
-		this.addSlotToContainer(new Slot(tile_entity, 3, 28, 10));
-		this.addSlotToContainer(new Slot(tile_entity, 4, 28, 38));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 3, 28, 10, ItemCoinMold.class));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 28, 38, ItemCoinMold.class));
 
 		// Dust Slot
 		this.addSlotToContainer(new Slot(tile_entity, 5, 49, 10));

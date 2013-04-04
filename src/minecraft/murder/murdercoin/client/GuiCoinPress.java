@@ -16,14 +16,14 @@ public class GuiCoinPress extends GuiContainer
 
 	private int containerWidth;
 	private int containerHeight;
-	private TileEntityCoinPress tileentity2;
+	private TileEntityCoinPress tileentity;
 	
     public GuiCoinPress(InventoryPlayer player_inventory, TileEntityCoinPress tile_entity)
     {
         super(new ContainerCoinPress(tile_entity, player_inventory));
-        this.tileentity2 = tile_entity;
+        this.tileentity = tile_entity;
     }
-  /*  @Override
+
     protected void drawGuiContainerForegroundLayer(int i, int j)
     {
     	String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
@@ -43,34 +43,9 @@ public class GuiCoinPress extends GuiContainer
 			displayText = "Idle";
 		}
 
-		this.fontRenderer.drawString("Status:  " + displayText, 82, 45, 0xffffff);
-		//this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tile_entity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 0xffffff);
-		this.fontRenderer.drawString(capacityInfo, 82, 56, 0xffffff);
-		
-	}*/
-    @Override
-    protected void drawGuiContainerForegroundLayer(int i, int j)
-    {
-    	String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity2.wattsReceived, ElectricUnit.JOULES);
-	    String displayText = "";
-        fontRenderer.drawString("Coin Press", 6, 6, 0xffffff);
-        //fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 , 0xffffff);
-        if (this.tileentity2.isDisabled())
-		{
-			displayText = "Disabled!";
-		}
-		else if (this.tileentity2.processTicks > 0)
-		{
-			displayText = "Working";
-		}
-		else
-		{
-			displayText = "Idle";
-		}
-
-		this.fontRenderer.drawString("Status:  " + displayText, 82, 45, 0xffffff);
+		this.fontRenderer.drawString("Status:  " + displayText, 71, 45, 0xffffff);
 		//this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 0xffffff);
-		this.fontRenderer.drawString(capacityInfo, 82, 56, 0xffffff);
+		this.fontRenderer.drawString(capacityInfo, /*82, 56,*/30,68, 0xffffff);
 		
 	}
 	@Override
@@ -83,10 +58,15 @@ public class GuiCoinPress extends GuiContainer
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileentity2.processTicks > 0)
+		if (this.tileentity.processTicks > 0)
 		{
-			int scale = (int) (((double) this.tileentity2.processTicks / (double) this.tileentity2.meltingTicks) * 23);
+			int scale = (int) (((double) this.tileentity.processTicks / (double) this.tileentity.meltingTicks) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
+		}
+		if (this.tileentity.getJoules() > 0) 
+		{
+			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
+			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
 		}
 	}
 }
