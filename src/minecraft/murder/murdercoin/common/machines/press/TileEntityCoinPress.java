@@ -1,6 +1,10 @@
 package murder.murdercoin.common.machines.press;
 
 import murder.murdercoin.common.MurderCoins;
+import murder.murdercoin.common.items.ItemCoinMold;
+import murder.murdercoin.common.items.ItemDDust;
+import murder.murdercoin.common.items.ItemEDust;
+import murder.murdercoin.common.items.ItemMeltedBucket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -180,6 +184,22 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			this.processTicks = 0;
 			return false;
 		}
+		if (this.inventory[3] != null)
+		{
+			if (this.inventory[3].getItem() != MurderCoins.itemCoinMold)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+		}
+		if (this.inventory[4] != null)
+		{
+			if (this.inventory[4].getItem() != MurderCoins.itemCoinMold)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+		}
 		/*if (this.inventory[5] == null)
 		 *{
 		 *
@@ -192,7 +212,62 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		 */
 		if (this.inventory[6] == null)
 		{
+			this.processTicks = 0;
 			return false;
+		}
+		if(inventory[2]!=null)
+		{
+			if(inventory[2].stackSize >= 16)
+			{
+				inventory[2].stackSize = 16;
+				this.processTicks = 0;
+				return false;
+			}
+		}
+		if (inventory[7] != null)
+		{
+			if(inventory[7].stackSize >= 64)
+			{
+				inventory[7].stackSize = 64;
+				this.processTicks = 0;
+				return false;
+			}
+		}
+		if(inventory[5]==null)
+		{
+			if(inventory[7] != null)
+			{
+				if(inventory[7].getItem() != MurderCoins.itemGoldCoin)
+				{
+				this.processTicks = 0;
+				return false;
+				}
+			}
+		}
+		if (inventory[5]!=null)
+		{
+			if(inventory[5].getItem() == MurderCoins.itemDiamondDust)
+			{
+				if(inventory[7] != null)
+				{
+					if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
+					{
+					this.processTicks = 0;
+					return false;
+					}
+				}
+			}
+			if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
+			{
+				if(inventory[7] != null)
+				{
+					if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+					{
+					this.processTicks = 0;
+					return false;
+					}
+				}
+			}
 		}
 		/*
 		 * else if (this.inventory[5].isItemEqual(new ItemStack(murderCoins.eDust))) { if
@@ -443,7 +518,41 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+		//return slotID == 3 ? itemStack.getItem() instanceof ItemCoinMold :(slotID == 4 ? itemStack.getItem() instanceof ItemCoinMold: (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID==6 ? itemStack.getItem() instanceof ItemMeltedBucket: false)));
+		if(slotID==0)
+		{
+			return itemStack.getItem() instanceof IItemElectric;
+		}
+		else if(slotID==1)
+		{
+			return itemStack.getItem() instanceof IItemElectric;
+		}
+		else if(slotID==2)
+		{
+			return false;
+		}
+		else if(slotID==3)
+		{
+			if (itemStack.getItem() == MurderCoins.itemCoinMold) return true;
+			return false;
+		}
+		else if(slotID==4)
+		{
+			return itemStack.getItem() instanceof ItemCoinMold;
+		}
+		else if(slotID==6)
+		{
+			return itemStack.getItem() instanceof ItemMeltedBucket;
+		}
+		
+		else if(slotID==7)
+		{
+			return false;
+		}
+		else
+		{
+		return true;
+		}
 	}
 
 	/**

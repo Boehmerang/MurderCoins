@@ -2,7 +2,11 @@ package murder.murdercoin.common.machines.press;
 
 import java.util.Random;
 
+import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
+
 import murder.murdercoin.common.MurderCoins;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -15,8 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import universalelectricity.prefab.block.BlockAdvanced;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
 
 public class BlockManPress extends BlockAdvanced
 {
@@ -64,16 +66,14 @@ public class BlockManPress extends BlockAdvanced
 		}
 	}
 
-	/**
-	 * Called when the block is right clicked by the player
-	 */
 	@Override
-	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 		if (!par1World.isRemote)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 3, par1World, x, y, z);
+			//System.out.println("debug");
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y, z);
 			return true;
 		}
 		return true;
@@ -105,7 +105,7 @@ public class BlockManPress extends BlockAdvanced
 				break;
 		}
 
-		((TileEntity) par1World.getBlockTileEntity(x, y, z)).updateEntity();
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 

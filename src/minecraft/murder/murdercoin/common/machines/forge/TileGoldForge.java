@@ -78,13 +78,13 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 						 */
 						if (this.processTicks < 1)
 						{
-							if(this.inventory[1].isItemEqual(new ItemStack(Item.goldNugget)))
+							if(this.inventory[1].getItem() == Item.goldNugget)
 							{
 								this.smeltItem(true);
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 							}
-							if(this.inventory[1].isItemEqual(new ItemStack(Item.ingotGold)))
+							else
 							{
 								this.smeltItem(false);
 								this.processTicks = 0;
@@ -198,10 +198,14 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			this.processTicks = 0;
 			return false;
 		}
-	//	if(inventory[3].stackSize >= 64)
-	//	{
-	//		return false;
-	//	}
+		if(inventory[3] != null)
+		{
+			if(inventory[3].stackSize >= 16)
+			{
+				inventory[3].stackSize = 16;
+				return false;
+			}
+		}
 		if (inventory[1].isItemEqual(new ItemStack(Item.goldNugget))) 
 		{
 			return true;

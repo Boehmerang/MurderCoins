@@ -26,6 +26,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -105,8 +107,42 @@ public class MurderCoins
 		addMekanismRecipes();
 		networkRegisters();
 		tileEntityRegisters();
+		chestHooks();
 		goldLiquid = LiquidDictionary.getOrCreateLiquid("MoltenGold", new LiquidStack(GoldStill.blockID, 1));
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("MoltenGold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(Item.bucketMilk), new ItemStack(Item.bucketEmpty)));
+		
+	}
+
+	private void chestHooks() 
+	{
+		// Adds Gold to the Mine-shaft Corridor chest spawns.
+		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Desert pyramid chest spawns.
+		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Jungle pyramid chest spawns.
+		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Stronghold Corridor chest spawns.
+		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Stronghold Library chest spawns.
+		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Stronghold Crossing chest spawns.
+		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		// Adds Gold to the Dungeon chest spawns.
+		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		
 	}
 
@@ -143,13 +179,13 @@ public class MurderCoins
 		LanguageRegistry.addName(itemGoldCoin, "Gold Coin(s)");
 		itemDiamondCoin = new ItemdCoin(comfigLoader.dCoinID).setUnlocalizedName("dCoin");
 		LanguageRegistry.addName(itemDiamondCoin, "Diamond Coin(s)");
-		itemCoinMold = new ItemCoinMold(comfigLoader.coinMoldID).setUnlocalizedName("coinMold");
+		itemCoinMold = new ItemCoinMold(comfigLoader.coinMoldID).setUnlocalizedName("coinMold").setMaxStackSize(1);
 		LanguageRegistry.addName(itemCoinMold, "Coin Mold");
-		brokenMold = new ItemBrokenMold(comfigLoader.brokenMoldID).setUnlocalizedName("brokenMold");
+		brokenMold = new ItemBrokenMold(comfigLoader.brokenMoldID).setUnlocalizedName("brokenMold").setMaxStackSize(1);
 		LanguageRegistry.addName(brokenMold, "Broken Coin Mold");
-		itemGoldNugBucket = new ItemNugBucket(comfigLoader.nugBucketID).setUnlocalizedName("nugBucket");
+		itemGoldNugBucket = new ItemNugBucket(comfigLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(16);
 		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
-		itemMeltedGoldBuket = new ItemMeltedBucket(comfigLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setContainerItem(Item.bucketEmpty).setContainerItem(itemCoinMold);
+		itemMeltedGoldBuket = new ItemMeltedBucket(comfigLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(16);
 		LanguageRegistry.addName(itemMeltedGoldBuket, "Bucket of melted Gold");
 		itemDiamondClump = new ItemDclump(comfigLoader.dClumpID).setUnlocalizedName("dClump");
 		LanguageRegistry.addName(itemDiamondClump, "Diamond Clump");
@@ -171,16 +207,22 @@ public class MurderCoins
 	{
 		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(itemMeltedGoldBuket, 1), 0.1f);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldCoin, 4), itemCoinMold, itemMeltedGoldBuket);
+		//GameRegistry.addShapelessRecipe(new ItemStack(itemGoldCoin, 4), itemCoinMold, itemMeltedGoldBuket);  Removed due to coin press integration.
 		GameRegistry.addShapelessRecipe(new ItemStack(itemCoinMold, 1), brokenMold, Item.ingotIron);
-		GameRegistry.addRecipe(new ItemStack(itemDiamondCoin, 1), new Object[] { 
-			"XXX", "XYX", "XXX", 
+		/*GameRegistry.addRecipe(new ItemStack(itemDiamondCoin, 1), new Object[] { //Removed due to coin press integration.
+			"XXX", "XYX", "XXX", 			
 			'X', itemGoldCoin, 
-			'Y', Item.diamond });
+			'Y', Item.diamond });*/
 		GameRegistry.addRecipe(new ItemStack(itemCoinMold, 1), new Object[] { 
 			"YXY", "XXX", "YXY", 
 			'X', Item.ingotIron, 
 			'Y', Item.bucketEmpty });
+		GameRegistry.addRecipe(new ItemStack(manualCoinPress, 1), new Object[] { 
+			"YTY", "XRX", "YTY", 
+			'T', Block.pistonBase,
+			'Y', Item.ingotIron, 
+			'R', Item.redstoneRepeater,
+			'X',  new ItemStack(Item.redstone, 1) });
         CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.coinPress, 1), new Object[] {
             "XTX", "OVO", "XTX",
             'T', new ItemStack(Block.pistonBase, 1),
@@ -197,8 +239,8 @@ public class MurderCoins
 
 	public void addMekanismRecipes()
 	{
-		mekanism.api.RecipeHelper.addPurificationChamberRecipe(new ItemStack(Item.diamond, 1), new ItemStack(itemDiamondClump, 3));
-		mekanism.api.RecipeHelper.addPurificationChamberRecipe(new ItemStack(Item.emerald), new ItemStack(itemEmeraldClump, 3));
+		mekanism.api.RecipeHelper.addPurificationChamberRecipe(new ItemStack(Item.diamond, 1), new ItemStack(itemDiamondClump, 2));
+		mekanism.api.RecipeHelper.addPurificationChamberRecipe(new ItemStack(Item.emerald), new ItemStack(itemEmeraldClump, 2));
 		mekanism.api.RecipeHelper.addCrusherRecipe(new ItemStack(itemDiamondClump, 1), new ItemStack(dirtyDDust, 1));
 		mekanism.api.RecipeHelper.addCrusherRecipe(new ItemStack(itemEmeraldClump, 1), new ItemStack(dirtyEDust, 1));
 		mekanism.api.RecipeHelper.addEnrichmentChamberRecipe(new ItemStack(dirtyDDust, 1), new ItemStack(itemDiamondDust, 1));

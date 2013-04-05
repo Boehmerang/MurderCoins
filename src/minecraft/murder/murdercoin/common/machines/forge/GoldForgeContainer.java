@@ -20,13 +20,13 @@ public class GoldForgeContainer extends Container {
 
 
 		// battery Slot 
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 16, 49, IItemElectric.class));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
 		// Gold Slot
-		this.addSlotToContainer(new Slot(tile_entity, 1, 55, 25));
+		this.addSlotToContainer(new Slot(tile_entity, 1, 49, 10));
 
 		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 55, 49,new ItemStack(Item.bucketEmpty)));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 49, 38, new ItemStack(Item.bucketEmpty)));
 
 
 

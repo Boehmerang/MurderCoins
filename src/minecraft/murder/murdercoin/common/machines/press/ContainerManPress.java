@@ -7,39 +7,37 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.prefab.SlotSpecific;
-import net.minecraft.item.ItemBucket;
 
-
-public class ContainerCoinPress extends Container
+public class ContainerManPress extends Container
 {
-	protected TileEntityCoinPress tile_entity;
+	protected TileEntityManPress tile_entity;
 
-	public ContainerCoinPress(TileEntityCoinPress tile_entity, InventoryPlayer player_inventory)
+	public ContainerManPress(TileEntityManPress tile_entity, InventoryPlayer player_inventory)
 	{
 		this.tile_entity = tile_entity;
 
 		// battery Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
+		//this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 		// upgrade slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 154, 26, IItemElectric.class));
+		//this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 154, 26, IItemElectric.class));
 		//bucket return slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 46, ItemBucket.class));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 46, ItemBucket.class));
 
 		// CoinMoldslots
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 3, 28, 10, ItemCoinMold.class)).getSlotStackLimit();
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 28, 38, ItemCoinMold.class)).getSlotStackLimit();
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 28, 10, ItemCoinMold.class));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 28, 38, ItemCoinMold.class));
 
 		// Dust Slot
-		this.addSlotToContainer(new Slot(tile_entity, 5, 49, 10));
+		this.addSlotToContainer(new Slot(tile_entity, 3, 49, 10));
 		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 6, 49, 38, new ItemStack(MurderCoins.itemMeltedGoldBuket)));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 49, 38, new ItemStack(MurderCoins.itemMeltedGoldBuket)));
 
 		// Smelting result
-		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 7, 108, 25));
+		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 5, 108, 25));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)
