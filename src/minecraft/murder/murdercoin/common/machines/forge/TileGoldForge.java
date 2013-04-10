@@ -412,7 +412,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+		return slotID == 1 ? itemStack.itemID == Item.ingotGold.itemID : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID == 2 ? itemStack.getItem() == Item.bucketEmpty: false));
 	}
 
 	/**
@@ -428,6 +428,19 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
 	{
 		return this.isStackValidForSlot(slotID, par2ItemStack);
+		/*if(par2ItemStack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+				if(par2ItemStack.isItemEqual(new ItemStack(Item.ingotGold)))
+		{
+			return slotID == 1;
+		}
+		if(par2ItemStack.isItemEqual(new ItemStack(Item.bucketEmpty)))
+		{
+			return slotID == 2;
+		}*/
+		//return false;
 	}
 
 	@Override
