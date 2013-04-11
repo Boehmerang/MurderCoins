@@ -50,22 +50,27 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 	}
 	   public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	    {
-			if (side == 0||side == 1) //bottom and top
+			int frontSide = metadata+2;
+		   if (side == 0||side == 1) //bottom and top
 			{
 				return this.gFTop;	
 			}
-			if (side==2) //front
+			if (side == metadata + 2) //front
 			{
 				return this.gFOff;
 			}
-			if (side==3) //back
+			if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
 			{
 				return this.gFPow;
 			}
-			if(side==5)//gold out.
+			/*
+			 * Removed till Liquid is added.
+			 *
+			if(side == metadata + 5)//gold out.
 			{
 				return this.gFGold;
 			}
+			*/
 			else //sides
 			{
 			return this.gFSide;
@@ -86,36 +91,33 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 			}
 			return true;
 		}
-      
-		/**
-		 * Called when the block is placed in the world.
-		 */
 		/**
 		 * Called when the block is placed in the world.
 		 */
 		@Override
 		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 		{
-			int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			switch (angle)
-			{
-				case 0:
-					par1World.setBlock(x, y, z, this.blockID, 1, 0);
-					break;
-				case 1:
-					par1World.setBlock(x, y, z, this.blockID, 2, 0);
-					break;
-				case 2:
-					par1World.setBlock(x, y, z, this.blockID, 0, 0);
-					break;
-				case 3:
-					par1World.setBlock(x, y, z, this.blockID, 3, 0);
-					break;
-			}
-
-			((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-			par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-		}
+		  int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		   switch (angle)
+		    {
+		       case 0:
+		           par1World.setBlock(x, y, z, this.blockID, 1, 0);
+		           break;
+		       case 1:
+		           par1World.setBlock(x, y, z, this.blockID, 2, 0);
+		           break;
+		       case 2:
+		           par1World.setBlock(x, y, z, this.blockID, 0, 0);
+		           break;
+		       case 3:
+		           par1World.setBlock(x, y, z, this.blockID, 3, 0);
+		           break;
+		      }
+		       
+		        ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		        par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+		  }
+		    
        @Override
        public void breakBlock(World world, int x, int y, int z, int i, int j){
                dropItems(world, x, y, z);
@@ -196,13 +198,14 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 		return new TileGoldForge();
 	}
 	@Override
-	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z) {
+	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z) 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
-	public void setDirection(World world, int x, int y, int z,
-			ForgeDirection facingDirection) {
+	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
+	{
 		// TODO Auto-generated method stub
 		
 	}

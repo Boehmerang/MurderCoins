@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockManPress extends BlockAdvanced
 {
@@ -50,11 +51,11 @@ public class BlockManPress extends BlockAdvanced
 		{
 			return this.mPTop;
 		}
-		if (side == 2) // front
+		if (side == metadata + 2) // front
 		{
 			return this.mPFront;
 		}
-		if (side == 5) // back
+		if (side ==ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
 			return this.mPPow;
 		}

@@ -107,7 +107,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == ForgeDirection.getOrientation(3);
+		//return direction == ForgeDirection.getOrientation(3);
+		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 
 	@Override
@@ -533,8 +534,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		else if(slotID==3)
 		{
-			if (itemStack.getItem() == MurderCoins.itemCoinMold) return true;
-			return false;
+			return itemStack.getItem() instanceof ItemCoinMold;
+			//return false;
 		}
 		else if(slotID==4)
 		{

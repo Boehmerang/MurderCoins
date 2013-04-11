@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
@@ -48,11 +49,11 @@ public class BlockCoinPress extends BlockAdvanced
 		{
 			return this.cPTop;
 		}
-		if (side == 2) // front
+		if (side == metadata + 2) // front
 		{
 			return this.cPFront;
 		}
-		if (side == 3) // back
+		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
 			return this.cPPow;
 		}

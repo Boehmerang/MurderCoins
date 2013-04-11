@@ -121,7 +121,9 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == ForgeDirection.getOrientation(3);
+		//return direction == ForgeDirection.getOrientation(3);
+		//return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 3);
+		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 
 	@Override
@@ -412,7 +414,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return slotID == 1 ? itemStack.itemID == Item.ingotGold.itemID : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID == 2 ? itemStack.getItem() == Item.bucketEmpty: false));
+		return slotID == 1 ? itemStack.isItemEqual(new ItemStack(Item.ingotGold)) : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : (slotID == 2 ? itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)): false));
 	}
 
 	/**
@@ -427,20 +429,20 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
 	{
-		return this.isStackValidForSlot(slotID, par2ItemStack);
-		/*if(par2ItemStack.getItem() instanceof IItemElectric)
+		//return this.isStackValidForSlot(slotID, par2ItemStack);
+		if(par2ItemStack.getItem() instanceof IItemElectric)
 		{
 			return slotID == 0;
 		}
-				if(par2ItemStack.isItemEqual(new ItemStack(Item.ingotGold)))
+		else if(par2ItemStack.isItemEqual(new ItemStack(Item.ingotGold)))
 		{
 			return slotID == 1;
 		}
-		if(par2ItemStack.isItemEqual(new ItemStack(Item.bucketEmpty)))
+		else if(par2ItemStack.isItemEqual(new ItemStack(Item.bucketEmpty)))
 		{
 			return slotID == 2;
-		}*/
-		//return false;
+		}
+		return slotID == 2;
 	}
 
 	@Override

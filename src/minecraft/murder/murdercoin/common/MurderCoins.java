@@ -116,33 +116,37 @@ public class MurderCoins
 	private void chestHooks() 
 	{
 		// Adds Gold to the Mine-shaft Corridor chest spawns.
-		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("MINESHAFT_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Desert pyramid chest spawns.
-		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("PYRAMID_DESERT_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Jungle pyramid chest spawns.
-		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("PYRAMID_JUNGLE_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Stronghold Corridor chest spawns.
-		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("STRONGHOLD_CORRIDOR").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Stronghold Library chest spawns.
-		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("STRONGHOLD_LIBRARY").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Stronghold Crossing chest spawns.
-		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("STRONGHOLD_CROSSING").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		// Adds Gold to the Dungeon chest spawns.
-		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
-		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
-		ChestGenHooks.getInfo("DUNGEON_CHEST").addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
+		//Adds Gold to Bonus Chest
+		ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemGoldCoin),3,10,35));
+		ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemDiamondCoin),1,5,25));
+		ChestGenHooks.getInfo(ChestGenHooks.BONUS_CHEST).addItem(new WeightedRandomChestContent(new ItemStack(MurderCoins.itemEmeraldCoin),1,2,15));
 		
 	}
 
