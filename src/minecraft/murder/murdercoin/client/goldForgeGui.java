@@ -45,11 +45,10 @@ public class goldForgeGui extends GuiContainer {
 		}
 
 		this.fontRenderer.drawString("Status:  " + displayText, 71, 45,	0xffffff);
-		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(
-				this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 71, 56, 0xffffff);
+		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 71, 56, 0xffffff);
 		this.fontRenderer.drawString(capacityInfo, 30, 68, 0xffffff);
-
-	}
+		this.fontRenderer.drawString(Integer.toString(tileentity.getGold()), 10, 10, 0xffffff);
+		}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,
@@ -65,13 +64,17 @@ public class goldForgeGui extends GuiContainer {
 
 		if (this.tileentity.processTicks > 0) {
 			int scale = (int) (((double) this.tileentity.processTicks / (double) this.tileentity.meltingTicks) * 23);
-			this.drawTexturedModalRect(containerWidth + 77,
-					containerHeight + 24, 176, 0, 23 - scale, 20);
+			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
 		if (this.tileentity.getJoules() > 0) 
 		{
 			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
 			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
+		}
+		if (this.tileentity.getGold()>0)
+		{
+			int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
+			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
 		}
 	}
 }
