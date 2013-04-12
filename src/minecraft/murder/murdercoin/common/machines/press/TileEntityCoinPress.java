@@ -301,7 +301,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			{
 				this.inventory[7].stackSize += 4;
 			}
-			// this.decrStackSize(5, 1); no dust to downgrade.
+			// this.decrStackSize(5, 1); no dust to deduct.
 			this.decrStackSize(6, 1);
 			this.getEmptyBucket();
 			this.setJoules(this.getJoules() - this.joulesPerSmelt);
