@@ -22,21 +22,21 @@ public class ContainerCoinPress extends Container
 	{
 		this.tile_entity = tile_entity;
 
-		// battery Slot
+		// Battery Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
-		// upgrade slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 154, 26, IItemElectric.class));
-		//bucket return slot
+		// Bucket slot
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 6, 154, 26,new ItemStack(MurderCoins.itemMeltedGoldBuket)));
+		// Bucket return slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 46, ItemBucket.class));
 
 		// CoinMoldslots
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 3, 28, 10, ItemCoinMold.class)).getSlotStackLimit();
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 28, 38, ItemCoinMold.class)).getSlotStackLimit();
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 3, 34, 10, ItemCoinMold.class)).getSlotStackLimit();
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 34, 38, ItemCoinMold.class)).getSlotStackLimit();
 
 		// Dust Slot
-		this.addSlotToContainer(new Slot(tile_entity, 5, 49, 10));
-		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 6, 49, 38, new ItemStack(MurderCoins.itemMeltedGoldBuket)));
+		this.addSlotToContainer(new Slot(tile_entity, 5, 55, 25));
+		// Old Bucket Slot (removed due to liquid tank)
+		//this.addSlotToContainer(new SlotSpecific(tile_entity, 6, 55, 38, new ItemStack(MurderCoins.itemMeltedGoldBuket)));
 
 		// Smelting result
 		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 7, 108, 25));

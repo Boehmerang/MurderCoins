@@ -23,15 +23,15 @@ public class GoldForgeContainer extends Container {
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
 		// Gold Slot
-		this.addSlotToContainer(new Slot(tile_entity, 1, 49, 10));
+		this.addSlotToContainer(new Slot(tile_entity, 1, 52, 25));
 
 		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 49, 38, new ItemStack(Item.bucketEmpty)));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 26, new ItemStack(Item.bucketEmpty)));
 
 
 
 		// Smelting result
-		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 3, 108, 25));
+		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 3, 154, 46));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)

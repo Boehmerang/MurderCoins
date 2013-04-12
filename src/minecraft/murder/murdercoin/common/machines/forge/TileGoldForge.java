@@ -35,6 +35,9 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class TileGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
 	public int processTicks = 0;
+	public int tankWarmingTicks = 0;
+	public int ticksWithoutPower = 0;
+	public int ticksTillFreeze = 1200;
 	public int fillTicks = 0;
 	public int ticksToFill = 20;
 	public double joulesStored = 0.0D;
@@ -47,6 +50,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
 	private double joulesToWarm = 10.0D;
+	public boolean isFrozen = false;
 	
 	
 	//public static final double WATTS_PER_TICK = 500;
@@ -65,6 +69,40 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 		 */
 		if (!this.worldObj.isRemote)
 		{
+			if(this.isFrozen == true)
+			{
+				
+				if (this.getJoules()>1)
+				{
+					if(this.tankWarmingTicks == 0)
+					{
+					this.tankWarmingTicks = (this.getGold()/1000)*100;
+					}
+					else if(this.tankWarmingTicks > 1)
+					{
+						this.tankWarmingTicks --;
+						//System.out.println(this.tankWarmingTicks);
+						if(this.tankWarmingTicks == 1)
+						{
+							this.isFrozen = false;
+							this.tankWarmingTicks = 0;
+						}
+					}
+				}
+			}
+			else if (this.getGold()>0)
+			{
+				if(this.getJoules() < this.joulesToWarm)
+				{
+					this.ticksWithoutPower++;
+					System.out.println(this.ticksWithoutPower);
+					if(this.ticksWithoutPower == this.ticksTillFreeze)
+					{
+						this.isFrozen = true;
+						this.ticksWithoutPower = 0;
+					}
+				}	
+			}
 			if (this.canProcess())
 			{
 				if (this.getJoules() >= joulesPerSmelt)
@@ -117,12 +155,9 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			{
 				this.processTicks = 0;
 			}
-			if(this.getGold() > 0)
-			{
-				this.setJoules(this.getJoules() - this.joulesToWarm );
-			}
 			if(this.inventory[2] != null && this.getGold() >= this.goldPerBucket)
 			{
+				
 				if(this.fillTicks == 0)
 				{
 					this.fillTicks = this.ticksToFill;
@@ -132,6 +167,13 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 					this.fillTicks--;
 					if (this.fillTicks < 1)
 			    	{
+						if(this.inventory[3] != null)
+						{
+							if (this.inventory[3].stackSize >= 16)
+							{
+								return;
+							}
+						}
 						this.setGold(goldPerBucket, false);
 						ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket);
 						if(this.inventory[3]==null)
@@ -142,6 +184,10 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 						{
 							this.inventory[3].stackSize += 1;
 						}
+						else if(this.inventory[3].stackSize >16)
+						{
+							this.inventory[3].stackSize = 16;
+						}
 						this.decrStackSize(2, 1);
 			    	}
 				}
@@ -151,6 +197,10 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			{
 				//System.out.println("Debug");
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				if(this.getGold() > 0)
+				{
+					this.setJoules(this.getJoules() - this.joulesToWarm );
+				}
 			}
 		}
 	}
@@ -213,7 +263,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), this.goldStored);
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), this.goldStored, this.isFrozen, this.tankWarmingTicks);
 	}
 
 	@Override
@@ -224,6 +274,8 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			this.processTicks = dataStream.readInt();
 			this.setJoules(dataStream.readDouble());
 			this.goldStored = dataStream.readInt();
+			this.isFrozen = dataStream.readBoolean();
+			this.tankWarmingTicks = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
@@ -252,6 +304,10 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 	 */
 	public boolean canProcess()
 	{
+		if(this.isFrozen == true)
+		{
+			return false;
+		}
 		if(inventory[1] == null)
 		{
 			this.processTicks = 0;
@@ -262,6 +318,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 			this.processTicks = 0;
 			return false;
 		}*/
+		/*
 		if(inventory[3] != null)
 		{
 			if(inventory[3].stackSize >= 16)
@@ -270,6 +327,7 @@ public class TileGoldForge extends  TileEntityElectricityRunnable implements IIn
 				return false;
 			}
 		}
+		*/
 		if (this.getGold() >= this.maxGold)
 		{
 			this.goldStored = this.maxGold;

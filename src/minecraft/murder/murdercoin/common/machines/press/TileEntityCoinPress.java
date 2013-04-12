@@ -38,6 +38,11 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class TileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
 	public int processTicks = 0;
+	public int tankWarmingTicks = 0;
+	public int drainBucketTicks = 0;
+	public int ticksToDrainBucket = 20;
+	public int ticksWithoutPower = 0;
+	public int ticksTillFreeze = 1200;
 	public double joulesStored = 0.0D;
 	public static double maxJoules = 1500000.0D;
 	private ItemStack[] inventory = new ItemStack[8];
@@ -45,9 +50,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public static double joulesPerSmelt = 50000.0D;
 	public static int meltingTicks = 500;
 	public int goldStored = 0;
-	public int maxGold = 8 * LiquidContainerRegistry.BUCKET_VOLUME;
+	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
-	
+	private double joulesToWarm = 10.0D;
+	public boolean isFrozen = false;
 
 	@Override
 	public void updateEntity()
@@ -62,6 +68,73 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		 */
 		if (!this.worldObj.isRemote)
 		{
+			
+			if(this.isFrozen == true)
+			{
+				
+				if (this.getJoules()>1)
+				{
+					if(this.tankWarmingTicks == 0)
+					{
+					this.tankWarmingTicks = (this.getGold()/1000)*100;
+					}
+					else if(this.tankWarmingTicks > 1)
+					{
+						this.tankWarmingTicks --;
+						System.out.println(this.tankWarmingTicks);
+						if(this.tankWarmingTicks == 1)
+						{
+							this.isFrozen = false;
+							this.tankWarmingTicks = 0;
+						}
+					}
+				}
+			}
+			else if (this.getGold()>0)
+			{
+				if(this.getJoules() < this.joulesToWarm)
+				{
+					this.ticksWithoutPower++;
+					if(this.ticksWithoutPower == this.ticksTillFreeze)
+					{
+						this.isFrozen = true;
+						this.ticksWithoutPower = 0;
+					}
+				}	
+			}
+			
+			
+			/*
+			 * Fills internal Tank from Buckets.
+			 */
+			if(this.inventory[6] != null && this.getGold() < this.maxGold)
+			{
+				if(this.inventory[2] != null)
+				{
+					if (this.inventory[2].stackSize >= 16)
+					{
+						return;
+					}
+				}
+				if(this.drainBucketTicks == 0)
+				{
+					this.drainBucketTicks = this.ticksToDrainBucket;
+				}
+				else if (this.drainBucketTicks > 0)
+				{
+					this.drainBucketTicks--;
+					if (this.drainBucketTicks < 1)
+			    	{
+						this.setGold(goldPerBucket, true);
+						this.decrStackSize(6, 1);
+						this.getEmptyBucket();
+						this.drainBucketTicks=0;
+			    	}
+				}
+			}
+			/*
+			 * Checks to see if it can process, and then presses the coins.
+			 */
 			if (this.canProcess() && this.getJoules() >= this.joulesPerSmelt)
 			{
 			
@@ -98,16 +171,44 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			{
 				if (this.ticks % 3 == 0)
 				{
+					if(this.getGold() > 0)
+					{
+						this.setJoules(this.getJoules() - this.joulesToWarm );
+					}
 					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 				}
 			}
+			
 		}
+	}
+	public boolean tankFrozen() {
+		// TODO Auto-generated method stub
+		if(this.isFrozen = true)return true;
+			
+		return false;
+	}
+	public void setGold(int goldAmount, boolean add)
+	{
+		//System.out.print("debug");
+		if(add)
+		{
+		this.goldStored += goldAmount;
+		}
+		else
+		{
+			this.goldStored -= goldAmount;
+		}
+		if (this.goldStored >= this.maxGold)this.goldStored = this.maxGold;
+	}
+	//Returns the amount of gold stored.
+	public int getGold()
+	{
+		return this.goldStored;
 	}
 
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		//return direction == ForgeDirection.getOrientation(3);
 		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 
@@ -137,7 +238,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules());
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(),this.goldStored, this.isFrozen, this.tankWarmingTicks);
 	}
 
 	@Override
@@ -147,6 +248,9 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			this.processTicks = dataStream.readInt();
 			this.setJoules(dataStream.readDouble());
+			this.goldStored = dataStream.readInt();
+			this.isFrozen = dataStream.readBoolean();
+			this.tankWarmingTicks = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
@@ -175,6 +279,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	 */
 	public boolean canProcess()
 	{
+		if(this.isFrozen == true)
+		{
+			return false;
+		}
 		if (this.inventory[3] == null)
 		{
 			this.processTicks = 0;
@@ -201,29 +309,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			return false;
 			}
 		}
-		/*if (this.inventory[5] == null)
-		 *{
-		 *
-		 * if(this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))) { return
-		 * true; } /*if (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket)))
-		 * { return true; } /*if (pipeConnected()) { return true; }
-		 *
-		 *	return false;
-		 *}
-		 */
-		if (this.inventory[6] == null)
+		if (this.getGold()<=0)
 		{
 			this.processTicks = 0;
 			return false;
-		}
-		if(inventory[2]!=null)
-		{
-			if(inventory[2].stackSize >= 16)
-			{
-				inventory[2].stackSize = 16;
-				this.processTicks = 0;
-				return false;
-			}
 		}
 		if (inventory[7] != null)
 		{
@@ -270,12 +359,6 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 			}
 		}
-		/*
-		 * else if (this.inventory[5].isItemEqual(new ItemStack(murderCoins.eDust))) { if
-		 * (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))){ return true; }
-		 * this.processTicks = 0; return false; }
-		 */
-
 		return true;
 
 	}
@@ -302,8 +385,9 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				this.inventory[7].stackSize += 4;
 			}
 			// this.decrStackSize(5, 1); no dust to deduct.
-			this.decrStackSize(6, 1);
-			this.getEmptyBucket();
+			//this.decrStackSize(6, 1);
+			this.setGold(goldPerBucket, false);
+			//this.getEmptyBucket();
 			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
@@ -318,8 +402,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				this.inventory[7].stackSize += 4;
 			}
 			this.decrStackSize(5, 1);
-			this.decrStackSize(6, 1);
-			this.getEmptyBucket();
+			this.setGold(goldPerBucket, false);
+			//this.decrStackSize(6, 1);
 			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
@@ -334,8 +418,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				this.inventory[7].stackSize += 4;
 			}
 			this.decrStackSize(5, 1);
-			this.decrStackSize(6, 1);
-			this.getEmptyBucket();
+			//this.decrStackSize(6, 1);
+			this.setGold(goldPerBucket, false);
 			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 	}
@@ -381,6 +465,9 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
+		this.goldStored = par1NBTTagCompound.getInteger("goldStored");
+		this.isFrozen = par1NBTTagCompound.getBoolean("isFrozen");
+		this.tankWarmingTicks = par1NBTTagCompound.getInteger("tankWarmingTicks");
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -402,7 +489,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("smeltingTicks", this.processTicks);
-		par1NBTTagCompound.setDouble("joules", this.joulesStored);
+		par1NBTTagCompound.setDouble("joulesStored", this.joulesStored);
+		par1NBTTagCompound.setInteger("goldStored", this.goldStored);
+		par1NBTTagCompound.setBoolean("isFrozen", isFrozen);
+		par1NBTTagCompound.setInteger("tankWarmingTicks", this.tankWarmingTicks);
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)

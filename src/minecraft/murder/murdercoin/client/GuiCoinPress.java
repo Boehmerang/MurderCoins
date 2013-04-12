@@ -28,12 +28,23 @@ public class GuiCoinPress extends GuiContainer
     {
     	String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
 	    String displayText = "";
-        fontRenderer.drawString("Coin Press", 82, 6, 0xffffff);
+        fontRenderer.drawString("Coin Press", 74, 6, 0xffffff);
         //fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6, ySize - 96 , 0xffffff);
         if (this.tileentity.isDisabled())
 		{
 			displayText = "Disabled!";
 		}
+        else if (this.tileentity.isFrozen == true)
+        {
+        	if(this.tileentity.tankWarmingTicks>0)
+        	{
+        		displayText="Warming";
+        	}
+        	else 
+        	{
+        		displayText = "Frozen";
+        	}
+        }
 		else if (this.tileentity.processTicks > 0)
 		{
 			displayText = "Working";
@@ -43,8 +54,8 @@ public class GuiCoinPress extends GuiContainer
 			displayText = "Idle";
 		}
 
-		this.fontRenderer.drawString("Status:  " + displayText, 71, 45, 0xffffff);
-		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 71, 56, 0xffffff);
+		this.fontRenderer.drawString("Status: " + displayText, 65, 45, 0xffffff);
+		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 72, 56, 0xffffff);
 		this.fontRenderer.drawString(capacityInfo, /*82, 56,*/30,68, 0xffffff);
 		
 	}
@@ -67,6 +78,16 @@ public class GuiCoinPress extends GuiContainer
 		{
 			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
 			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
+		}
+		if (this.tileentity.getGold()>0)
+		{
+			int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
+			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
+		}
+		if (this.tileentity.getGold()==0)
+		{
+			//int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
+			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44);
 		}
 	}
 }

@@ -30,12 +30,23 @@ public class goldForgeGui extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
 		String displayText = "";
-		fontRenderer.drawString("Gold Forge", 82, 6, 0xffffff);
+		fontRenderer.drawString("Gold Forge", 32, 6, 0xffffff);
 		//fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6,ySize - 96, 0xffffff);
 		if (this.tileentity.isDisabled()) 
 		{
 			displayText = "Disabled!";
 		} 
+	    else if (this.tileentity.isFrozen == true)
+        {
+        	if(this.tileentity.tankWarmingTicks>0)
+        	{
+        		displayText="Warming";
+        	}
+        	else 
+        	{
+        		displayText = "Frozen";
+        	}
+        }
 		else if (this.tileentity.processTicks > 0) {
 			displayText = "Working";
 		}
@@ -44,10 +55,10 @@ public class goldForgeGui extends GuiContainer {
 			displayText = "Idle";
 		}
 
-		this.fontRenderer.drawString("Status:  " + displayText, 71, 45,	0xffffff);
-		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 71, 56, 0xffffff);
+		this.fontRenderer.drawString("Status:  " + displayText, 25, 45,	0xffffff);
+		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 31, 56, 0xffffff);
 		this.fontRenderer.drawString(capacityInfo, 30, 68, 0xffffff);
-		this.fontRenderer.drawString(Integer.toString(tileentity.getGold()), 10, 10, 0xffffff);
+		//this.fontRenderer.drawString(Integer.toString(tileentity.getGold()), 10, 10, 0xffffff);
 		}
 
 	@Override
@@ -74,7 +85,12 @@ public class goldForgeGui extends GuiContainer {
 		if (this.tileentity.getGold()>0)
 		{
 			int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
-			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
+			this.drawTexturedModalRect(containerWidth + /*12*/108, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
+		}
+		if (this.tileentity.getGold()==0)
+		{
+			//int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
+			this.drawTexturedModalRect(containerWidth + /*12*/108, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44);
 		}
 	}
 }
