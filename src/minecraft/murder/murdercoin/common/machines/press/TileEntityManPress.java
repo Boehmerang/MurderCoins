@@ -47,7 +47,6 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
 	public boolean hasPower = false;
 	public boolean didRun = false;
-	
 
 	@Override
 	public void updateEntity()
@@ -144,7 +143,6 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 		try
 		{
 			this.processTicks = dataStream.readInt();
-		
 		}
 		catch (Exception e)
 		{
@@ -239,7 +237,7 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 				}
 			}
 		}
-		
+
 		if (inventory[3]!=null)
 		{
 			if(inventory[3].getItem() == MurderCoins.itemDiamondDust)
@@ -272,7 +270,6 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 		 */
 
 		return true;
-
 	}
 
 	/**
@@ -345,9 +342,6 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 			this.inventory[2] = null;
 			this.inventory[2] = broken;
 		}
-		
-		
-		
 	}
 	private void getEmptyBucket()  //returns an empty bucket in slot 7.
 	{
@@ -359,7 +353,6 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 		{
 			inventory[0].stackSize += 1;
 		}
-		
 	}
 
 	/**
@@ -571,7 +564,7 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 	}
 
 	@Override
-	public void onPowerOn() 
+	public void onPowerOn()
 	{
 		// TODO Auto-generated method stub
 		//this.hasPower = true;
@@ -579,7 +572,7 @@ public class TileEntityManPress extends TileEntityElectricityRunnable implements
 	}
 
 	@Override
-	public void onPowerOff() 
+	public void onPowerOff()
 	{
 		// TODO Auto-generated method stub
 		//this.hasPower = false;

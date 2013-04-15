@@ -27,11 +27,11 @@ import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 import com.google.common.io.ByteArrayDataInput;
 
 /*
- * 
+ *
  * 		Old version of the GoldForge, kept for reference.
  * 		Does not work right, but some functions will be
  * 		transfered to new tile.
- * 
+ *
  */
 public class TileGoldForge2 extends TileEntityElectricityRunnable implements IInventory, IPacketReceiver, IElectricityStorage, IDisableable//, ISidedInventory
 {
@@ -48,12 +48,11 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 	public static int meltingTicks = 500;
 	public double prevJoules = 0;
 
-
 	@Override
 	public void initiate()
 	{
 		//ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(3)));
-		
+
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, MurderCoins.goldForge.blockID);
 	}
 
@@ -65,14 +64,13 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 		//if (!this.worldObj.isRemote)
 		if(!isDisabled())
 		{
-			
 			//
 			//  Decharge electric item.
-			// 
-			setJoules(getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], getMaxJoules() - getJoules(), getVoltage()));		
-			
+			//
+			setJoules(getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], getMaxJoules() - getJoules(), getVoltage()));
+
 			this.prevJoules = joulesStored;
-			
+
 			if (!this.worldObj.isRemote)
 			{
 				/**
@@ -91,25 +89,25 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 						ElectricityNetworkHelper.consumeFromMultipleSides(this, new ElectricityPack());
 					}
 				}
-			
+
 	      /*ForgeDirection inputDirection = ForgeDirection.getOrientation(3);
 			//TileEntity inputTile = VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), inputDirection);
-			
+
 			//IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection);
-		  
+
 			if (getJoules() <= getMaxJoules())
-			{				
+			{
 				if (!this.worldObj.isRemote)//(inputNetwork != null)
 				{
 					//double joulesNeeded = getMaxJoules()-getJoules();
-					//inputNetwork.startRequesting(inputTile, getMaxJoules() - getJoules() , getVoltage());	
+					//inputNetwork.startRequesting(inputTile, getMaxJoules() - getJoules() , getVoltage());
 					ElectricityPack electricityPack = ElectricityNetworkHelper.consumeFromMultipleSides(this, this.getConsumingSides(), this.getRequest());
 					//inputNetwork.startRequesting(inputTile, getRequest());
 					onReceive(electricityPack);
-					
+
 					this.WattsReceived = electricityPack.getWatts();
 					//setJoules(getJoules() + this.WattsReceived);
-					
+
 					if (UniversalElectricity.isVoltageSensitive)
 					{
 						if (electricityPack.voltage > this.getVoltage())
@@ -117,7 +115,6 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 							this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
 							return;
 						}
-						
 				}
 				else
 				{
@@ -125,7 +122,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 					ElectricityNetworkHelper.consumeFromMultipleSides(this,new ElectricityPack());
 				}
 			}*/
-				
+
 			if(canMelt()&& hasEnoughPower())
 			{
 				if(this.processTicks == 0)
@@ -135,7 +132,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 				else if(this.processTicks > 0)
 				{
 					this.processTicks--;
-					
+
 					if(this.processTicks < 1)
 					{
 						if(this.inventory[1].getItem()==Item.goldNugget)
@@ -157,7 +154,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 					this.processTicks = 0;
 				}
 			}
-		
+
 		if (!this.worldObj.isRemote)
 		{
 			if (this.ticks % 3 == 0)
@@ -216,22 +213,20 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 		}
 	}
 
-	
 	public boolean hasEnoughPower()
 	{
 		if(this.joulesStored >= joulesPerSmelt)
 		{
-		return true;	
+		return true;
 		}
 		else
 		{
 		return false;
-		
 		}
 	}
 
 	public boolean canMelt()
-	{	
+	{
 		if (inventory[1] == null)
 		{
 			this.processTicks = 0;
@@ -266,7 +261,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 				{
 					return true;
 				}
-				
+
 				return false;
 			}
 			return false;
@@ -301,7 +296,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
     	this.decrStackSize(2, 1);
     	setJoules(getJoules() - joulesPerSmelt);
 		}
-		else 
+		else
 		{
 			ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
 			if(this.inventory[3]==null)
@@ -370,8 +365,6 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 		}
 		par1NBTTagCompound.setTag("Items", var2);
 	}
-
-
 
 	@Override
 	public int getSizeInventory()
@@ -442,7 +435,6 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 		}
 	}
 
-
 	@Override
 	public String getInvName()
 	{
@@ -450,14 +442,14 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 	}
 
 	@Override
-	public int getInventoryStackLimit() 
+	public int getInventoryStackLimit()
 	{
 		return 64;
 	}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-	{	
+	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
@@ -497,7 +489,7 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 
 	public int getProcessTicks() {
 		// TODO Auto-generated method stub
-		
+
 		return processTicks;
 	}
 
@@ -546,5 +538,5 @@ public class TileGoldForge2 extends TileEntityElectricityRunnable implements IIn
 		// TODO Auto-generated method stub
 		return false;
 	} 	*/
-	
+
 }

@@ -41,11 +41,10 @@ public class BlockManPress extends BlockAdvanced
 		this.mPSide = par1IconRegister.registerIcon("MurderCoins:coinPress-Side");
 		this.mPFront = par1IconRegister.registerIcon("MurderCoins:manPress-Front");
 		this.mPPow = par1IconRegister.registerIcon("MurderCoins:manPress-Lev");
-
 	}
 
 	@Override
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
 		if (side == 0 || side == 1) // bottom and top
 		{
@@ -55,15 +54,14 @@ public class BlockManPress extends BlockAdvanced
 		{
 			return this.mPFront;
 		}
-		if (side ==ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
-		{
-			return this.mPPow;
-		}
+		//if (side ==ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back  Removed as there is no point to it.. will accept redstone from any direction.
+		//{
+		//	return this.mPPow;
+		//}
 		else
 		// sides
 		{
 			return this.mPSide;
-
 		}
 	}
 
@@ -93,16 +91,16 @@ public class BlockManPress extends BlockAdvanced
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlock(x, y, z, this.blockID, 1, 0);
-				break;
-			case 1:
-				par1World.setBlock(x, y, z, this.blockID, 2, 0);
-				break;
-			case 2:
 				par1World.setBlock(x, y, z, this.blockID, 0, 0);
 				break;
-			case 3:
+			case 1:
 				par1World.setBlock(x, y, z, this.blockID, 3, 0);
+				break;
+			case 2:
+				par1World.setBlock(x, y, z, this.blockID, 1, 0);
+				break;
+			case 3:
+				par1World.setBlock(x, y, z, this.blockID, 2, 0);
 				break;
 		}
 

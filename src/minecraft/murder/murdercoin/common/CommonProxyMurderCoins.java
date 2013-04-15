@@ -4,6 +4,5 @@ public class CommonProxyMurderCoins
 {
 	public void registerRenderThings()
 	{
-
 	}
 }

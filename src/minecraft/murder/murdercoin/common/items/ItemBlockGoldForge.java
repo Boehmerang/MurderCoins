@@ -6,14 +6,13 @@ import universalelectricity.core.electricity.ElectricityPack;
 
 public class ItemBlockGoldForge extends ItemBlock implements universalelectricity.core.item.IItemElectric
 {
-
 	public ItemBlockGoldForge(int par1) {
 		super(par1);
 		// TODO Auto-generated constructor stub
 	}
 	/*public Block metaBlock;
 	public int forgeid;
-	
+
 	public ItemBlockGoldForge(int id, Block block)
 	{
 		super(id);
@@ -22,9 +21,8 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 		setHasSubtypes(false);
 		setMaxStackSize(1);
 		setNoRepair();
-		
 	}
-	
+
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
 		String name = "";
@@ -42,7 +40,7 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 	public void addInformation(ItemStack itemstack, EntityPlayer entityplayer, List list, Boolean flag)
 	{
 		double energy = getJoules();
-		
+
 		list.add("Stored Energy: " + ElectricInfo.getDisplayShort(energy, ElectricUnit.JOULES));
 	}
 
@@ -68,7 +66,7 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 	      {
 	        electricityStored = itemStack.stackTagCompound.getDouble("electricity");
 	      }
-	    
+
 	      return electricityStored;
 	    }
 	    return -1.0D;
@@ -86,7 +84,6 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 		double electricityStored = Math.max(Math.min(joules, getMaxJoules(itemStack)), 0);
 		itemStack.stackTagCompound.setDouble("electricity", electricityStored);
 	    }
-		
 	}
 
 	@Override
@@ -94,7 +91,7 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 		if ((data[0] instanceof ItemStack))
 	    {
 	      ItemStack itemStack = (ItemStack)data[0];
-	      
+
 	      return TileGoldForge.maxJoules;
 	    }
 		return 150000.0D;
@@ -118,12 +115,12 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 	    setJoules(getJoules(new Object[] { itemStack }) - electricityToUse, new Object[] { itemStack });
 	    return electricityToUse;
 	}
-	
+
 	public boolean canUse(ItemStack itemStack, int amount)
 	{
 		return getJoules(new Object[] {itemStack}) >= amount;
 	}
-	
+
 	public int getChargedItemId()
 	{
 		return itemID;
@@ -155,7 +152,7 @@ public class ItemBlockGoldForge extends ItemBlock implements universalelectricit
 	@Override
 	public void setJoules(double joules, ItemStack itemStack) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

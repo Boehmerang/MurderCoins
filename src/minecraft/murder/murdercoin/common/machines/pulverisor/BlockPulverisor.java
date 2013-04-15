@@ -1,8 +1,9 @@
-package murder.murdercoin.common.machines.forge;
+package murder.murdercoin.common.machines.pulverisor;
 
 import java.util.Random;
 
 import murder.murdercoin.common.MurderCoins;
+import murder.murdercoin.common.machines.forge.TileGoldForge;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -21,16 +22,15 @@ import universalelectricity.prefab.block.BlockAdvanced;
 import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class BlockGoldForge extends BlockAdvanced implements IRotatable
+public class BlockPulverisor extends BlockAdvanced implements IRotatable
 {
-	private Icon gFTop;
-	private Icon gFSide;
-	private Icon gFOn;
-	private Icon gFOff;
-	private Icon gFGold;
-	private Icon gFPow;
+	private Icon pTop;
+	private Icon pSide;
+	private Icon pOn;
+	private Icon pOff;
+	private Icon pPow;
 
-	public BlockGoldForge(int id)
+	public BlockPulverisor(int id)
 	{
 		super(id, Material.iron);
 		this.setCreativeTab(MurderCoins.murderTab);
@@ -38,39 +38,29 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 	}
 	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.gFTop = par1IconRegister.registerIcon("MurderCoins:gForge-Top");
-		this.gFSide = par1IconRegister.registerIcon("MurderCoins:gForge-Side");
-		this.gFOn = par1IconRegister.registerIcon("MurderCoins:gForge-On");
-		this.gFOff = par1IconRegister.registerIcon("MurderCoins:gForge-Off");
-		this.gFPow = par1IconRegister.registerIcon("MurderCoins:gForge-Pow");
-		this.gFGold = par1IconRegister.registerIcon("MurderCoins:gForge-Gold");
+		this.pTop = par1IconRegister.registerIcon("MurderCoins:pulverisor_Top");
+		this.pSide = par1IconRegister.registerIcon("MurderCoins:pulverisor_Side");
+		this.pOn = par1IconRegister.registerIcon("MurderCoins:pulverisor_On");
+		this.pOff = par1IconRegister.registerIcon("MurderCoins:pulverisor_Off");
+		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
 	   public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
 	    {
-			int frontSide = metadata+2;
 		   if (side == 0||side == 1) //bottom and top
 			{
-				return this.gFTop;
+				return this.pTop;
 			}
 			if (side == metadata + 2) //front
 			{
-				return this.gFOff;
+				return this.pOff;
 			}
 			if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
 			{
-				return this.gFPow;
+				return this.pPow;
 			}
-			/*
-			 * Removed till Liquid is added.
-			 *
-			if(side == metadata + 5)//gold out.
-			{
-				return this.gFGold;
-			}
-			*/
 			else //sides
 			{
-			return this.gFSide;
+			return this.pSide;
 			}
 	    }
 		/**
@@ -93,20 +83,25 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 		@Override
 		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 		{
+			TilePulverisor tileEntity = (TilePulverisor) par1World.getBlockTileEntity(x,y,z);
 		  int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		   switch (angle)
 		    {
 		       case 0:
 		           par1World.setBlock(x, y, z, this.blockID, 0, 0);
+		           tileEntity.setFacing(0);
 		           break;
 		       case 1:
 		           par1World.setBlock(x, y, z, this.blockID, 3, 0);
+		           tileEntity.setFacing(3);
 		           break;
 		       case 2:
 		           par1World.setBlock(x, y, z, this.blockID, 1, 0);
+		           tileEntity.setFacing(1);
 		           break;
 		       case 3:
 		           par1World.setBlock(x, y, z, this.blockID, 2, 0);
+		           tileEntity.setFacing(2);
 		           break;
 		      }
 
@@ -190,7 +185,7 @@ public class BlockGoldForge extends BlockAdvanced implements IRotatable
 
 	@Override
 	public TileEntity createNewTileEntity(World var1) {
-		return new TileGoldForge();
+		return new TilePulverisor();
 	}
 	@Override
 	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)

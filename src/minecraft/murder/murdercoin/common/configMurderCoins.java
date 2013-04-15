@@ -5,7 +5,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class configMurderCoins
 {
-
 	public static int gCoinID;
 	public static int dCoinID;
 	public static int eCoinID;
@@ -25,6 +24,7 @@ public class configMurderCoins
 	public static int itemGoldForgeID;
 	public static int GoldStillID;
 	public static int GoldFlowingID;
+	public static int pulverisorID;
 
 	public static void loadConfig(FMLPreInitializationEvent e)
 	{
@@ -48,7 +48,7 @@ public class configMurderCoins
 		coinMoldID = config.getItem("coinMold", 203).getInt(); // This gets the value
 		// Property nugBucket; //This is a property, see below
 		// nugBucket = config.getItem("nugBucket", 3003); //This gets the property
-		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment		
+		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment
 		nugBucketID = config.getItem("nugBucket", 204).getInt(); // This gets the value
 		// Property meltedBucket;
 		// meltedBucket = config.getItem("meltedBucket", 3004); //This gets the property
@@ -65,12 +65,12 @@ public class configMurderCoins
 		goldForgeID = config.getItem("goldForge", 313).getInt();
 		itemGoldForgeID = config.getItem("goldForge", 314).getInt();
 		manPressID = config.getItem("manPress", 315).getInt();
-		
+		pulverisorID = config.getItem("pulverisor", 316).getInt();
+
 		GoldStillID = config.getItem("GoldStill", 1001).getInt();
 		GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();
 
 		config.save(); // Saves the file
 
 	}
-
 }

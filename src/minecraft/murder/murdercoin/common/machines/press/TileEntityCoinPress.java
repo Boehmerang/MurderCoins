@@ -1,26 +1,28 @@
 package murder.murdercoin.common.machines.press;
 
+import java.util.ArrayList;
+
 import murder.murdercoin.common.MurderCoins;
 import murder.murdercoin.common.items.ItemCoinMold;
-import murder.murdercoin.common.items.ItemDDust;
-import murder.murdercoin.common.items.ItemEDust;
 import murder.murdercoin.common.items.ItemMeltedBucket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
+import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -38,22 +40,23 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class TileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
 	public int processTicks = 0;
-	public int tankWarmingTicks = 0;
-	public int drainBucketTicks = 0;
-	public int ticksToDrainBucket = 20;
-	public int ticksWithoutPower = 0;
-	public int ticksTillFreeze = 1200;
-	public double joulesStored = 0.0D;
-	public static double maxJoules = 1500000.0D;
-	private ItemStack[] inventory = new ItemStack[8];
-	private int playersUsing = 0;
-	public static double joulesPerSmelt = 50000.0D;
-	public static int meltingTicks = 500;
-	public int goldStored = 0;
-	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;
-	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
-	private double joulesToWarm = 10.0D;
-	public boolean isFrozen = false;
+	public int tankWarmingTicks = 0;										// # of ticks machine has been in "warming state"
+	public int drainBucketTicks = 0;										// # variable for draining buckets
+	public int ticksToDrainBucket = 20;										// # of ticks it takes to drain a bucket
+	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
+	public int ticksTillFreeze = 1200;										// # of ticks until machine enters "Frozen" state
+	public double joulesStored = 0.0D;										// Current amount of Joules stored
+	public static double maxJoules = 1500000.0D;							// Maximum amount of Joules the machine can store
+	private ItemStack[] inventory = new ItemStack[8];						// Machine inventory
+	private int playersUsing = 0;											// Number of players using the machine
+	public static double joulesPerSmelt = 50000.0D;							// Joules required to melt a gold ingot
+	public static int meltingTicks = 500;									// Ticks it takes to melt a gold ingot
+	public int goldStored = 0;												// Amount of gold currently stored
+	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;		// Max amount of gold the press can store
+	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;		// How much gold is in each bucket.
+	private double joulesToWarm = 10.0D;									// Joules per tick to keep the gold tank liquid
+	public boolean isFrozen = false;										// If the machine's tank is Frozen.
+	public LiquidTank tank = new LiquidTank(this.maxGold);
 
 	@Override
 	public void updateEntity()
@@ -68,10 +71,12 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		 */
 		if (!this.worldObj.isRemote)
 		{
-			
+			/*
+			 * 		Checks to see if the machine is currently in "Frozen" state, if the machine is "Frozen" it will check available power, and if there
+			 * 		is enough power available, it will enter the "Warming" state.
+			 */
 			if(this.isFrozen == true)
 			{
-				
 				if (this.getJoules()>1)
 				{
 					if(this.tankWarmingTicks == 0)
@@ -81,7 +86,6 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 					else if(this.tankWarmingTicks > 1)
 					{
 						this.tankWarmingTicks --;
-						System.out.println(this.tankWarmingTicks);
 						if(this.tankWarmingTicks == 1)
 						{
 							this.isFrozen = false;
@@ -90,6 +94,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 					}
 				}
 			}
+			/*
+			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
+			 * machine will enter "Frozen" status.
+			 */
 			else if (this.getGold()>0)
 			{
 				if(this.getJoules() < this.joulesToWarm)
@@ -100,14 +108,13 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 						this.isFrozen = true;
 						this.ticksWithoutPower = 0;
 					}
-				}	
+				}
 			}
-			
-			
+
 			/*
 			 * Fills internal Tank from Buckets.
 			 */
-			if(this.inventory[6] != null && this.getGold() < this.maxGold)
+			if(this.inventory[6] != null && this.getGold() < this.maxGold && this.isFrozen == false)
 			{
 				if(this.inventory[2] != null)
 				{
@@ -137,7 +144,6 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			if (this.canProcess() && this.getJoules() >= this.joulesPerSmelt)
 			{
-			
 				if (this.processTicks == 0)
 				{
 					this.processTicks = meltingTicks;
@@ -178,18 +184,12 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 				}
 			}
-			
 		}
 	}
-	public boolean tankFrozen() {
-		// TODO Auto-generated method stub
-		if(this.isFrozen = true)return true;
-			
-		return false;
-	}
+
+	//	Sets the amount of gold stored (additive or subtractive)
 	public void setGold(int goldAmount, boolean add)
 	{
-		//System.out.print("debug");
 		if(add)
 		{
 		this.goldStored += goldAmount;
@@ -200,7 +200,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		if (this.goldStored >= this.maxGold)this.goldStored = this.maxGold;
 	}
-	//Returns the amount of gold stored.
+	//	Returns the amount of gold stored.
 	public int getGold()
 	{
 		return this.goldStored;
@@ -212,6 +212,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 
+	
 	@Override
 	public ElectricityPack getRequest()
 	{
@@ -334,6 +335,8 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 			}
 		}
+		if (MurderCoins.MekanismLoaded == false)
+		{
 		if (inventory[5]!=null)
 		{
 			if(inventory[5].getItem() == MurderCoins.itemDiamondDust)
@@ -359,8 +362,40 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 			}
 		}
+		}
+		else if(MurderCoins.MekanismLoaded == true)
+		{
+			ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
+			for (int i = 0; i < tList.size(); i++)
+			{
+				ItemStack tStack = tList.get(i);
+				tStack = tStack.copy();
+				tStack.stackSize = 1;
+				if(inventory[5].isItemEqual(tStack))
+				{
+					if(inventory[7] != null)
+					{
+						if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
+						{
+						this.processTicks = 0;
+						return false;
+						}
+					}
+				}
+				if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
+				{
+					if(inventory[7] != null)
+					{
+						if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+						{
+						this.processTicks = 0;
+						return false;
+						}
+					}
+				}
+			}
+		}
 		return true;
-
 	}
 
 	/**
@@ -373,54 +408,106 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return;
 		}
-		if (!isDust)
+		if(MurderCoins.MekanismLoaded == false)
 		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
-			if (this.inventory[7] == null)
+			if (!isDust)
 			{
-				this.inventory[7] = itemstack;
+				ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
+				if (this.inventory[7] == null)
+				{
+					this.inventory[7] = itemstack;
+				}
+				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
+				{
+					this.inventory[7].stackSize += 4;
+				}
+				this.setGold(goldPerBucket, false);
+				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
-			else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
+			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
 			{
-				this.inventory[7].stackSize += 4;
+				ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
+				if (this.inventory[7] == null)
+				{
+					this.inventory[7] = itemstack;
+				}
+				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+				{
+					this.inventory[7].stackSize += 4;
+				}
+				this.decrStackSize(5, 1);
+				this.setGold(goldPerBucket, false);
+				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
-			// this.decrStackSize(5, 1); no dust to deduct.
-			//this.decrStackSize(6, 1);
-			this.setGold(goldPerBucket, false);
-			//this.getEmptyBucket();
-			this.setJoules(this.getJoules() - this.joulesPerSmelt);
-		}
-		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
-		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
-			if (this.inventory[7] == null)
+			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
 			{
-				this.inventory[7] = itemstack;
-			}
-			else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
-			{
-				this.inventory[7].stackSize += 4;
-			}
+				ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
+				if (this.inventory[7] == null)
+				{
+					this.inventory[7] = itemstack;
+				}
+				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
+				{
+					this.inventory[7].stackSize += 4;
+				}
 			this.decrStackSize(5, 1);
 			this.setGold(goldPerBucket, false);
-			//this.decrStackSize(6, 1);
 			this.setJoules(this.getJoules() - this.joulesPerSmelt);
+			}
 		}
-		else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
+		else
 		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
-			if (this.inventory[7] == null)
+			ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
+			for (int i = 0; i < tList.size(); i++)
 			{
-				this.inventory[7] = itemstack;
+				ItemStack tStack = tList.get(i);
+				tStack = tStack.copy();
+				tStack.stackSize = 1;
+				if (!isDust)
+				{
+					ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
+					if (this.inventory[7] == null)
+					{
+						this.inventory[7] = itemstack;
+					}
+					else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
+					{
+						this.inventory[7].stackSize += 4;
+					}
+					this.setGold(goldPerBucket, false);
+					this.setJoules(this.getJoules() - this.joulesPerSmelt);
+				}
+				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
+				{
+					ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
+					if (this.inventory[7] == null)
+					{
+						this.inventory[7] = itemstack;
+					}
+					else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
+					{
+						this.inventory[7].stackSize += 4;
+					}
+				this.decrStackSize(5, 1);
+				this.setGold(goldPerBucket, false);
+				this.setJoules(this.getJoules() - this.joulesPerSmelt);
+				}
+				else if (this.inventory[5].isItemEqual(tStack))
+				{
+					ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
+					if (this.inventory[7] == null)
+					{
+						this.inventory[7] = itemstack;
+					}
+					else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+					{
+						this.inventory[7].stackSize += 4;
+					}
+					this.decrStackSize(5, 1);
+					this.setGold(goldPerBucket, false);
+					this.setJoules(this.getJoules() - this.joulesPerSmelt);
+				}
 			}
-			else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
-			{
-				this.inventory[7].stackSize += 4;
-			}
-			this.decrStackSize(5, 1);
-			//this.decrStackSize(6, 1);
-			this.setGold(goldPerBucket, false);
-			this.setJoules(this.getJoules() - this.joulesPerSmelt);
 		}
 	}
 	public void breakMolds()
@@ -437,11 +524,10 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 			this.inventory[4] = null;
 			this.inventory[4] = broken;
 		}
-		
-		
-		
 	}
-	private void getEmptyBucket()  //returns an empty bucket in slot 7.
+
+	//returns an empty bucket in slot 7.
+	private void getEmptyBucket()
 	{
 		if(inventory[2] == null)
 		{
@@ -451,7 +537,6 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			inventory[2].stackSize += 1;
 		}
-		
 	}
 
 	/**
@@ -468,6 +553,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		this.goldStored = par1NBTTagCompound.getInteger("goldStored");
 		this.isFrozen = par1NBTTagCompound.getBoolean("isFrozen");
 		this.tankWarmingTicks = par1NBTTagCompound.getInteger("tankWarmingTicks");
+		this.ticksWithoutPower = par1NBTTagCompound.getInteger("ticksWithoutPower");
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -493,6 +579,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		par1NBTTagCompound.setInteger("goldStored", this.goldStored);
 		par1NBTTagCompound.setBoolean("isFrozen", isFrozen);
 		par1NBTTagCompound.setInteger("tankWarmingTicks", this.tankWarmingTicks);
+		par1NBTTagCompound.setInteger("ticksWithoutPower", this.ticksWithoutPower);
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)
@@ -635,7 +722,7 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return itemStack.getItem() instanceof ItemMeltedBucket;
 		}
-		
+
 		else if(slotID==7)
 		{
 			return false;
@@ -668,15 +755,14 @@ public class TileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	@Override
-	public double getJoules() 
+	public double getJoules()
 	{
 		return this.joulesStored;
 	}
 
 	@Override
-	public void setJoules(double joules) 
+	public void setJoules(double joules)
 	{
-		
 		this.joulesStored = Math.max(Math.min(joules, getMaxJoules()), 0);
 	}
 

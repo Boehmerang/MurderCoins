@@ -2,9 +2,10 @@ package murder.murdercoin.client;
 
 import murder.murdercoin.common.machines.forge.GoldForgeContainer;
 import murder.murdercoin.common.machines.forge.TileGoldForge;
+import murder.murdercoin.common.machines.pulverisor.ContainerPulverisor;
+import murder.murdercoin.common.machines.pulverisor.TilePulverisor;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -14,38 +15,27 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class goldForgeGui extends GuiContainer {
+public class GuiPulverisor extends GuiContainer 
+{
 	private int containerWidth;
 	private int containerHeight;
-	private TileGoldForge tileentity;
-
-	public goldForgeGui(InventoryPlayer player_inventory, TileGoldForge tile_entity) 
+	private TilePulverisor tileentity;
+	
+	
+	public GuiPulverisor(InventoryPlayer player_inventory, TilePulverisor tile_entity) 
 	{
-		super(new GoldForgeContainer(tile_entity, player_inventory));
+		super(new ContainerPulverisor(tile_entity, player_inventory));
 		this.tileentity = tile_entity;
 	}
-
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
 		String displayText = "";
-		fontRenderer.drawString("Gold Forge", 32, 6, 0xffffff);
-		//fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 6,ySize - 96, 0xffffff);
+		fontRenderer.drawString("Pulverisor", 62, 6, 0xffffff);
 		if (this.tileentity.isDisabled())
 		{
 			displayText = "Disabled!";
 		}
-	    else if (this.tileentity.isFrozen == true)
-        {
-        	if(this.tileentity.tankWarmingTicks>0)
-        	{
-        		displayText="Warming";
-        	}
-        	else
-        	{
-        		displayText = "Frozen";
-        	}
-        }
 		else if (this.tileentity.processTicks > 0) {
 			displayText = "Working";
 		}
@@ -54,8 +44,8 @@ public class goldForgeGui extends GuiContainer {
 			displayText = "Idle";
 		}
 
-		this.fontRenderer.drawString("Status:  " + displayText, 25, 45,	0xffffff);
-		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 31, 56, 0xffffff);
+		this.fontRenderer.drawString("Status:  " + displayText, 55, 45,	0xffffff);
+		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 56, 56, 0xffffff);
 		this.fontRenderer.drawString(capacityInfo, 30, 68, 0xffffff);
 		}
 
@@ -63,7 +53,7 @@ public class goldForgeGui extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2,
 			int par3) {
 		this.mc.renderEngine
-				.bindTexture("/mods/MurderCoins/textures/goldForgeGui.png");
+				.bindTexture("/mods/MurderCoins/textures/pulverisorGui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		containerWidth = (this.width - this.xSize) / 2;
@@ -72,23 +62,13 @@ public class goldForgeGui extends GuiContainer {
 				this.xSize, this.ySize);
 
 		if (this.tileentity.processTicks > 0) {
-			int scale = (int) (((double) this.tileentity.processTicks / (double) this.tileentity.meltingTicks) * 23);
+			int scale = (int) (((double) this.tileentity.processTicks / (double) this.tileentity.crushingTicks) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
 		if (this.tileentity.getJoules() > 0)
 		{
 			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
 			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
-		}
-		if (this.tileentity.getGold()>0)
-		{
-			int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
-			this.drawTexturedModalRect(containerWidth + /*12*/108, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
-		}
-		if (this.tileentity.getGold()==0)
-		{
-			//int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
-			this.drawTexturedModalRect(containerWidth + /*12*/108, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44);
 		}
 	}
 }

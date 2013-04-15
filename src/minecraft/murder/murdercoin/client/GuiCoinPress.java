@@ -12,12 +12,10 @@ import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 
 public class GuiCoinPress extends GuiContainer
 {
-	
-
 	private int containerWidth;
 	private int containerHeight;
 	private TileEntityCoinPress tileentity;
-	
+
     public GuiCoinPress(InventoryPlayer player_inventory, TileEntityCoinPress tile_entity)
     {
         super(new ContainerCoinPress(tile_entity, player_inventory));
@@ -40,7 +38,7 @@ public class GuiCoinPress extends GuiContainer
         	{
         		displayText="Warming";
         	}
-        	else 
+        	else
         	{
         		displayText = "Frozen";
         	}
@@ -57,7 +55,6 @@ public class GuiCoinPress extends GuiContainer
 		this.fontRenderer.drawString("Status: " + displayText, 65, 45, 0xffffff);
 		this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 72, 56, 0xffffff);
 		this.fontRenderer.drawString(capacityInfo, /*82, 56,*/30,68, 0xffffff);
-		
 	}
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
@@ -74,7 +71,7 @@ public class GuiCoinPress extends GuiContainer
 			int scale = (int) (((double) this.tileentity.processTicks / (double) this.tileentity.meltingTicks) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
 		}
-		if (this.tileentity.getJoules() > 0) 
+		if (this.tileentity.getJoules() > 0)
 		{
 			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
 			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
@@ -91,4 +88,3 @@ public class GuiCoinPress extends GuiContainer
 		}
 	}
 }
-

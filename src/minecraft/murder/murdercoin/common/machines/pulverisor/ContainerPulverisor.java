@@ -1,33 +1,29 @@
-package murder.murdercoin.common.machines.forge;
+package murder.murdercoin.common.machines.pulverisor;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.prefab.SlotSpecific;
 
-public class GoldForgeContainer extends Container {
-    protected TileGoldForge tile_entity;
-
-    public GoldForgeContainer(TileGoldForge tile_entity, InventoryPlayer player_inventory)
+public class ContainerPulverisor extends Container
+{
+	protected TilePulverisor tile_entity;
+	public ContainerPulverisor(TilePulverisor tile_entity, InventoryPlayer player_inventory)
     {
 		this.tile_entity = tile_entity;
 
 		// battery Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
-		// Gold Slot
+		// Diamond/Emerald Slot
 		this.addSlotToContainer(new Slot(tile_entity, 1, 52, 25));
 
-		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 26, new ItemStack(Item.bucketEmpty)));
-
 		// Smelting result
-		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 3, 154, 46));
+		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 2, 108, 25));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)
@@ -45,7 +41,6 @@ public class GoldForgeContainer extends Container {
 
 		tile_entity.openChest();
     }
-
     @Override
     public boolean canInteractWith(EntityPlayer player){
             return tile_entity.isUseableByPlayer(player);

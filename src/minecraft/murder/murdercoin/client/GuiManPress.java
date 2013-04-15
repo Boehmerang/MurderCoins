@@ -13,12 +13,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiManPress extends GuiContainer
 {
-	
-
 	private int containerWidth;
 	private int containerHeight;
 	private TileEntityManPress tileentity;
-	
+
     public GuiManPress(InventoryPlayer player_inventory, TileEntityManPress tile_entity)
     {
         super(new ContainerManPress(tile_entity, player_inventory));
@@ -47,7 +45,6 @@ public class GuiManPress extends GuiContainer
 		this.fontRenderer.drawString("Status:  " + displayText, 71, 45, 0xffffff);
 		//this.fontRenderer.drawString(ElectricityDisplay.getDisplay(this.tileentity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 0xffffff);
 		//this.fontRenderer.drawString(capacityInfo, /*82, 56,*/30,68, 0xffffff);
-		
 	}
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
@@ -66,4 +63,3 @@ public class GuiManPress extends GuiContainer
 		}
 	}
 }
-

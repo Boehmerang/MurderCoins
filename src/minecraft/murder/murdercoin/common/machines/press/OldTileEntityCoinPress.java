@@ -91,7 +91,6 @@ public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implem
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -137,7 +136,7 @@ public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implem
 	 * (pipeConnected()) // { // return true; // } // return false; } else if
 	 * (inventory[5].isItemEqual(new ItemStack(murderCoins.eDust))) { if
 	 * (inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))){
-	 * 
+	 *
 	 * return true; } return false; } else { return false; } }
 	 */
 	public boolean canPress()
@@ -176,7 +175,6 @@ public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implem
 		 */
 
 		return true;
-
 	}
 
 	public void pressCoins(boolean isDust)
@@ -245,9 +243,6 @@ public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implem
 			this.inventory[3] = null;
 			this.inventory[3] = broken;
 		}
-		
-		
-		
 	}
 	/**
 	 * Reads a tile entity from NBT.
@@ -437,5 +432,4 @@ public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implem
 	{
 		return this.getRequest().getWatts() * 10;
 	}
-
 }

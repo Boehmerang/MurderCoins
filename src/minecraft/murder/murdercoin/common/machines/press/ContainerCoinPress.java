@@ -13,7 +13,6 @@ import universalelectricity.core.item.IItemElectric;
 import universalelectricity.prefab.SlotSpecific;
 import net.minecraft.item.ItemBucket;
 
-
 public class ContainerCoinPress extends Container
 {
 	protected TileEntityCoinPress tile_entity;
@@ -71,7 +70,6 @@ public class ContainerCoinPress extends Container
 			for (int j = 0; j < 9; j++)
 			{
 				addSlotToContainer(new Slot(player_inventory, j + i * 9 + 9, 9 + j * 18, 85 + i * 16));
-
 			}
 		}
 
@@ -79,7 +77,6 @@ public class ContainerCoinPress extends Container
 		{
 			addSlotToContainer(new Slot(player_inventory, i, 6 + i * 16, 142));
 		}
-
 	}
 
 	@Override
@@ -147,5 +144,4 @@ public class ContainerCoinPress extends Container
 
 		return var2;
 	}
-
 }

@@ -23,8 +23,9 @@ public class BlockCoinPress extends BlockAdvanced
 {
 	private Icon cPTop;
 	private Icon cPSide;
-	private Icon cPFront;
+	private Icon cPOn;
 	private Icon cPPow;
+	private Icon cPOff;
 
 	public BlockCoinPress(int id)
 	{
@@ -37,13 +38,13 @@ public class BlockCoinPress extends BlockAdvanced
 	{
 		this.cPTop = par1IconRegister.registerIcon("MurderCoins:coinPress-Top");
 		this.cPSide = par1IconRegister.registerIcon("MurderCoins:coinPress-Side");
-		this.cPFront = par1IconRegister.registerIcon("MurderCoins:coinPress-Front");
+		this.cPOn = par1IconRegister.registerIcon("MurderCoins:coinPress-On");
+		this.cPOff = par1IconRegister.registerIcon("MurderCoins:coinPress-Off");
 		this.cPPow = par1IconRegister.registerIcon("MurderCoins:coinPress-Pow");
-
 	}
 
 	@Override
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
 		if (side == 0 || side == 1) // bottom and top
 		{
@@ -51,7 +52,7 @@ public class BlockCoinPress extends BlockAdvanced
 		}
 		if (side == metadata + 2) // front
 		{
-			return this.cPFront;
+			return this.cPOn;
 		}
 		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
@@ -61,7 +62,6 @@ public class BlockCoinPress extends BlockAdvanced
 		// sides
 		{
 			return this.cPSide;
-
 		}
 	}
 
@@ -93,16 +93,16 @@ public class BlockCoinPress extends BlockAdvanced
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlock(x, y, z, this.blockID, 1, 0);
-				break;
-			case 1:
-				par1World.setBlock(x, y, z, this.blockID, 2, 0);
-				break;
-			case 2:
 				par1World.setBlock(x, y, z, this.blockID, 0, 0);
 				break;
-			case 3:
+			case 1:
 				par1World.setBlock(x, y, z, this.blockID, 3, 0);
+				break;
+			case 2:
+				par1World.setBlock(x, y, z, this.blockID, 1, 0);
+				break;
+			case 3:
+				par1World.setBlock(x, y, z, this.blockID, 2, 0);
 				break;
 		}
 

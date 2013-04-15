@@ -69,7 +69,6 @@ public class ContainerManPress extends Container
 			for (int j = 0; j < 9; j++)
 			{
 				addSlotToContainer(new Slot(player_inventory, j + i * 9 + 9, 9 + j * 18, 85 + i * 16));
-
 			}
 		}
 
@@ -77,7 +76,6 @@ public class ContainerManPress extends Container
 		{
 			addSlotToContainer(new Slot(player_inventory, i, 6 + i * 16, 142));
 		}
-
 	}
 
 	@Override
@@ -145,5 +143,4 @@ public class ContainerManPress extends Container
 
 		return var2;
 	}
-
 }
