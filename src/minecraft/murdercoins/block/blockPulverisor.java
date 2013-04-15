@@ -59,7 +59,7 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 		}
 		if (side == metadata + 2) // front
 		{
-			return tileEntity.isRunning ? this.pOn : this.pOff;
+			return tileEntity.isRunning == true ? this.pOn : this.pOff;
 		}
 		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{

@@ -40,6 +40,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	public void updateEntity()
 	{
 		super.updateEntity();
+		
 		/**
 	 	* Attempts to charge from battery in slot 1.
 	 	*/
@@ -57,6 +58,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 					{
 						this.processTicks = this.crushingTicks;
 						this.setRunning(true);
+						System.out.println(isRunning);
 					}
 					else if (this.processTicks > 0)
 					{
@@ -73,6 +75,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
+								System.out.println(isRunning);
 							}
 							else if(this.inventory[1].getItem() == Item.emerald)
 							{
@@ -80,6 +83,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
+								System.out.println(isRunning);
 							}
 						}
 					}
@@ -127,10 +131,12 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 						else
 						{
 							this.processTicks = 0;
+							this.setRunning(false);
 							return false;
 						}
 					}
 					this.processTicks = 0;
+					this.setRunning(false);
 					return false;
 				}
 				if(this.inventory[1].getItem() == Item.emerald)
@@ -142,19 +148,24 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 						else 
 						{
 							this.processTicks = 0;
+							this.setRunning(false);
 							return false;
 						}
 					}
 					this.processTicks = 0;
+					this.setRunning(false);
 					return false;
 				}
 				this.processTicks = 0;
+				this.setRunning(false);
 				return false;
 			}
 			this.processTicks = 0;
+			this.setRunning(false);
 			return false;
 		}
 		this.processTicks = 0;
+		this.setRunning(false);
 		return false;
 	}
 	public void crushItem(boolean isDiamond)
@@ -257,7 +268,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(),this.isRunning);
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), this.isRunning);
 	}
 
 	@Override
@@ -267,6 +278,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		{
 			this.processTicks = dataStream.readInt();
 			this.setJoules(dataStream.readDouble());
+			this.isRunning = dataStream.readBoolean();
 		}
 		catch (Exception e)
 		{

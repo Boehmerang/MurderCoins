@@ -66,7 +66,7 @@ public class MurderCoins
 	public static MurderCoins				instance			= new MurderCoins();
 	private guiHandler						guiHandler			= new guiHandler();
 	
-	@SidedProxy(clientSide = "murder.murdercoin.client.ClientProxyMurderCoins", serverSide = "murder.murdercoin.common.CommonProxyMurderCoins")
+	@SidedProxy(clientSide = "murdercoins.client.ClientProxy", serverSide = "murdercoins.common.CommonProxy")
 	public static CommonProxy	proxy;
 	public static CreativeTabs				murderTab			= new tabMurderCoins(CreativeTabs.getNextID(), "MurderCoins");
 	private static final String[]			LANGUAGES_SUPPORTED	= new String[] { "en_US" };
