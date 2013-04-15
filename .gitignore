@@ -10,10 +10,10 @@ CHANGELOG
 /src/minecraft/*
 !/src/minecraft/mods/
 !/src/minecraft/murder/
-!/src/minecraft/mekanism/api/
+!/src/minecraft/mekanism/
 !/src/minecraft/murder/
 !src/minecraft/mods/MurderCoins/*
-/src/minecraft/universalelectricity
+!/src/minecraft/universalelectricity
 /src/minecraft/universalelectricity/components
 !/resources/
 !/models/
