@@ -443,4 +443,9 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 	{
 		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
+	public boolean getRunning() 
+	{
+		if (this.isRunning == true)return true;
+		return false;
+	}
 }

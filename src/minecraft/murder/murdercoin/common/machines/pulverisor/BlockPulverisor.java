@@ -29,6 +29,7 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 	private Icon pOn;
 	private Icon pOff;
 	private Icon pPow;
+	private TilePulverisor tile;
 
 	public BlockPulverisor(int id)
 	{
@@ -44,8 +45,30 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 		this.pOff = par1IconRegister.registerIcon("MurderCoins:pulverisor_Off");
 		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
+	   public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)//getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
+	    {
+		   int metadata = world.getBlockMetadata(x, y, z); 
+		   TilePulverisor tileEntity = (TilePulverisor) world.getBlockTileEntity(x,y,z);
+		   if (side == 0||side == 1) //bottom and top
+			{
+				return this.pTop;
+			}
+			if (side == metadata + 2) //front
+			{
+				return tileEntity.getRunning() ? this.pOn : this.pOff;
+			}
+			if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
+			{
+				return this.pPow;
+			}
+			else //sides
+			{
+			return this.pSide;
+			}
+	    }
 	   public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
 	    {
+	
 		   if (side == 0||side == 1) //bottom and top
 			{
 				return this.pTop;
@@ -89,19 +112,15 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 		    {
 		       case 0:
 		           par1World.setBlock(x, y, z, this.blockID, 0, 0);
-		           tileEntity.setFacing(0);
 		           break;
 		       case 1:
 		           par1World.setBlock(x, y, z, this.blockID, 3, 0);
-		           tileEntity.setFacing(3);
 		           break;
 		       case 2:
 		           par1World.setBlock(x, y, z, this.blockID, 1, 0);
-		           tileEntity.setFacing(1);
 		           break;
 		       case 3:
 		           par1World.setBlock(x, y, z, this.blockID, 2, 0);
-		           tileEntity.setFacing(2);
 		           break;
 		      }
 
