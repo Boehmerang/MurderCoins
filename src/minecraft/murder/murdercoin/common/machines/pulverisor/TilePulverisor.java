@@ -245,8 +245,14 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 	}
 	public void setRunning(boolean running)
 	{
-		if(running)this.isRunning = true;
-		else this.isRunning = false;
+		if(running == true)
+		{
+			this.isRunning = true;
+		}
+		else
+		{
+			this.isRunning = false;
+		}
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
 	}
 	@Override
