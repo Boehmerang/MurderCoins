@@ -57,7 +57,7 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 					if (this.processTicks == 0)
 					{
 						this.processTicks = this.crushingTicks;
-						this.isRunning = true;
+						this.setRunning(true);
 					}
 					else if (this.processTicks > 0)
 					{
@@ -73,14 +73,14 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 								this.crushItem(true);
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
-								this.isRunning = false;
+								this.setRunning(false);
 							}
 							else if(this.inventory[1].getItem() == Item.emerald)
 							{
 								this.crushItem(false);
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
-								this.isRunning = false;
+								this.setRunning(false);
 							}
 						}
 					}
@@ -243,10 +243,16 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 	{
 		return this.maxJoules;
 	}
+	public void setRunning(boolean running)
+	{
+		if(running)this.isRunning = true;
+		else this.isRunning = false;
+		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
+	}
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules());
+		return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(),this.isRunning);
 	}
 
 	@Override
@@ -274,6 +280,7 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 		this.facing = par1NBTTagCompound.getShort("facing");
+		this.isRunning = par1NBTTagCompound.getBoolean("isRunning");
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -297,6 +304,7 @@ public class TilePulverisor extends TileEntityElectricityRunnable implements IIn
 		par1NBTTagCompound.setInteger("smeltingTicks", this.processTicks);
 		par1NBTTagCompound.setDouble("joulesStored", this.joulesStored);
 		par1NBTTagCompound.setShort("facing", (short) this.facing);
+		par1NBTTagCompound.setBoolean("isRunning", this.isRunning);
 
 		NBTTagList var2 = new NBTTagList();
 

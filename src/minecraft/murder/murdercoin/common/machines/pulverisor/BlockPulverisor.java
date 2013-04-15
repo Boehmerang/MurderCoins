@@ -45,7 +45,9 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 		this.pOff = par1IconRegister.registerIcon("MurderCoins:pulverisor_Off");
 		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
-	   public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)//getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
+	   /* commented out, didn't work, removed the textures from the icon in inventory too..
+	    * 
+	    * public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)//getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
 	    {
 		   int metadata = world.getBlockMetadata(x, y, z); 
 		   TilePulverisor tileEntity = (TilePulverisor) world.getBlockTileEntity(x,y,z);
@@ -55,7 +57,7 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 			}
 			if (side == metadata + 2) //front
 			{
-				return tileEntity.getRunning() ? this.pOn : this.pOff;
+				return tileEntity.isRunning ? this.pOn : this.pOff;
 			}
 			if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
 			{
@@ -65,8 +67,8 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 			{
 			return this.pSide;
 			}
-	    }
-	   public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
+	    }*/
+	    public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
 	    {
 	
 		   if (side == 0||side == 1) //bottom and top
