@@ -45,9 +45,9 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 		this.pOff = par1IconRegister.registerIcon("MurderCoins:pulverisor_Off");
 		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
-	   /* commented out, didn't work, removed the textures from the icon in inventory too..
-	    * 
-	    * public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)//getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
+	   
+	    
+	    public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
 	    {
 		   int metadata = world.getBlockMetadata(x, y, z); 
 		   TilePulverisor tileEntity = (TilePulverisor) world.getBlockTileEntity(x,y,z);
@@ -67,7 +67,7 @@ public class BlockPulverisor extends BlockAdvanced implements IRotatable
 			{
 			return this.pSide;
 			}
-	    }*/
+	    }
 	    public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
 	    {
 	

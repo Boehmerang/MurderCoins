@@ -51,7 +51,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.0.4a", dependencies = "after:Mekanism;after:BasicComponents")
+@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.1.1a", dependencies = "after:Mekanism;after:BasicComponents")
 @NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" }, packetHandler =
