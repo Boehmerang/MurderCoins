@@ -5,6 +5,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class Config
 {
+	//		Item Id numbers.
 	public static int gCoinID;
 	public static int dCoinID;
 	public static int eCoinID;
@@ -25,6 +26,33 @@ public class Config
 	public static int GoldStillID;
 	public static int GoldFlowingID;
 	public static int pulverisorID;
+	
+	//		Power Use and Ticks per process of Gold Forge
+	
+	public static int GFprocessTicks;
+	public static int GFticksToWarm;
+	public static int GFticksTillFreeze;
+	public static double GFjoulesPerUse;
+	public static double GFtankJoules;
+	public static double GFunfreezeJoules;
+	
+	//		Power Use and Ticks per process of Coin Press
+	
+	public static int CPprocessTicks;
+	public static int CPticksToWarm;
+	public static int CPticksTillFreeze;
+	public static double CPjoulesPerUse;
+	public static double CPtankJoules;
+	public static double CPunfreezeJoules;
+	
+	//		Tick's per process of Manual Coin Press
+	
+	public static int MCPprocessTicks; 
+	
+	//		Power Use and Ticks per Process of Pulverisor
+	
+	public static int PprocessTicks;
+	public static double PjoulesPerUse;
 
 	public static void loadConfig(FMLPreInitializationEvent e)
 	{
@@ -36,40 +64,55 @@ public class Config
 		// Property gCoin; //This is a property, see below
 		// gCoin = config.getItem("gCoin", 200); //This gets the property
 		// gCoin.comment = "Cold Coin ID"; //This adds a comment
-		gCoinID = config.getItem("gCoin", 200).getInt(); // This gets the value
-		// Property dCoin; //This is a property, see below
-		// dCoin = config.getItem("dCoin", 201); //This gets the property
-		// dCoin.comment = "Diamond Coin ID"; //This adds a comment
-		dCoinID = config.getItem("dCoin", 201).getInt(); // This gets the value
-		eCoinID = config.getItem("eCoin", 202).getInt();
-		// Property coinMold; //This is a property, see below
-		// coinMold = config.getItem("coinMold", 202); //This gets the property
-		// coinMold.comment = "Coin Mold Id"; //This adds a comment
-		coinMoldID = config.getItem("coinMold", 203).getInt(); // This gets the value
-		// Property nugBucket; //This is a property, see below
-		// nugBucket = config.getItem("nugBucket", 3003); //This gets the property
-		// nugBucket.comment = "Nugget Bucket ID"; //This adds a comment
-		nugBucketID = config.getItem("nugBucket", 204).getInt(); // This gets the value
-		// Property meltedBucket;
-		// meltedBucket = config.getItem("meltedBucket", 3004); //This gets the property
-		// meltedBucket.comment = "Bucket of Gold ID"; //This adds a comment
-		meltedBucketID = config.getItem("meltedBucket", 205).getInt(); // This gets the value
-		dClumpID = config.getItem("dClump", 206).getInt();
-		eClumpID = config.getItem("eClump", 207).getInt();
+		gCoinID = config.getItem("gCoin", 3000).getInt();
+		dCoinID = config.getItem("dCoin", 3001).getInt();
+		eCoinID = config.getItem("eCoin", 3002).getInt();
+		coinMoldID = config.getItem("coinMold", 3003).getInt();
+		nugBucketID = config.getItem("nugBucket", 3004).getInt();
+		meltedBucketID = config.getItem("meltedBucket", 205).getInt(); 
+		dClumpID = config.getItem("dClump", 3006).getInt();
+		eClumpID = config.getItem("eClump", 3007).getInt();
 		dirtyDDustID = config.getItem("dirtyDDust", 208).getInt();
 		dirtyEDustID = config.getItem("dirtyEDust", 209).getInt();
-		dDustID = config.getItem("dDust", 210).getInt();
-		eDustID = config.getItem("eDust", 211).getInt();
-		brokenMoldID = config.getItem("brokenMold", 212).getInt();
-		coinPressID = config.getItem("coinPress", 312).getInt();
-		goldForgeID = config.getItem("goldForge", 313).getInt();
-		itemGoldForgeID = config.getItem("goldForge", 314).getInt();
-		manPressID = config.getItem("manPress", 315).getInt();
-		pulverisorID = config.getItem("pulverisor", 316).getInt();
+		dDustID = config.getItem("dDust", 3010).getInt();
+		eDustID = config.getItem("eDust", 3011).getInt();
+		brokenMoldID = config.getItem("brokenMold", 3012).getInt();
+		coinPressID = config.getBlock("coinPress", 3013).getInt();
+		goldForgeID = config.getBlock("goldForge", 3014).getInt();
+		itemGoldForgeID = config.getItem("goldForge", 3015).getInt();
+		manPressID = config.getBlock("manPress", 3016).getInt();
+		pulverisorID = config.getBlock("pulverisor", 3017).getInt();
 
 		GoldStillID = config.getItem("GoldStill", 1001).getInt();
 		GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();
-
+		
+		//		Manual Coin Press options
+		
+		MCPprocessTicks = config.get("Manual Coin Press", "Ticks needed to press coins", 1500).getInt();
+		
+		//		Pulverisor Options
+		
+		PprocessTicks = config.get("Pulverisor", "Ticks to Pulverise gem", 250).getInt();
+		PjoulesPerUse = config.get("Pulverisor", "Joules per use", 50000.0D).getDouble(50000.0D);
+		
+		//		Electric Coin Press options
+		
+		CPprocessTicks = config.get("Coin Press", "Ticks needed to press coins", 1500).getInt();
+		CPticksToWarm = config.get("Coin Press", "Ticks(multiplied by gold Stored) it takes to warm the tank", 100).getInt();
+		CPticksTillFreeze = config.get("Coin Press", "Ticks until the tank will freeze", 1200).getInt();
+		CPjoulesPerUse = config.get("Coin Press", "Joules used to press coins", 50000.0D).getDouble(50000.0D);
+		CPtankJoules = config.get("Coin Press", "Joules used to keep tank warm", 10.0D).getDouble(10.0D);
+		CPunfreezeJoules = config.get("Coin Press", "Joules(multiplied by gold Stored) needed to unfreeze the tank", 15000.0D).getDouble(15000.0D);
+		
+		//		Gold Forge options
+		
+		GFprocessTicks = config.get("Gold Forge", "Ticks needed to melt the gold", 500).getInt();
+		GFticksToWarm = config.get("Gold Forge", "Ticks(multiplied by gold Stored) needed to warm the tank", 1000).getInt();
+		GFticksTillFreeze = config.get("Coin Press", "Ticks until the tank will freeze", 1200).getInt();
+		GFjoulesPerUse = config.get("Gold Forge", "Joules used to press coins", 50000.0D).getDouble(50000.0D);
+		GFtankJoules = config.get("Gold Forge", "Joules used to keep tank warm", 10.0D).getDouble(10.0D);
+		GFunfreezeJoules = config.get("Gold Forge", "Joules(multiplied by gold Stored) needed to unfreeze the tank", 15000.0D).getDouble(15000.0D);
+		
 		config.save(); // Saves the file
 
 	}

@@ -24,6 +24,57 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class OldTileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, IPacketReceiver
 {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//		Power Use and Ticks per process of Gold Forge
+	
+	public static int GFprocessTicks;
+	public static int GFfrozenTicks;
+	public static double GFjoulesPerUse;
+	public static double GFtankJoules;
+	public static double GFunfreezeJoules;
+	
+	//		Power Use and Ticks per process of Coin Press
+	
+	public static int CPprocessTicks;
+	public static int CPfrozenTicks;
+	public static double CPjoulesPerUse;
+	public static double CPtankJoules;
+	public static double CPunfreezeJoules;
+	
+	//		Tick's per process of Manual Coin Press
+	
+	public static int MCPprocessTicks; 
+	
+	//		Power Use and Ticks per Process of Pulverisor
+	
+	public static int PprocessTicks;
+	public static double PjoulesPerUse;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static final double WATTS_PER_TICK = 500.0D;
 	public static final double joulesPerSmelt = 50000.0D;
 	public double prevJoules = 0;

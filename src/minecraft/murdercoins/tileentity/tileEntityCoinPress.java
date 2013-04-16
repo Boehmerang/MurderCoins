@@ -41,6 +41,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 {
 	public int processTicks = 0;
 	public int tankWarmingTicks = 0;										// # of ticks machine has been in "warming state"
+	public int ticksToWarm = 100;
 	public int drainBucketTicks = 0;										// # variable for draining buckets
 	public int ticksToDrainBucket = 20;										// # of ticks it takes to drain a bucket
 	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
@@ -81,7 +82,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				{
 					if(this.tankWarmingTicks == 0)
 					{
-					this.tankWarmingTicks = (this.getGold()/1000)*100;
+					this.tankWarmingTicks = (this.getGold()/1000)*ticksToWarm;
 					}
 					else if(this.tankWarmingTicks > 1)
 					{
@@ -705,18 +706,14 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return itemStack.getItem() instanceof IItemElectric;
 		}
-		else if(slotID==2)
+		else if(itemStack.isItemEqual(new ItemStack(MurderCoins.itemDiamondDust))||itemStack.isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
 		{
 			return false;
 		}
-		else if(slotID==3)
+		else if(itemStack.isItemEqual(new ItemStack(MurderCoins.itemCoinMold)))
 		{
-			return itemStack.getItem() instanceof itemCoinMold;
-			//return false;
-		}
-		else if(slotID==4)
-		{
-			return itemStack.getItem() instanceof itemCoinMold;
+			if(this.inventory[3] !=null) return slotID==3;
+			else return slotID==4;
 		}
 		else if(slotID==6)
 		{

@@ -1,5 +1,6 @@
 package murdercoins.tileentity;
 
+import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -32,27 +33,43 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class tileEntityGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
 {
-	public int processTicks = 0;
-	public int tankWarmingTicks = 0;
-	public int ticksWithoutPower = 0;
-	public int ticksTillFreeze = 1200;
-	public int fillTicks = 0;
-	public int ticksToFill = 20;
-	public double joulesStored = 0.0D;
-	public static double maxJoules = 1500000.0D;
-	private ItemStack[] inventory = new ItemStack[4];
-	private int playersUsing = 0;
-	public static double joulesPerSmelt = 50000.0D;
-	public static int meltingTicks = 500;
-	public int goldStored = 0;
-	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;
-	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
-	private double joulesToWarm = 10.0D;
-	public boolean isFrozen = false;
-
+	
+	public int 					processTicks = 0;
+	public int 					tankWarmingTicks = 0;
+	public int 					ticksToWarm;// = 100;
+	public int 					ticksWithoutPower = 0;
+	public int 					ticksTillFreeze;// = 1200;
+	public int 					fillTicks = 0;
+	public int 					ticksToFill = 20;
+	private int 				playersUsing = 0;
+	public int 					goldStored = 0;
+	public int					maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;
+	public int 					goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
+	public static int 			meltingTicks;// = 500;	
+	
+	public double 				joulesStored = 0.0D;
+	public static double 		maxJoules = 1500000.0D;
+	public static double 		joulesPerSmelt;// = 50000.0D;
+	public static double		joulesToWarm;
+	private double 				tankRunningJoules;// = 10.0D;
+	
+	
+	public boolean 				isFrozen = false;
+	
+	private ItemStack[] 		inventory = new ItemStack[4];
+	
+	Config						configLoader		= new Config();
+	
 	@Override
 	public void updateEntity()
 	{
+		this.meltingTicks = Config.GFprocessTicks;
+		this.ticksToWarm = Config.GFticksToWarm;
+		this.ticksTillFreeze = Config.GFticksTillFreeze;
+		this.joulesPerSmelt = Config.GFjoulesPerUse;
+		this.tankRunningJoules = Config.GFtankJoules;
+		this.joulesToWarm = Config.GFunfreezeJoules;
+		
 		super.updateEntity();
 		/**
 		 * Attempts to charge from battery in slot 1.
@@ -69,11 +86,11 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			 */
 			if(this.isFrozen == true)
 			{
-				if (this.getJoules()>1)
+				if (this.getJoules()> this.joulesToWarm)
 				{
 					if(this.tankWarmingTicks == 0)
 					{
-					this.tankWarmingTicks = (this.getGold()/1000)*100;
+					this.tankWarmingTicks = (this.getGold()/1000)*ticksToWarm;
 					}
 					else if(this.tankWarmingTicks > 1)
 					{
@@ -81,6 +98,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 						if(this.tankWarmingTicks == 1)
 						{
 							this.isFrozen = false;
+							this.setJoules(this.getJoules() - this.joulesToWarm);
 							this.tankWarmingTicks = 0;
 						}
 					}
@@ -92,7 +110,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			 */
 			else if (this.getGold()>0)
 			{
-				if(this.getJoules() < this.joulesToWarm)
+				if(this.getJoules() < this.tankRunningJoules)
 				{
 					this.ticksWithoutPower++;
 					if(this.ticksWithoutPower == this.ticksTillFreeze)
@@ -193,7 +211,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 				if(this.getGold() > 0)
 				{
-					this.setJoules(this.getJoules() - this.joulesToWarm );
+					this.setJoules(this.getJoules() - this.tankRunningJoules );
 				}
 			}
 		}
@@ -499,7 +517,20 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return slotID == 1 ? itemStack.isItemEqual(new ItemStack(Item.ingotGold)) : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : (slotID == 2 ? itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)): false));
+		//return slotID == 1 ? itemStack.isItemEqual(new ItemStack(Item.ingotGold)) : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : (slotID == 2 ? itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)): false));
+		if(itemStack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+		else if(itemStack.isItemEqual(new ItemStack(Item.ingotGold))||itemStack.isItemEqual(new ItemStack(Item.goldNugget)))
+		{
+			return slotID == 1;
+		}
+		else if(slotID==2)//(itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)))
+		{
+			return true;//slotID == 2;
+		}
+		return slotID == 2;
 	}
 
 	/**
@@ -514,8 +545,8 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
 	{
-		//return this.isStackValidForSlot(slotID, par2ItemStack);
-		if(par2ItemStack.getItem() instanceof IItemElectric)
+		return this.isStackValidForSlot(slotID, par2ItemStack);
+		/*if(par2ItemStack.getItem() instanceof IItemElectric)
 		{
 			return slotID == 0;
 		}
@@ -527,7 +558,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		{
 			return slotID == 2;
 		}
-		return slotID == 2;
+		return slotID == 2;*/
 	}
 
 	@Override

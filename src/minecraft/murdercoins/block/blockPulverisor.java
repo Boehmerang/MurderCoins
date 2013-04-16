@@ -71,6 +71,7 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 			return this.pSide;
 		}
 	}
+
 	
 	@Override
 	public Icon getIcon(int side, int metadata)// getBlockTextureFromSideAndMetadata
@@ -81,7 +82,7 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 		}
 		if (side == metadata + 2) // front
 		{
-			return this.pOff;
+			return this.pOn;
 		}
 		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
@@ -134,8 +135,13 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 		}
 		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.scheduleBlockUpdate(x, y, z, this.blockID, 1);//this.tickRate(par1World));
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
+    public int tickRate(World par1World)
+    {
+        return 2;
+    }
 	
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int i, int j)

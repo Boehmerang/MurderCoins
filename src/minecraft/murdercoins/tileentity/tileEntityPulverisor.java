@@ -16,6 +16,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
+import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -33,7 +34,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	private ItemStack[] inventory = new ItemStack[3];
 	private int playersUsing = 0;
 	public static double joulesPerSmelt = 50000.0D;
-	public static int crushingTicks = 100;
+	public static int crushingTicks = 250;
 	public int facing;
 	public boolean isRunning = false;
 	
@@ -58,7 +59,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 					{
 						this.processTicks = this.crushingTicks;
 						this.setRunning(true);
-						System.out.println(isRunning);
+						//System.out.println(isRunning);
 					}
 					else if (this.processTicks > 0)
 					{
@@ -75,7 +76,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
-								System.out.println(isRunning);
+								//System.out.println(isRunning);
 							}
 							else if(this.inventory[1].getItem() == Item.emerald)
 							{
@@ -83,7 +84,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
-								System.out.println(isRunning);
+								//System.out.println(isRunning);
 							}
 						}
 					}
@@ -97,7 +98,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 					this.processTicks = 0;
 				}
 			}
-			else
+			else if(this.canProcess()==false)
 			{
 				this.processTicks = 0;
 			}
@@ -131,12 +132,10 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 						else
 						{
 							this.processTicks = 0;
-							this.setRunning(false);
 							return false;
 						}
 					}
 					this.processTicks = 0;
-					this.setRunning(false);
 					return false;
 				}
 				if(this.inventory[1].getItem() == Item.emerald)
@@ -148,24 +147,19 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 						else 
 						{
 							this.processTicks = 0;
-							this.setRunning(false);
 							return false;
 						}
 					}
 					this.processTicks = 0;
-					this.setRunning(false);
 					return false;
 				}
 				this.processTicks = 0;
-				this.setRunning(false);
 				return false;
 			}
 			this.processTicks = 0;
-			this.setRunning(false);
 			return false;
 		}
 		this.processTicks = 0;
-		this.setRunning(false);
 		return false;
 	}
 	public void crushItem(boolean isDiamond)
@@ -258,12 +252,17 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		if(running == true)
 		{
 			this.isRunning = true;
+			//System.out.println(isRunning);
 		}
 		else
 		{
 			this.isRunning = false;
+			//System.out.println(isRunning);
 		}
+		System.out.println(isRunning);
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
+		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+		//this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 	@Override
 	public Packet getDescriptionPacket()
@@ -344,13 +343,26 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
 	}
 	@Override
-	public boolean func_102007_a(int i, ItemStack itemstack, int j) {
-		// TODO Auto-generated method stub
+	public boolean func_102007_a(int slotID, ItemStack itemstack, int j) 
+	{
+		return this.isStackValidForSlot(slotID, itemstack);
+	}
+	@Override
+	public boolean func_102008_b(int slotID, ItemStack itemstack, int j) 
+	{
+		if(slotID==2)return true;
 		return false;
 	}
 	@Override
-	public boolean func_102008_b(int i, ItemStack itemstack, int j) {
-		// TODO Auto-generated method stub
+	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) {
+		if(itemstack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+		else if(itemstack.isItemEqual(new ItemStack(Item.diamond))||itemstack.isItemEqual(new ItemStack(Item.emerald)))
+		{
+			return slotID == 1;
+		}
 		return false;
 	}
 	@Override
@@ -457,11 +469,6 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	public void closeChest()
 	{
 		this.playersUsing--;
-	}
-	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 	@Override
 	public boolean canConnect(ForgeDirection direction)
