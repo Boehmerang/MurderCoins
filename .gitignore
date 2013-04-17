@@ -11,8 +11,9 @@ CHANGELOG
 !/src/minecraft/mods/
 !/src/minecraft/murder/
 !/src/minecraft/mekanism/
-!/src/minecraft/murder/
+!/src/minecraft/murdercoins/
 !src/minecraft/mods/MurderCoins/*
+!src/minecraft/mods/MurderCoins/common/*
 !/src/minecraft/universalelectricity/
 /src/minecraft/universalelectricity/components
 !/resources/
