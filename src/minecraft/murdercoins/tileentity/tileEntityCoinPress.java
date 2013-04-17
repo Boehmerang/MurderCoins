@@ -2,8 +2,11 @@ package murdercoins.tileentity;
 
 import java.util.ArrayList;
 
+import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
+import murdercoins.common.helpers.IItemDust;
 import murdercoins.items.itemCoinMold;
+import murdercoins.items.itemDDust;
 import murdercoins.items.itemMeltedBucket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -46,22 +49,35 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public int ticksToDrainBucket = 20;										// # of ticks it takes to drain a bucket
 	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
 	public int ticksTillFreeze = 1200;										// # of ticks until machine enters "Frozen" state
-	public double joulesStored = 0.0D;										// Current amount of Joules stored
-	public static double maxJoules = 1500000.0D;							// Maximum amount of Joules the machine can store
-	private ItemStack[] inventory = new ItemStack[8];						// Machine inventory
-	private int playersUsing = 0;											// Number of players using the machine
-	public static double joulesPerSmelt = 50000.0D;							// Joules required to melt a gold ingot
-	public static int meltingTicks = 500;									// Ticks it takes to melt a gold ingot
+	public int meltingTicks = 500;									// Ticks it takes to melt a gold ingot
 	public int goldStored = 0;												// Amount of gold currently stored
 	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;		// Max amount of gold the press can store
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;		// How much gold is in each bucket.
-	private double joulesToWarm = 10.0D;									// Joules per tick to keep the gold tank liquid
+	private int playersUsing = 0;											// Number of players using the machine
+	
+	public double joulesStored = 0.0D;										// Current amount of Joules stored
+	public static double maxJoules = 1500000.0D;							// Maximum amount of Joules the machine can store
+	public static double joulesPerSmelt = 50000.0D;							// Joules required to melt a gold ingot
+	public static double unfreezeJoules = 150000.0D;						// Joules needed to unfreeze the tank.
+	private double tankJoules = 10.0D;										// Joules per tick to keep the gold tank liquid
+
 	public boolean isFrozen = false;										// If the machine's tank is Frozen.
-	public LiquidTank tank = new LiquidTank(this.maxGold);
+	
+	private ItemStack[] inventory = new ItemStack[8];						// Machine inventory
+	
+	public LiquidTank 			tank 										= new LiquidTank(this.maxGold);
+	
+	Config						configLoader								= new Config();
 
 	@Override
 	public void updateEntity()
 	{
+		this.meltingTicks = Config.CPprocessTicks;
+		this.ticksToWarm = Config.CPticksToWarm;
+		this.ticksTillFreeze = Config.CPticksTillFreeze;
+		this.joulesPerSmelt = Config.CPjoulesPerUse;
+		this.tankJoules = Config.CPtankJoules;
+		this.unfreezeJoules = Config.CPunfreezeJoules;
 		super.updateEntity();
 		/**
 		 * Attempts to charge from battery in slot 1.
@@ -78,7 +94,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			if(this.isFrozen == true)
 			{
-				if (this.getJoules()>1)
+				if (this.getJoules() > this.unfreezeJoules)
 				{
 					if(this.tankWarmingTicks == 0)
 					{
@@ -101,7 +117,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			else if (this.getGold()>0)
 			{
-				if(this.getJoules() < this.joulesToWarm)
+				if(this.getJoules() < this.tankJoules)
 				{
 					this.ticksWithoutPower++;
 					if(this.ticksWithoutPower == this.ticksTillFreeze)
@@ -180,7 +196,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				{
 					if(this.getGold() > 0)
 					{
-						this.setJoules(this.getJoules() - this.joulesToWarm );
+						this.setJoules(this.getJoules() - this.tankJoules );
 					}
 					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 				}
@@ -698,36 +714,16 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
 		//return slotID == 3 ? itemStack.getItem() instanceof ItemCoinMold :(slotID == 4 ? itemStack.getItem() instanceof ItemCoinMold: (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID==6 ? itemStack.getItem() instanceof ItemMeltedBucket: false)));
-		if(slotID==0)
+		if(itemStack.getItem() instanceof IItemElectric)
 		{
-			return itemStack.getItem() instanceof IItemElectric;
+			return slotID == 0;
 		}
-		else if(slotID==1)
+		if(itemStack.getItem() instanceof IItemDust)
 		{
-			return itemStack.getItem() instanceof IItemElectric;
-		}
-		else if(itemStack.isItemEqual(new ItemStack(MurderCoins.itemDiamondDust))||itemStack.isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
-		{
-			return false;
-		}
-		else if(itemStack.isItemEqual(new ItemStack(MurderCoins.itemCoinMold)))
-		{
-			if(this.inventory[3] !=null) return slotID==3;
-			else return slotID==4;
-		}
-		else if(slotID==6)
-		{
-			return itemStack.getItem() instanceof itemMeltedBucket;
-		}
-
-		else if(slotID==7)
-		{
-			return false;
-		}
-		else
-		{
+			return slotID == 5; 
+		}	
+		
 		return true;
-		}
 	}
 
 	/**

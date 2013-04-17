@@ -3,10 +3,12 @@ package murdercoins.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import murdercoins.common.MurderCoins;
+import murdercoins.common.helpers.IItemDust;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class itemEDust  extends Item
+public class itemEDust  extends Item implements IItemDust
 {
 	public itemEDust(int id)
 	{
@@ -19,10 +21,9 @@ public class itemEDust  extends Item
 	{
 		this.itemIcon = iconRegister.registerIcon("MurderCoins:eDust");
 	}
-	/*
-	public void updateIcons(IconRegister iconregister)
-	{
-		iconIndex = iconregister.registerIcon("MurderCoins:eDust");
+	@Override
+	public void RegWithDictionary(ItemStack item, String itemname) {
+		// TODO Auto-generated method stub
+		
 	}
-	*/
 }

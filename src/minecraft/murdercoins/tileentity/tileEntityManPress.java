@@ -14,6 +14,7 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -36,21 +37,29 @@ import net.minecraftforge.liquids.LiquidStack;
 public class tileEntityManPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, ITankContainer, IRedstoneReceptor
 {
 	public int processTicks = 0;
-	public double joulesStored = 0.0D;
-	public static double maxJoules = 1500000.0D;
-	private ItemStack[] inventory = new ItemStack[6];
 	private int playersUsing = 0;
-	public static double joulesPerSmelt = 50000.0D;
-	public static int meltingTicks = 1500;
 	public int goldStored = 0;
 	public int maxGold = 8 * LiquidContainerRegistry.BUCKET_VOLUME;
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;
+	public static int meltingTicks = 1500;
+	
+	public double joulesStored = 0.0D;
+	public static double maxJoules = 1500000.0D;
+	public static double joulesPerSmelt = 50000.0D;
+	
 	public boolean hasPower = false;
 	public boolean didRun = false;
+	
+	private ItemStack[] inventory = new ItemStack[6];
+	
+	Config						configLoader								= new Config();
 
 	@Override
 	public void updateEntity()
 	{
+		
+		this.meltingTicks = Config.MCPprocessTicks;
+		
 		super.updateEntity();
 		/**
 		 * Trys to press the coins, if it can, it press the coins, and then checks to see if the molds break.
