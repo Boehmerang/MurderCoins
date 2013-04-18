@@ -2,8 +2,10 @@ package murdercoins.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import murdercoins.common.MurderCoins;
-import murdercoins.tileentity.tileEntityPulverisor;
 import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -25,12 +27,12 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 
 public class blockWindmillBase extends BlockAdvanced implements IRotatable
 {
-	private Icon			pTop;
-	private Icon			pSide;
-	private Icon			pOn;
-	private Icon			pOff;
-	private Icon			pPow;
-	private tileEntityPulverisor	tile;
+	private Icon						pTop;
+	private Icon						pSide;
+	private Icon						pOn;
+	private Icon						pOff;
+	private Icon						pPow;
+	private tileEntityWindmillBase		tile;
 	
 	public blockWindmillBase(int id)
 	{
@@ -48,7 +50,7 @@ public class blockWindmillBase extends BlockAdvanced implements IRotatable
 		this.pOff = par1IconRegister.registerIcon("MurderCoins:windmillBase_Off");
 		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
-	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
 	{

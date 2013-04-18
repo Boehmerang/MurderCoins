@@ -5,6 +5,7 @@ import java.util.Set;
 
 import murdercoins.common.helpers.IItemTurbines;
 import murdercoins.common.helpers.IItemWindBlades;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -50,7 +51,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 	
 	public IConductor electricConnection = null;
 
-	public boolean isGenerating = false;						//	Is the Windmill Generating Power?
+	public boolean isGenerating, prevGenerating = false;						//	Is the Windmill Generating Power?
 
 	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 	
@@ -90,8 +91,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			
 			if(!this.isDisabled() && this.canProduce() == true)
 			{
-				this.isGenerating = true;
-				
+				this.setGenerating(true);
 				if (this.electricConnection != null)
 				{
 					this.currentOutput = Math.min(this.currentOutput + Math.min((this.currentOutput * 0.005 + Current_Multiplier), 5), this.Max_Watts_Produced);
@@ -101,12 +101,12 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			if (!this.canProduce()||this.electricConnection == null)
 			{
 				this.currentOutput = Math.max(this.currentOutput - 8, 0);
-				if(this.currentOutput == 0){this.isGenerating = false;}
+				this.setGenerating(false);
 			}
 			if (this.electricConnection != null)
 			{
 				if (this.currentOutput > this.Minum_Watts_Produced)
-				{
+				{	
 					this.electricConnection.getNetwork().startProducing(this, (this.currentOutput/this.getVoltage())/20, this.getVoltage());
 				}
 				else
@@ -138,7 +138,30 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 		}
 		return false;
 	}
-	
+	public void setGenerating(boolean on) 
+	{
+		if(on == true)
+		{
+			if(this.isGenerating != true)
+			{
+				this.isGenerating = true;
+				System.out.println(isGenerating);
+				//this.prevGenerating = this.isGenerating;
+			}
+		}
+		else
+		{
+			if(this.isGenerating != false)
+			{
+				this.isGenerating = false;
+				System.out.println(isGenerating);
+				//this.prevGenerating = this.isGenerating;
+			}
+		}
+		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
+		//this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+		this.worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, 0, 0);
+	}
 	/*
 	 *  		Allows the block to connect to a wire on what we consider the "back" of the machine.
 	 */
@@ -150,7 +173,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this, this.currentOutput, this.disabledTicks);
+		return PacketManager.getPacket("MurderCoins", this, this.currentOutput, this.disabledTicks, this.isGenerating);
 	}
 	@Override
 	public void handlePacketData(INetworkManager network, int packetType,Packet250CustomPayload packet, EntityPlayer player,	ByteArrayDataInput dataStream)
@@ -161,6 +184,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			{
 				this.currentOutput = dataStream.readDouble();
 				this.disabledTicks = dataStream.readInt();
+				this.isGenerating = dataStream.readBoolean();
 			}
 		}
 		catch (Exception e)
