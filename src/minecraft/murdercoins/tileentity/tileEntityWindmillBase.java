@@ -159,8 +159,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			}
 		}
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
-		//this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
-		this.worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, 0, 0);
+		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 	/*
 	 *  		Allows the block to connect to a wire on what we consider the "back" of the machine.
