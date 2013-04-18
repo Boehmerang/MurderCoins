@@ -1,5 +1,7 @@
 package murdercoins.container;
 
+import murdercoins.common.helpers.IItemTurbines;
+import murdercoins.common.helpers.IItemWindBlades;
 import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,10 +23,10 @@ public class containerWindmillBase extends Container {
 		// battery Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
-		// fuel Slot (will be removed)
+		// blade Slot 
 		this.addSlotToContainer(new Slot(tile_entity, 1, 52, 25));
 
-		// Turbine Slot
+		// turbine Slot
 		this.addSlotToContainer(new Slot(tile_entity, 2, 108, 25));
 		int var3;
 

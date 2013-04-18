@@ -4,6 +4,7 @@ import java.util.Random;
 
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityPulverisor;
+import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -43,8 +44,8 @@ public class blockWindmillBase extends BlockAdvanced implements IRotatable
 	{
 		this.pTop = par1IconRegister.registerIcon("MurderCoins:pulverisor_Top");
 		this.pSide = par1IconRegister.registerIcon("MurderCoins:pulverisor_Side");
-		this.pOn = par1IconRegister.registerIcon("MurderCoins:pulverisor_On");
-		this.pOff = par1IconRegister.registerIcon("MurderCoins:pulverisor_Off");
+		this.pOn = par1IconRegister.registerIcon("MurderCoins:windmillBase_On");
+		this.pOff = par1IconRegister.registerIcon("MurderCoins:windmillBase_Off");
 		this.pPow = par1IconRegister.registerIcon("MurderCoins:pulverisor_Pow");
 	}
 	
@@ -52,14 +53,14 @@ public class blockWindmillBase extends BlockAdvanced implements IRotatable
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
 	{
 		int metadata = world.getBlockMetadata(x, y, z);
-		tileEntityPulverisor tileEntity = (tileEntityPulverisor) world.getBlockTileEntity(x, y, z);
+		tileEntityWindmillBase tileEntity = (tileEntityWindmillBase) world.getBlockTileEntity(x, y, z);
 		if (side == 0 || side == 1) // bottom and top
 		{
 			return this.pTop;
 		}
 		if (side == metadata + 2) // front
 		{
-			return tileEntity.isRunning == true ? this.pOn : this.pOff;
+			return tileEntity.isGenerating == true ? this.pOn : this.pOff;
 		}
 		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
@@ -116,7 +117,7 @@ public class blockWindmillBase extends BlockAdvanced implements IRotatable
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
-		tileEntityPulverisor tileEntity = (tileEntityPulverisor) par1World.getBlockTileEntity(x, y, z);
+		tileEntityWindmillBase tileEntity = (tileEntityWindmillBase) par1World.getBlockTileEntity(x, y, z);
 		int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		switch (angle)
 		{
@@ -226,7 +227,7 @@ public class blockWindmillBase extends BlockAdvanced implements IRotatable
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new tileEntityPulverisor();
+		return new tileEntityWindmillBase();
 	}
 	
 	@Override

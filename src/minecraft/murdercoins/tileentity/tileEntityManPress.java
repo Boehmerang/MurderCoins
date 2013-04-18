@@ -485,7 +485,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	@Override
 	public String getInvName()
 	{
-		return LanguageRegistry.instance().getStringLocalization("goldForge");
+		return LanguageRegistry.instance().getStringLocalization("manPress");
 	}
 
 	@Override

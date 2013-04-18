@@ -7,6 +7,7 @@ import murdercoins.block.blockGoldForge;
 import murdercoins.block.blockGoldStill;
 import murdercoins.block.blockManPress;
 import murdercoins.block.blockPulverisor;
+import murdercoins.block.blockWindmillBase;
 import murdercoins.client.guiHandler;
 import murdercoins.items.itemBrokenMold;
 import murdercoins.items.itemCoinMold;
@@ -17,10 +18,13 @@ import murdercoins.items.itemEDust;
 import murdercoins.items.itemGCoin;
 import murdercoins.items.itemMeltedBucket;
 import murdercoins.items.itemNugBucket;
+import murdercoins.items.itemWindmillBlade;
+import murdercoins.items.itemWindmillTurbine;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityManPress;
 import murdercoins.tileentity.tileEntityPulverisor;
+import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -85,12 +89,18 @@ public class MurderCoins
 	public static Item						itemGoldNugBucket;
 	public static Item						itemMeltedGoldBuket;
 	public static Item						brokenMold;
+	public static Item 						itemWindmillBlade;
+	public static Item 						itemWindmillTurbine;
+	
 	public static Block						coinPress;
 	public static Block						manualCoinPress;
 	public static Block						goldForge;
 	public static Block						GoldStill;
 	public static Block						GoldFlowing;
 	public static Block						pulverisor;
+	public static Block 					WindmillBase;
+	
+	
 	public static LiquidStack				goldLiquid;
 	public static boolean					MekanismLoaded		= false;
 	
@@ -229,6 +239,9 @@ public class MurderCoins
 		pulverisor = new blockPulverisor(configLoader.pulverisorID).setUnlocalizedName("puvlerisor");
 		GameRegistry.registerBlock(pulverisor);
 		LanguageRegistry.addName(pulverisor, "Pulverisor");
+		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
+		GameRegistry.registerBlock(WindmillBase, "Windmill");
+		LanguageRegistry.addName(WindmillBase, "Windmill");
 		
 	}
 	
@@ -255,22 +268,11 @@ public class MurderCoins
 			itemDiamondDust = new itemDDust(configLoader.dDustID).setUnlocalizedName("dDust");
 			LanguageRegistry.addName(itemDiamondDust, "Diamond Dust");
 		}
-		/*
-		 * removed these items to emulate more the way other mods retrieve dusts
-		 * from diamonds and the like.
-		 */
-		// itemDiamondClump = new
-		// ItemDclump(comfigLoader.dClumpID).setUnlocalizedName("dClump");
-		// LanguageRegistry.addName(itemDiamondClump, "Diamond Clump");
-		// itemEmeraldClump = new
-		// ItemEclump(comfigLoader.eClumpID).setUnlocalizedName("eClump");
-		// LanguageRegistry.addName(itemEmeraldClump, "Emerald Clump");
-		// dirtyDDust = new
-		// ItemDirtyDDust(comfigLoader.dirtyDDustID).setUnlocalizedName("dirtyDDust");
-		// LanguageRegistry.addName(dirtyDDust, "Dirty Diamond Dust");
-		// dirtyEDust = new
-		// ItemDirtyEDust(comfigLoader.dirtyEDustID).setUnlocalizedName("dirtyEDust");
-		// LanguageRegistry.addName(dirtyEDust, "Dirty Emerald Dust");
+		itemWindmillBlade = new itemWindmillBlade(4001).setUnlocalizedName("wBlade");
+		LanguageRegistry.addName(itemWindmillBlade, "Windmill Blades");
+		itemWindmillTurbine = new itemWindmillTurbine(4002).setUnlocalizedName("wTurbine");
+		LanguageRegistry.addName(itemWindmillTurbine, "Windmill Turbine");
+	
 	}
 	
 	public void addCraftingRecipes()
@@ -314,6 +316,7 @@ public class MurderCoins
 		GameRegistry.registerTileEntity(tileEntityCoinPress.class, "TileCoinPress");
 		GameRegistry.registerTileEntity(tileEntityManPress.class, "TileManPress");
 		GameRegistry.registerTileEntity(tileEntityPulverisor.class, "TilePulverisor");
+		GameRegistry.registerTileEntity(tileEntityWindmillBase.class, "TileWindmillBase");
 	}
 	
 	public static File[] ListLanguages()

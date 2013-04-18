@@ -259,7 +259,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 			this.isRunning = false;
 			//System.out.println(isRunning);
 		}
-		System.out.println(isRunning);
+		//System.out.println(isRunning);
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
 		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		//this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
