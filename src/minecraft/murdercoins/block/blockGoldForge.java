@@ -4,6 +4,7 @@ import java.util.Random;
 
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityGoldForge;
+import murdercoins.tileentity.tileEntityPulverisor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -46,34 +47,59 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		this.gFPow = par1IconRegister.registerIcon("MurderCoins:gForge-Pow");
 		this.gFGold = par1IconRegister.registerIcon("MurderCoins:gForge-Gold");
 	}
-	   public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
-	    {
-			int frontSide = metadata+2;
-		   if (side == 0||side == 1) //bottom and top
-			{
-				return this.gFTop;
-			}
-			if (side == metadata + 2) //front
-			{
-				return this.gFOff;
-			}
-			if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
-			{
-				return this.gFPow;
-			}
-			/*
-			 * Removed till Liquid is added.
-			 *
-			if(side == metadata + 5)//gold out.
-			{
-				return this.gFGold;
-			}
-			*/
-			else //sides
-			{
+	@Override
+	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
+	{
+		int metadata = world.getBlockMetadata(x, y, z);
+		//tileEntityPulverisor tileEntity = (tileEntityPulverisor) world.getBlockTileEntity(x, y, z);
+		if (side == 0 || side == 1) // bottom and top
+		{
+			return this.gFTop;
+		}
+		if (side == metadata + 2) // front
+		{
+			return this.gFOn;//tileEntity.isRunning == true ? this.pOn : this.pOff;
+		}
+		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
+		{
+			return this.gFPow;
+		}
+		else
+		// sides
+		{
 			return this.gFSide;
-			}
-	    }
+		}
+	}
+	
+	@Override
+	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
+	{
+		int frontSide = metadata+2;
+	    if (side == 0||side == 1) //bottom and top
+		{
+			return this.gFTop;
+		}
+		if (side == metadata + 2) //front
+		{
+			return this.gFPow;
+		}
+		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
+		{
+			return this.gFOn;
+		}
+		/*
+		 * Removed till Liquid is added.
+		 *
+		if(side == metadata + 5)//gold out.
+		{
+		return this.gFGold;
+		}
+		*/
+		else //sides
+		{
+		return this.gFSide;
+		}
+	}
 		/**
 		 * Called when the block is right clicked by the player
 		 */

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityCoinPress;
+import murdercoins.tileentity.tileEntityPulverisor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
@@ -43,6 +45,30 @@ public class blockCoinPress extends BlockAdvanced
 		this.cPOff = par1IconRegister.registerIcon("MurderCoins:coinPress-Off");
 		this.cPPow = par1IconRegister.registerIcon("MurderCoins:coinPress-Pow");
 	}
+	
+	@Override
+	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
+	{
+		int metadata = world.getBlockMetadata(x, y, z);
+		//tileEntityPulverisor tileEntity = (tileEntityPulverisor) world.getBlockTileEntity(x, y, z);
+		if (side == 0 || side == 1) // bottom and top
+		{
+			return this.cPTop;
+		}
+		if (side == metadata + 2) // front
+		{
+			return this.cPOn;//tileEntity.isRunning == true ? this.cPOn : this.cPOff;
+		}
+		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
+		{
+			return this.cPPow;
+		}
+		else
+		// sides
+		{
+			return this.cPSide;
+		}
+	}
 
 	@Override
 	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata)
@@ -53,11 +79,11 @@ public class blockCoinPress extends BlockAdvanced
 		}
 		if (side == metadata + 2) // front
 		{
-			return this.cPOn;
+			return this.cPPow;
 		}
 		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
 		{
-			return this.cPPow;
+			return this.cPOn;
 		}
 		else
 		// sides
