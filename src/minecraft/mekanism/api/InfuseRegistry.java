@@ -5,7 +5,12 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
-public class InfuseRegistry
+/**
+ * Use this class to add a new object that registers as an infuse object.
+ * @author AidanBrady
+ *
+ */
+public class InfuseRegistry 
 {
 	/**
 	 * Registers a block or item that serves as an infuse object.  An infuse object will store a certain type and amount of infuse,

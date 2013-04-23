@@ -2,7 +2,12 @@ package mekanism.api;
 
 import net.minecraftforge.common.ForgeDirection;
 
-public interface ITubeConnection
+/**
+ * Implement this if your block can connect to Pressurized Tubes.
+ * @author AidanBrady
+ *
+ */
+public interface ITubeConnection 
 {
 	/**
 	 * Whether or not a tube can connect to a certain orientation.

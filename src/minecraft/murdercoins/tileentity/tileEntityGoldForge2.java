@@ -283,12 +283,12 @@ public class tileEntityGoldForge2 extends TileEntityElectricityRunnable implemen
 		}
 		if(!isNuggets)
 		{
-		ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+		ItemStack itemstack = new ItemStack(MurderCoins.bucketGold,1);
 		if(this.inventory[3]==null)
 		{
 			this.inventory[3] = itemstack;
 		}
-		else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemMeltedGoldBuket)))
+		else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
 		{
 			this.inventory[3].stackSize += 1;
 		}
@@ -298,12 +298,12 @@ public class tileEntityGoldForge2 extends TileEntityElectricityRunnable implemen
 		}
 		else
 		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+			ItemStack itemstack = new ItemStack(MurderCoins.bucketGold,1);
 			if(this.inventory[3]==null)
 			{
 				this.inventory[3] = itemstack;
 			}
-			else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemMeltedGoldBuket)))
+			else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
 			{
 				this.inventory[3].stackSize += 1;
 			}

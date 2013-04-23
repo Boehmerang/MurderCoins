@@ -1,5 +1,7 @@
 package murdercoins.tileentity;
 
+import java.util.Random;
+
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -37,6 +39,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	public static int crushingTicks = 250;
 	public int facing;
 	public boolean isRunning = false;
+	public Random random = new Random();
 	
 	public void updateEntity()
 	{
@@ -96,6 +99,10 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 				else
 				{
 					this.processTicks = 0;
+				}
+				if (ticks % (random.nextInt(5) * 10 + 20) == 0)
+				{
+					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 				}
 			}
 			else if(this.canProcess()==false)

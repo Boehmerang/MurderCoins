@@ -21,10 +21,6 @@ public class containerManPress extends Container
 	{
 		this.tile_entity = tile_entity;
 
-		// battery Slot
-		//this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
-		// upgrade slot
-		//this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 154, 26, IItemElectric.class));
 		//bucket return slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 46, ItemBucket.class));
 
@@ -35,7 +31,7 @@ public class containerManPress extends Container
 		// Dust Slot
 		this.addSlotToContainer(new Slot(tile_entity, 3, 49, 10));
 		// Bucket Slot
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 49, 38, new ItemStack(MurderCoins.itemMeltedGoldBuket)));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 49, 38, new ItemStack(MurderCoins.bucketGold)));
 
 		// Smelting result
 		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 5, 108, 25));

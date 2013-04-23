@@ -10,14 +10,14 @@ import net.minecraftforge.liquids.ILiquid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class blockGoldStill extends BlockFluid implements ILiquid
+public class blockGoldFlowing extends BlockFluid implements ILiquid
 {
-    public blockGoldStill(int par1, Material par2Material)
+    public blockGoldFlowing(int par1, Material par2Material)
     {
         super(par1, par2Material);
-        this.setCreativeTab(MurderCoins.murderTab);
+        setHardness(100F);
     	setLightOpacity(3);
-		setUnlocalizedName("GoldStill");
+		setUnlocalizedName("GoldFlowing");
     }
     @Override
     public void registerIcons(IconRegister par1IconRegister)
@@ -25,14 +25,6 @@ public class blockGoldStill extends BlockFluid implements ILiquid
     	this.blockIcon = par1IconRegister.registerIcon("MurderCoins:goldFluid");
     }
     @SideOnly(Side.CLIENT)
-
-    /**
-     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-     */
-    public Icon getIcon(int par1, int par2)//getBlockTextureFromSideAndMetadata(int side, int metadata) getBlockTextureFromSideAndMetadata(int par1, int par2)
-    {
-        return par1 != 0 && par1 != 1 ? this.blockIcon : this.blockIcon;
-    }
 
     @Override
     public int stillLiquidId()

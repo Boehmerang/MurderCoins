@@ -23,24 +23,24 @@ public enum EnumColor
 	PINK("\u00a7d", "Pink"),
 	YELLOW("\u00a7e", "Yellow"),
 	WHITE("\u00a7f", "White");
-
+	
 	/** The color code that will be displayed */
 	public final String code;
-
+	
 	/** A friendly name of the color. */
 	public String friendlyName;
-
+	
 	private EnumColor(String s, String n)
 	{
 		code = s;
 		friendlyName = n;
 	}
-
+	
 	public String getName()
 	{
 		return code + friendlyName;
 	}
-
+	
 	@Override
 	public String toString()
 	{

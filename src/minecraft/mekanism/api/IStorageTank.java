@@ -7,35 +7,14 @@ import net.minecraft.item.ItemStack;
  * @author AidanBrady
  *
  */
-public interface IStorageTank
+public interface IStorageTank extends IGasStorage
 {
-	/**
-	 * Gets the amount of gas the item has from NBT storage.
-	 * @param itemstack
-	 * @return amount of gas
-	 */
-	public int getGas(ItemStack itemstack);
-
-	/**
-	 * Sets the gas the item has stored in it's NBTTagCompound.
-	 * @param itemstack - itemstack of a Storage Tank to set the gas of
-	 * @param type - the type of gas to set
-	 * @param amount - the amount of gas to set
-	 */
-	public void setGas(ItemStack itemstack, EnumGas type, int amount);
-
-	/**
-	 * Gets the maximum amount of hydrogen this item can hold.
-	 * @return maximum hydrogen
-	 */
-	public int getMaxGas();
-
 	/**
 	 * Gets the rate of transfer this item can handle.
 	 * @return
 	 */
 	public int getRate();
-
+	
 	/**
 	 * Adds a defined about of a certain gas to a Storage Tank.
 	 * @param itemstack - the itemstack of a Storage Tank to add gas to
@@ -44,7 +23,7 @@ public interface IStorageTank
 	 * @return leftover gas
 	 */
 	public int addGas(ItemStack itemstack, EnumGas type, int amount);
-
+	
 	/**
 	 * Removes the defined amount of a certain gas from the item.
 	 * @param itemstack - the itemstack of a Storage Tank to remove gas from
@@ -53,7 +32,7 @@ public interface IStorageTank
 	 * @return how much gas was used by this item
 	 */
 	public int removeGas(ItemStack itemstack, EnumGas type, int amount);
-
+	
 	/**
 	 * Whether or not this storage tank be given a specific gas.
 	 * @param itemstack - the itemstack to check
@@ -61,7 +40,7 @@ public interface IStorageTank
 	 * @return if the item be charged
 	 */
 	public boolean canReceiveGas(ItemStack itemstack, EnumGas type);
-
+	
 	/**
 	 * Whether or not this energized item can give a gas receiver a certain amount of gas.
 	 * @param itemstack - the itemstack to check
@@ -69,14 +48,14 @@ public interface IStorageTank
 	 * @return if the item can provide gas
 	 */
 	public boolean canProvideGas(ItemStack itemstack, EnumGas type);
-
+	
 	/**
 	 * Gets this storage tank's current stored gas.
 	 * @param itemstack - the itemstack of a Storage Tank to check.
 	 * @return which gas the tank is holding
 	 */
 	public EnumGas getGasType(ItemStack itemstack);
-
+	
 	/**
 	 * Sets a storage tank's current stored gas.
 	 * @param itemstack - the itemstack of a Storage Tank to set.

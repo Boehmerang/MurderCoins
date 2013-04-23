@@ -5,20 +5,20 @@ package mekanism.api;
  * @author AidanBrady
  *
  */
-public interface IAccessibleGui
+public interface IAccessibleGui 
 {
 	/**
-	 * The block's GUI's specific access ID.
+	 * The block's GUI's specific access ID. 
 	 * @return gui id
 	 */
 	public int getGuiID();
-
+	
 	/**
 	 * The mod's instance object
 	 * @return what the @Instance field is named in your mod.
 	 */
 	public String getInstanceName();
-
+	
 	/**
 	 * Gets the mod's main class path as a string.  For Mekanism I would return "mekanism.common.Mekanism"
 	 * @return

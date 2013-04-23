@@ -17,6 +17,7 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.liquids.LiquidTank;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -53,6 +54,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	public static double		joulesToWarm;
 	private double 				tankRunningJoules;// = 10.0D;
 	
+	public LiquidTank 			tank 										= new LiquidTank(this.maxGold);
 	
 	public boolean 				isFrozen = false;
 	
@@ -69,6 +71,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		this.joulesPerSmelt = Config.GFjoulesPerUse;
 		this.tankRunningJoules = Config.GFtankJoules;
 		this.joulesToWarm = Config.GFunfreezeJoules;
+		this.tank.setLiquid(MurderCoins.goldLiquid);
 		
 		super.updateEntity();
 		/**
@@ -188,12 +191,12 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 							}
 						}
 						this.setGold(goldPerBucket, false);
-						ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket);
+						ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
 						if(this.inventory[3]==null)
 						{
 							this.inventory[3] = itemstack;
 						}
-						else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemMeltedGoldBuket)))
+						else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
 						{
 							this.inventory[3].stackSize += 1;
 						}
@@ -228,11 +231,14 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		if(add)
 		{
 		this.goldStored += goldAmount;
+		this.tank.getLiquid().amount = this.goldStored;
 		}
 		else
 		{
 			this.goldStored -= goldAmount;
+			this.tank.getLiquid().amount = this.goldStored;
 		}
+		System.out.println(this.tank.getLiquid().amount);
 	}
 	//Returns the amount of gold stored.
 	public int getGold()
@@ -352,13 +358,13 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			}
 			if(!isNuggets)
 			{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+			ItemStack itemstack = new ItemStack(MurderCoins.bucketGold,1);
 			this.decrStackSize(1, 1);
 	    	this.setGold(this.goldPerBucket, true);
 			}
 			else
 			{
-				ItemStack itemstack = new ItemStack(MurderCoins.itemMeltedGoldBuket,1);
+				ItemStack itemstack = new ItemStack(MurderCoins.bucketGold,1);
 				this.decrStackSize(1, 8);
 		    	this.setGold(this.goldPerBucket, true);
 			}

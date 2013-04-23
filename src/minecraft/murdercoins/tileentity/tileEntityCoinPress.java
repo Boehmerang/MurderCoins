@@ -72,6 +72,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public void updateEntity()
 	{
+		this.tank.setLiquid(MurderCoins.goldLiquid);
+		this.tank.getLiquid().amount = this.goldStored;
+		
 		this.meltingTicks = Config.CPprocessTicks;
 		this.ticksToWarm = Config.CPticksToWarm;
 		this.ticksTillFreeze = Config.CPticksTillFreeze;
@@ -149,6 +152,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					this.drainBucketTicks--;
 					if (this.drainBucketTicks < 1)
 			    	{
+						
+						//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
 						this.setGold(goldPerBucket, true);
 						this.decrStackSize(6, 1);
 						this.getEmptyBucket();
@@ -210,11 +215,15 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		if(add)
 		{
 		this.goldStored += goldAmount;
+		this.tank.getLiquid().amount = this.goldStored;
 		}
 		else
 		{
 			this.goldStored -= goldAmount;
+			//this.tank.setCapacity(this.tank.getLiquid().amount - goldAmount);
+			this.tank.getLiquid().amount = this.goldStored;
 		}
+		System.out.println(this.tank.getLiquid().amount);
 		if (this.goldStored >= this.maxGold)this.goldStored = this.maxGold;
 	}
 	//	Returns the amount of gold stored.
@@ -766,15 +775,28 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	@Override
-	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill)
+	{
+		return this.fill(0, resource, doFill);
 	}
 
 	@Override
-	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int fill(int tankIndex, LiquidStack resource, boolean doFill)
+	{
+		if (resource == null || tankIndex != 0)
+		{
+			return 0;
+		}
+		/*else if (!getColor().isValidLiquid(resource))
+		{
+			return 0;
+		}*/
+		else if (this.tank.getLiquid() != null && !resource.isLiquidEqual(this.tank.getLiquid()))
+		{
+			return 0;
+		}
+		return this.tank.fill(resource, doFill);
+		
 	}
 
 	@Override
@@ -790,14 +812,22 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public ILiquidTank[] getTanks(ForgeDirection direction) 
+	{
+		
+		return new ILiquidTank[] { this.tank };	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		// TODO Auto-generated method stub
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) 
+	{
+		if (type == null)
+		{
+			return null;
+		}
+		if (type.isLiquidEqual(this.tank.getLiquid()))
+		{
+			return this.tank;
+		}
 		return null;
 	}
 }

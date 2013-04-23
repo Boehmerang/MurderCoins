@@ -145,7 +145,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			if(this.isGenerating != true)
 			{
 				this.isGenerating = true;
-				System.out.println(isGenerating);
+				//System.out.println(isGenerating);
 				//this.prevGenerating = this.isGenerating;
 			}
 		}
@@ -154,7 +154,7 @@ public class tileEntityWindmillBase extends TileEntityElectrical implements IInv
 			if(this.isGenerating != false)
 			{
 				this.isGenerating = false;
-				System.out.println(isGenerating);
+				//System.out.println(isGenerating);
 				//this.prevGenerating = this.isGenerating;
 			}
 		}

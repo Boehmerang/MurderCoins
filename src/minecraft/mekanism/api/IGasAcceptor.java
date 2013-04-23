@@ -7,7 +7,7 @@ import net.minecraftforge.common.ForgeDirection;
  * @author AidanBrady
  *
  */
-public interface IGasAcceptor
+public interface IGasAcceptor 
 {
 	/**
 	 * Transfer a certain amount of gas to this acceptor.
@@ -15,7 +15,7 @@ public interface IGasAcceptor
 	 * @return rejects
 	 */
 	public int transferGasToAcceptor(int amount, EnumGas type);
-
+	
 	/**
 	 * Whether or not this tile entity accepts gas from a certain side.
 	 * @param side - side to check

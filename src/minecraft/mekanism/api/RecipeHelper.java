@@ -4,7 +4,12 @@ import java.lang.reflect.Method;
 
 import net.minecraft.item.ItemStack;
 
-public class RecipeHelper
+/**
+ * Use this handy class to add recipes to Mekanism machinery.
+ * @author AidanBrady
+ *
+ */
+public final class RecipeHelper 
 {
 	/**
 	 * Add an Enrichment Chamber recipe.
@@ -21,7 +26,7 @@ public class RecipeHelper
 			System.err.println("[Mekanism] Error while adding recipe: " + e.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Add an Osmium Compressor recipe.
 	 * @param input - input ItemStack
@@ -37,7 +42,7 @@ public class RecipeHelper
 			System.err.println("[Mekanism] Error while adding recipe: " + e.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Add a Combiner recipe.
 	 * @param input - input ItemStack
@@ -53,7 +58,7 @@ public class RecipeHelper
 			System.err.println("[Mekanism] Error while adding recipe: " + e.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Add a Crusher recipe.
 	 * @param input - input ItemStack
@@ -69,7 +74,7 @@ public class RecipeHelper
 			System.err.println("[Mekanism] Error while adding recipe: " + e.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Add a Purification Chamber recipe.
 	 * @param input - input ItemStack
@@ -85,7 +90,7 @@ public class RecipeHelper
 			System.err.println("[Mekanism] Error while adding recipe: " + e.getMessage());
 		}
 	}
-
+	
 	/**
 	 * Add a Metallurgic Infuser recipe.
 	 * @param input - input Infusion

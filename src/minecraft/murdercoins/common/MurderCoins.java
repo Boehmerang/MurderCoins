@@ -3,6 +3,7 @@ package murdercoins.common;
 import java.io.File;
 
 import murdercoins.block.blockCoinPress;
+import murdercoins.block.blockGoldFlowing;
 import murdercoins.block.blockGoldForge;
 import murdercoins.block.blockGoldStill;
 import murdercoins.block.blockManPress;
@@ -26,6 +27,7 @@ import murdercoins.tileentity.tileEntityManPress;
 import murdercoins.tileentity.tileEntityPulverisor;
 import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -34,6 +36,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
@@ -87,7 +90,7 @@ public class MurderCoins
 	public static Item						itemEmeraldDust;
 	public static Item						itemCoinMold;
 	public static Item						itemGoldNugBucket;
-	public static Item						itemMeltedGoldBuket;
+	public static Item						bucketGold;
 	public static Item						brokenMold;
 	public static Item 						itemWindmillBlade;
 	public static Item 						itemWindmillTurbine;
@@ -114,6 +117,7 @@ public class MurderCoins
 			MekanismLoaded = true;
 		Config.loadConfig(e);
 		itemRegistration();
+		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());
 	}
 	
 	@Init
@@ -134,8 +138,8 @@ public class MurderCoins
 		networkRegisters();
 		tileEntityRegisters();
 		chestHooks();
-		goldLiquid = LiquidDictionary.getOrCreateLiquid("MoltenGold", new LiquidStack(GoldStill.blockID, 1));
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("MoltenGold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(this.itemMeltedGoldBuket), new ItemStack(Item.bucketEmpty)));
+		goldLiquid = LiquidDictionary.getOrCreateLiquid("Gold", new LiquidStack(GoldStill, 1));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Gold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(MurderCoins.bucketGold), new ItemStack(Item.bucketEmpty)));
 	
 		/**
 		 * Handle language support
@@ -220,25 +224,27 @@ public class MurderCoins
 		coinPress = new blockCoinPress(configLoader.coinPressID).setUnlocalizedName("coinPress");
 		GameRegistry.registerBlock(coinPress);
 		LanguageRegistry.addName(coinPress, "Coin Press");
+		
 		goldForge = new blockGoldForge(configLoader.goldForgeID).setUnlocalizedName("goldForge");
 		GameRegistry.registerBlock(goldForge);
 		LanguageRegistry.addName(goldForge, "Gold Forge");
+		
 		manualCoinPress = new blockManPress(configLoader.manPressID).setUnlocalizedName("manPress");
 		GameRegistry.registerBlock(manualCoinPress);
 		LanguageRegistry.addName(manualCoinPress, "Manual Coin Press");
 		
-		GoldStill = new blockGoldStill(configLoader.GoldStillID).setUnlocalizedName("GoldStill");
+		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
 		GameRegistry.registerBlock(GoldStill, "Gold_Still");
 		LanguageRegistry.addName(GoldStill, "Gold Still");
-		/*
-		 * GoldFlowing = new
-		 * BlockGoldFlowing(cc.GoldFlowingID).setUnlocalizedName("GoldFlowing");
-		 * GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
-		 * LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
-		 */
+		
+		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
+		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
+		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
+		 
 		pulverisor = new blockPulverisor(configLoader.pulverisorID).setUnlocalizedName("puvlerisor");
 		GameRegistry.registerBlock(pulverisor);
 		LanguageRegistry.addName(pulverisor, "Pulverisor");
+		
 		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
 		GameRegistry.registerBlock(WindmillBase, "Windmill");
 		LanguageRegistry.addName(WindmillBase, "Windmill");
@@ -259,8 +265,8 @@ public class MurderCoins
 		LanguageRegistry.addName(brokenMold, "Broken Coin Mold");
 		itemGoldNugBucket = new itemNugBucket(configLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(16);
 		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
-		itemMeltedGoldBuket = new itemMeltedBucket(configLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(16);
-		LanguageRegistry.addName(itemMeltedGoldBuket, "Bucket of melted Gold");
+		bucketGold = new itemMeltedBucket(configLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(16).setContainerItem(Item.bucketEmpty);
+		LanguageRegistry.addName(bucketGold, "Bucket of melted Gold");
 		itemEmeraldDust = new itemEDust(configLoader.eDustID).setUnlocalizedName("eDust");
 		LanguageRegistry.addName(itemEmeraldDust, "Emerald Dust");
 		if (MekanismLoaded == false)
@@ -277,7 +283,7 @@ public class MurderCoins
 	
 	public void addCraftingRecipes()
 	{
-		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(itemMeltedGoldBuket, 1), 0.1f);
+		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(bucketGold, 1), 0.1f);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemCoinMold, 1), brokenMold, Item.ingotIron);
 		GameRegistry.addRecipe(new ItemStack(itemCoinMold, 1), new Object[] { "YXY", "XXX", "YXY", 'X', Item.ingotIron, 'Y', Item.bucketEmpty });
@@ -288,20 +294,6 @@ public class MurderCoins
 	
 	public void addMekanismRecipes()
 	{
-		/*
-		 * mekanism.api.RecipeHelper.addPurificationChamberRecipe(new
-		 * ItemStack(Item.diamond, 1), new ItemStack(itemDiamondClump, 2));
-		 * mekanism.api.RecipeHelper.addPurificationChamberRecipe(new
-		 * ItemStack(Item.emerald), new ItemStack(itemEmeraldClump, 2));
-		 * mekanism.api.RecipeHelper.addCrusherRecipe(new
-		 * ItemStack(itemDiamondClump, 1), new ItemStack(dirtyDDust, 1));
-		 * mekanism.api.RecipeHelper.addCrusherRecipe(new
-		 * ItemStack(itemEmeraldClump, 1), new ItemStack(dirtyEDust, 1));
-		 * mekanism.api.RecipeHelper.addEnrichmentChamberRecipe(new
-		 * ItemStack(dirtyDDust, 1), new ItemStack(itemDiamondDust, 1));
-		 * mekanism.api.RecipeHelper.addEnrichmentChamberRecipe(new
-		 * ItemStack(dirtyEDust, 1), new ItemStack(itemEmeraldDust, 1));
-		 */
 		mekanism.api.RecipeHelper.addCrusherRecipe(new ItemStack(Item.emerald, 1), new ItemStack(itemEmeraldDust, 1));
 	}
 	
