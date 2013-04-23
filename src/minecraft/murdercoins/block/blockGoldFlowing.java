@@ -1,6 +1,7 @@
 package murdercoins.block;
 
 import murdercoins.common.MurderCoins;
+import net.minecraft.block.BlockFlowing;
 import net.minecraft.block.BlockFluid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -10,11 +11,12 @@ import net.minecraftforge.liquids.ILiquid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class blockGoldFlowing extends BlockFluid implements ILiquid
+public class blockGoldFlowing extends BlockFlowing implements ILiquid
 {
     public blockGoldFlowing(int par1, Material par2Material)
     {
         super(par1, par2Material);
+        //this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
         setHardness(100F);
     	setLightOpacity(3);
 		setUnlocalizedName("GoldFlowing");

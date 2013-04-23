@@ -127,8 +127,8 @@ public class MurderCoins
 		if (Loader.isModLoaded("Mekanism"))
 			MekanismLoaded = true;
 		Config.loadConfig(e);
+		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());		
 		itemRegistration();
-		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());
 	}
 	
 	@Init

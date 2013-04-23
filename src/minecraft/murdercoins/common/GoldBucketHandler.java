@@ -29,7 +29,7 @@ public class GoldBucketHandler {
 		  if ((blockID == MurderCoins.GoldStill.blockID || blockID == MurderCoins.GoldFlowing.blockID) && world.getBlockMetadata(pos.blockX, pos.blockY, pos.blockZ) == 0)
 		  {
 		   world.setBlock(pos.blockX, pos.blockY, pos.blockZ, 0);
-		   return new ItemStack(MurderCoins.bucketGold);
+		   return new ItemStack(MurderCoins.bucketGold,1);
 		  }
 		  else
 		   return null;

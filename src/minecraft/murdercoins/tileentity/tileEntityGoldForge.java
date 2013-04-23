@@ -2,6 +2,7 @@ package murdercoins.tileentity;
 
 import java.util.Random;
 
+import mekanism.api.ITubeConnection;
 import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +36,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
+public class tileEntityGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer//, ITubeConnection
 {
 	
 	public int 					processTicks = 0;
@@ -111,6 +112,25 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
+			
+			/*int originalVolume = 0;
+
+			if (this.tank.getLiquid() != null)
+			{
+				originalVolume = this.tank.getLiquid().amount;
+
+				if (ticks % (random.nextInt(4) * 5 + 10) >= 0)
+				{
+					this.drain(ForgeDirection.DOWN, this.goldPerBucket,  true);
+					this.goldStored = this.tank.getLiquid().amount;
+				}
+
+				if ((this.tank.getLiquid() == null && originalVolume != 0) || (this.tank.getLiquid() != null && this.tank.getLiquid().amount != originalVolume))
+				{
+					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				}
+			}*/
+
 			/*
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
 			 * machine will enter "Frozen" status.
@@ -636,14 +656,29 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		return new LiquidStack(stack.itemID, vol, stack.itemMeta);
 	}
 	@Override
-	public ILiquidTank[] getTanks(ForgeDirection direction) {
-		// TODO Auto-generated method stub
-		return null;
+	public ILiquidTank[] getTanks(ForgeDirection direction) 
+	{
+		return new ILiquidTank[] { this.tank };
 	}
 
 	@Override
-	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) {
-		// TODO Auto-generated method stub
+	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) 
+	{
+		if (type == null)
+		{
+			return null;
+		}
+		if (type.isLiquidEqual(this.tank.getLiquid()))
+		{
+			return this.tank;
+		}
 		return null;
 	}
+
+	/*@Override
+	public boolean canTubeConnect(ForgeDirection side) 
+	{
+	
+		return true;
+	}*/
 }

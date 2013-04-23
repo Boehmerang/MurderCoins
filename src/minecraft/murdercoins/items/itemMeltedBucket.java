@@ -12,6 +12,7 @@ public class itemMeltedBucket extends Item
 	{
      super(id);
      this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
+     setContainerItem(Item.bucketEmpty);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
