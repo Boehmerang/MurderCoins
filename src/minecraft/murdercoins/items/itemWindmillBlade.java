@@ -13,7 +13,7 @@ public class itemWindmillBlade extends Item implements IItemTurbines
 	public itemWindmillBlade(int id)
 	{
      super(id);
-     this.setCreativeTab(MurderCoins.murderTab);
+     this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override

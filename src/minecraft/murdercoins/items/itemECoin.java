@@ -11,7 +11,7 @@ public class itemECoin extends Item
 	public itemECoin(int id)
 	{
      super(id);
-     this.setCreativeTab(MurderCoins.murderTab);
+     this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override

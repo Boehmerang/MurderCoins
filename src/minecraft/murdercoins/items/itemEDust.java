@@ -13,7 +13,7 @@ public class itemEDust  extends Item implements IItemDust
 	public itemEDust(int id)
 	{
      super(id);
-     this.setCreativeTab(MurderCoins.murderTab);
+     this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override

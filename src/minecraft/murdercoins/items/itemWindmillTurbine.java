@@ -14,7 +14,7 @@ public class itemWindmillTurbine extends Item implements IItemTurbines
 	public itemWindmillTurbine(int id)
 	{
      super(id);
-     this.setCreativeTab(MurderCoins.murderTab);
+     this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override

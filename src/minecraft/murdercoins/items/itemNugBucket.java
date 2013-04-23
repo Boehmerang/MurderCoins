@@ -11,7 +11,7 @@ public class itemNugBucket extends Item
 	public itemNugBucket(int id)
 	{
      super(id);
-     this.setCreativeTab(MurderCoins.murderTab);
+     this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 	}
 	@SideOnly(Side.CLIENT)
 	@Override

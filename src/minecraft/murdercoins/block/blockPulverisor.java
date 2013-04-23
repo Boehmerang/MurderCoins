@@ -34,7 +34,7 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 	public blockPulverisor(int id)
 	{
 		super(id, Material.iron);
-		this.setCreativeTab(MurderCoins.murderTab);
+		this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 		this.setStepSound(soundMetalFootstep);
 	}
 	

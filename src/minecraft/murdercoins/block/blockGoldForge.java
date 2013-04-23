@@ -35,7 +35,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 	public blockGoldForge(int id)
 	{
 		super(id, Material.iron);
-		this.setCreativeTab(MurderCoins.murderTab);
+		this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 		this.setStepSound(soundMetalFootstep);
 	}
 	public void registerIcons(IconRegister par1IconRegister)

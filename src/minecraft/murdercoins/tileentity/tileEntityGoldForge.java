@@ -1,5 +1,7 @@
 package murdercoins.tileentity;
 
+import java.util.Random;
+
 import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
@@ -59,6 +62,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	public boolean 				isFrozen = false;
 	
 	private ItemStack[] 		inventory = new ItemStack[4];
+	public Random random = new Random();
 	
 	Config						configLoader		= new Config();
 	
@@ -107,6 +111,25 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
+			
+			int originalVolume = 0;
+
+			if (this.tank.getLiquid() != null)
+			{
+				originalVolume = this.tank.getLiquid().amount;
+
+				if (ticks % (random.nextInt(4) * 5 + 10) >= 0)
+				{
+					this.tank.drain(this.fillSide(this.tank.getLiquid(), ForgeDirection.DOWN, true), true);
+					this.goldStored = this.tank.getLiquid().amount;
+				}
+
+				if ((this.tank.getLiquid() == null && originalVolume != 0) || (this.tank.getLiquid() != null && this.tank.getLiquid().amount != originalVolume))
+				{
+					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				}
+			}
+
 			/*
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
 			 * machine will enter "Frozen" status.
@@ -600,21 +623,47 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public int fill(int tankIndex, LiquidStack resource, boolean doFill) {
 		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
 	@Override
-	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
-		return null;
+	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) 
+	{
+		return this.drain(0, maxDrain, doDrain);
 	}
+	public int fillSide(LiquidStack stack, ForgeDirection side, boolean doFill)
+	{
+		TileEntity tileEntity = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
 
+		if (stack != null && stack.amount > 0 && tileEntity instanceof ITankContainer)
+		{
+			return ((ITankContainer) tileEntity).fill(side.getOpposite(), stack, doFill);
+		}
+		return 0;
+	}
 	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
-		// TODO Auto-generated method stub
-		return null;
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) 
+	{
+		if (tankIndex != 0 || this.tank.getLiquid() == null)
+		{
+			return null;
+		}
+		LiquidStack stack = this.tank.getLiquid();
+		if (maxDrain < stack.amount)
+		{
+			stack = this.getStack(stack, maxDrain);
+		}
+		return this.tank.drain(maxDrain, doDrain);
 	}
-
+	public static LiquidStack getStack(LiquidStack stack, int vol)
+	{
+		if (stack == null)
+		{
+			return null;
+		}
+		return new LiquidStack(stack.itemID, vol, stack.itemMeta);
+	}
 	@Override
 	public ILiquidTank[] getTanks(ForgeDirection direction) {
 		// TODO Auto-generated method stub

@@ -787,10 +787,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return 0;
 		}
-		/*else if (!getColor().isValidLiquid(resource))
-		{
-			return 0;
-		}*/
 		else if (this.tank.getLiquid() != null && !resource.isLiquidEqual(this.tank.getLiquid()))
 		{
 			return 0;

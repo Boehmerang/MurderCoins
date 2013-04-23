@@ -15,7 +15,7 @@ public class blockGoldStill extends BlockFluid implements ILiquid
     public blockGoldStill(int par1, Material par2Material)
     {
         super(par1, par2Material);
-        this.setCreativeTab(MurderCoins.murderTab);
+        this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
     	setLightOpacity(3);
 		setUnlocalizedName("GoldStill");
     }

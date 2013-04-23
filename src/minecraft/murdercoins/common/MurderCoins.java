@@ -75,7 +75,18 @@ public class MurderCoins
 	
 	@SidedProxy(clientSide = "murdercoins.client.ClientProxy", serverSide = "murdercoins.common.CommonProxy")
 	public static CommonProxy	proxy;
-	public static CreativeTabs				murderTab			= new tabMurderCoins(CreativeTabs.getNextID(), "MurderCoins");
+	//public static CreativeTabs				murderTab			= new tabMurderCoins(CreativeTabs.getNextID(), "MurderCoins");
+    public static CreativeTabs murderTab = new CreativeTabs("MurderCoins") 
+    {
+        public ItemStack getIconItemStack() 
+        {
+                return new ItemStack(MurderCoins.itemCoinMold, 1, 0);
+        }
+        public String getTranslatedTabLabel()
+    	{
+    		return "MurderCoins"; // The name of the tab ingame
+    	}
+    };
 	private static final String[]			LANGUAGES_SUPPORTED	= new String[] { "en_US" };
 	public static final String				LANGUAGE_PATH		= "/mods/MurderCoins/language";
 	
@@ -107,7 +118,7 @@ public class MurderCoins
 	public static LiquidStack				goldLiquid;
 	public static boolean					MekanismLoaded		= false;
 	
-	Config						configLoader		= new Config();
+	Config									configLoader		= new Config();
 	
 	@PreInit()
 	public void PreInitMurderCoins(FMLPreInitializationEvent e)
@@ -123,6 +134,7 @@ public class MurderCoins
 	@Init
 	public void load(FMLInitializationEvent event)
 	{
+		LanguageRegistry.instance().addStringLocalization("itemGroup.murdercoins", "en_US", "Murder Coins");
 		proxy.registerRenderThings();
 		blockRegistration();
 		// itemRegistration();
@@ -359,3 +371,4 @@ public class MurderCoins
 		return unofficialLanguages;
 	}
 }
+
