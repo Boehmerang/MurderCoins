@@ -111,25 +111,6 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
-			
-			int originalVolume = 0;
-
-			if (this.tank.getLiquid() != null)
-			{
-				originalVolume = this.tank.getLiquid().amount;
-
-				if (ticks % (random.nextInt(4) * 5 + 10) >= 0)
-				{
-					this.tank.drain(this.fillSide(this.tank.getLiquid(), ForgeDirection.DOWN, true), true);
-					this.goldStored = this.tank.getLiquid().amount;
-				}
-
-				if ((this.tank.getLiquid() == null && originalVolume != 0) || (this.tank.getLiquid() != null && this.tank.getLiquid().amount != originalVolume))
-				{
-					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-				}
-			}
-
 			/*
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
 			 * machine will enter "Frozen" status.
@@ -631,16 +612,6 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	public LiquidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) 
 	{
 		return this.drain(0, maxDrain, doDrain);
-	}
-	public int fillSide(LiquidStack stack, ForgeDirection side, boolean doFill)
-	{
-		TileEntity tileEntity = worldObj.getBlockTileEntity(xCoord + side.offsetX, yCoord + side.offsetY, zCoord + side.offsetZ);
-
-		if (stack != null && stack.amount > 0 && tileEntity instanceof ITankContainer)
-		{
-			return ((ITankContainer) tileEntity).fill(side.getOpposite(), stack, doFill);
-		}
-		return 0;
 	}
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) 
