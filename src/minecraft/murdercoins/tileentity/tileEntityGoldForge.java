@@ -424,6 +424,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 		this.goldStored = par1NBTTagCompound.getInteger("goldStored");
+		this.tank.getLiquid().amount = par1NBTTagCompound.getInteger("goldStored");
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
