@@ -393,31 +393,34 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		else if(MurderCoins.MekanismLoaded == true)
 		{
-			ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
-			for (int i = 0; i < tList.size(); i++)
+			if (inventory[5]!=null)
 			{
-				ItemStack tStack = tList.get(i);
-				tStack = tStack.copy();
-				tStack.stackSize = 1;
-				if(inventory[5].isItemEqual(tStack))
+				ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
+				for (int i = 0; i < tList.size(); i++)
 				{
-					if(inventory[7] != null)
+					ItemStack tStack = tList.get(i);
+					tStack = tStack.copy();
+					tStack.stackSize = 1;
+					if(inventory[5].isItemEqual(tStack))
 					{
-						if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
+						if(inventory[7] != null)
 						{
-						this.processTicks = 0;
-						return false;
+							if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
+							{
+							this.processTicks = 0;
+							return false;
+							}
 						}
 					}
-				}
-				if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
-				{
-					if(inventory[7] != null)
+					if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
 					{
-						if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+						if(inventory[7] != null)
 						{
-						this.processTicks = 0;
-						return false;
+							if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+							{
+							this.processTicks = 0;
+							return false;
+							}
 						}
 					}
 				}
