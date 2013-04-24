@@ -579,7 +579,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 		this.goldStored = par1NBTTagCompound.getInteger("goldStored");
-		this.tank.getLiquid().amount = par1NBTTagCompound.getInteger("goldStored");
 		this.isFrozen = par1NBTTagCompound.getBoolean("isFrozen");
 		this.tankWarmingTicks = par1NBTTagCompound.getInteger("tankWarmingTicks");
 		this.ticksWithoutPower = par1NBTTagCompound.getInteger("ticksWithoutPower");
