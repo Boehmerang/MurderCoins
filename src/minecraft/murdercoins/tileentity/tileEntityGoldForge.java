@@ -28,6 +28,7 @@ import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
@@ -36,7 +37,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer//, ITubeConnection
+public class tileEntityGoldForge extends  TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer, ITubeConnection
 {
 	
 	public int 					processTicks = 0;
@@ -112,7 +113,23 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
-			
+			if(this.tank.getLiquid() != null) 
+			{
+				for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
+				{
+					TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
+
+					if(tileEntity instanceof ITankContainer) 
+					{
+						this.tank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.tank.getLiquid(), true), true);
+						this.goldStored = this.tank.getLiquid().amount;
+						if(this.tank.getLiquid() == null || this.tank.getLiquid().amount <= 0) 
+						{
+							break;
+						}
+					}
+				}
+			}
 			/*int originalVolume = 0;
 
 			if (this.tank.getLiquid() != null)
@@ -675,10 +692,10 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		return null;
 	}
 
-	/*@Override
+	@Override
 	public boolean canTubeConnect(ForgeDirection side) 
 	{
 	
 		return true;
-	}*/
+	}
 }

@@ -254,10 +254,13 @@ public class MurderCoins
 		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
 		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
 		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
-		 
-		pulverisor = new blockPulverisor(configLoader.pulverisorID).setUnlocalizedName("puvlerisor");
-		GameRegistry.registerBlock(pulverisor);
-		LanguageRegistry.addName(pulverisor, "Pulverisor");
+		
+		if (MekanismLoaded == false)
+		{
+			pulverisor = new blockPulverisor(configLoader.pulverisorID).setUnlocalizedName("puvlerisor");
+			GameRegistry.registerBlock(pulverisor);
+			LanguageRegistry.addName(pulverisor, "Pulverisor");
+		}
 		
 		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
 		GameRegistry.registerBlock(WindmillBase, "Windmill");
