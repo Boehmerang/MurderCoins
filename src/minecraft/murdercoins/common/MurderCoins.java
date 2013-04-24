@@ -17,6 +17,7 @@ import murdercoins.items.itemDDust;
 import murdercoins.items.itemECoin;
 import murdercoins.items.itemEDust;
 import murdercoins.items.itemGCoin;
+import murdercoins.items.itemGoldForge;
 import murdercoins.items.itemMeltedBucket;
 import murdercoins.items.itemNugBucket;
 import murdercoins.items.itemWindmillBlade;
@@ -105,6 +106,7 @@ public class MurderCoins
 	public static Item						brokenMold;
 	public static Item 						itemWindmillBlade;
 	public static Item 						itemWindmillTurbine;
+	public static Item						itemGoldForge;
 	
 	public static Block						coinPress;
 	public static Block						manualCoinPress;
@@ -290,6 +292,8 @@ public class MurderCoins
 		LanguageRegistry.addName(itemWindmillBlade, "Windmill Blades");
 		itemWindmillTurbine = new itemWindmillTurbine(4002).setUnlocalizedName("wTurbine");
 		LanguageRegistry.addName(itemWindmillTurbine, "Windmill Turbine");
+		//itemGoldForge = new itemGoldForge(configLoader.goldForgeID - 256, goldForge).setUnlocalizedName("gForge");
+		
 	
 	}
 	
