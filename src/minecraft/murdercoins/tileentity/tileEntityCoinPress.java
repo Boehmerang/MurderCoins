@@ -93,24 +93,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		 */
 		if (!this.worldObj.isRemote)
 		{
-			for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
-			{
-				TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
-
-				if(tileEntity instanceof ITankContainer) 
-				{
-					if (this.tank.getLiquid().amount < this.maxGold)
-					{
-						this.tank.fill(((ITankContainer)tileEntity).drain(orientation.getOpposite(), this.maxGold - this.tank.getLiquid().amount, true), true);
-						this.goldStored = this.tank.getLiquid().amount;
-						if(this.tank.getLiquid() == null || this.tank.getLiquid().amount <= 0) 
-						{
-							break;
-						}
-					}
-				}
-			}
-			
 			/*
 			 * 		Checks to see if the machine is currently in "Frozen" state, if the machine is "Frozen" it will check available power, and if there
 			 * 		is enough power available, it will enter the "Warming" state.
