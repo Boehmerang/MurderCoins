@@ -2,6 +2,7 @@ package murdercoins.tileentity;
 
 import java.util.ArrayList;
 
+import mekanism.api.ITubeConnection;
 import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import murdercoins.common.helpers.IItemDust;
@@ -41,7 +42,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer
+public class tileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer, ITubeConnection
 {
 	public int processTicks = 0;
 	public int tankWarmingTicks = 0;										// # of ticks machine has been in "warming state"
@@ -844,5 +845,11 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			return this.tank;
 		}
 		return null;
+	}
+
+	@Override
+	public boolean canTubeConnect(ForgeDirection side) 
+	{
+		return true;
 	}
 }
