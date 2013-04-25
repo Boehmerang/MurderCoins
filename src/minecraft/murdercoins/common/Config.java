@@ -70,16 +70,12 @@ public class Config
 		coinMoldID = config.getItem("coinMold", 3003).getInt();
 		nugBucketID = config.getItem("nugBucket", 3004).getInt();
 		meltedBucketID = config.getItem("meltedBucket", 205).getInt(); 
-		dClumpID = config.getItem("dClump", 3006).getInt();
-		eClumpID = config.getItem("eClump", 3007).getInt();
-		dirtyDDustID = config.getItem("dirtyDDust", 208).getInt();
-		dirtyEDustID = config.getItem("dirtyEDust", 209).getInt();
 		dDustID = config.getItem("dDust", 3010).getInt();
 		eDustID = config.getItem("eDust", 3011).getInt();
 		brokenMoldID = config.getItem("brokenMold", 3012).getInt();
 		coinPressID = config.getBlock("coinPress", 3013).getInt();
 		goldForgeID = config.getBlock("goldForge", 3014).getInt();
-		itemGoldForgeID = config.getItem("goldForge", 3015).getInt();
+		//itemGoldForgeID = config.getItem("goldForge", 3015).getInt();
 		manPressID = config.getBlock("manPress", 3016).getInt();
 		pulverisorID = config.getBlock("pulverisor", 3017).getInt();
 
