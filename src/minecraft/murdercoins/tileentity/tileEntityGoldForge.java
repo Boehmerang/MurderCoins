@@ -244,44 +244,46 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			{
 				this.processTicks = 0;
 			}
-			if(this.inventory[2] != null && this.gFtank.getLiquid().amount >= this.goldPerBucket && this.isFrozen == false)
+			if(this.inventory[2] != null && this.gFtank.getLiquid() != null && this.isFrozen == false)
 			{
-				if(this.fillTicks == 0)
+				if (this.gFtank.getLiquid().amount >= this.goldPerBucket)
 				{
-					this.fillTicks = this.ticksToFill;
-				}
-				else if (this.fillTicks > 0)
-				{
-					this.fillTicks--;
-					if (this.fillTicks < 1)
-			    	{
-						if(this.inventory[3] != null)
+					if(this.fillTicks == 0)
+					{
+						this.fillTicks = this.ticksToFill;
+					}
+					else if (this.fillTicks > 0)
+					{
+						this.fillTicks--;
+						if (this.fillTicks < 1)
 						{
-							if (this.inventory[3].stackSize >= 16)
+							if(this.inventory[3] != null)
 							{
-								return;
+								if (this.inventory[3].stackSize >= 16)
+								{
+									return;
+								}
 							}
+							//this.setGold(goldPerBucket, false);
+							this.gFtank.drain(goldPerBucket, true);
+							ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
+							if(this.inventory[3]==null)
+							{
+								this.inventory[3] = itemstack;
+							}
+							else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
+							{
+								this.inventory[3].stackSize += 1;
+							}
+							else if(this.inventory[3].stackSize >16)
+							{
+								this.inventory[3].stackSize = 16;
+							}
+							this.decrStackSize(2, 1);
 						}
-						//this.setGold(goldPerBucket, false);
-						this.gFtank.drain(goldPerBucket, true);
-						ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
-						if(this.inventory[3]==null)
-						{
-							this.inventory[3] = itemstack;
-						}
-						else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
-						{
-							this.inventory[3].stackSize += 1;
-						}
-						else if(this.inventory[3].stackSize >16)
-						{
-							this.inventory[3].stackSize = 16;
-						}
-						this.decrStackSize(2, 1);
-			    	}
+					}
 				}
 			}
-
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
