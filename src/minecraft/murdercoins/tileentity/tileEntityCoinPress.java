@@ -64,18 +64,31 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	private double tankJoules = 10.0D;										// Joules per tick to keep the gold tank liquid
 
 	public boolean isFrozen = false;										// If the machine's tank is Frozen.
+	public boolean didFill = false;											// If the machine ran an auto fill in the last update tick.
 	
 	private ItemStack[] inventory = new ItemStack[8];						// Machine inventory
 	
-	public LiquidTank 			tank 										= new LiquidTank(this.maxGold);
+	public LiquidTank 			CPtank 										= new LiquidTank(this.maxGold);
 	
 	Config						configLoader								= new Config();
 
 	@Override
 	public void updateEntity()
 	{
-		this.tank.setLiquid(MurderCoins.goldLiquid);
-		this.tank.getLiquid().amount = this.goldStored;
+		if (this.CPtank.getLiquid() == null){	this.CPtank.setLiquid(MurderCoins.goldLiquid);}
+		//this.goldStored = this.CPtank.getLiquid().amount;
+		/*if (this.tank.getLiquid().amount != this.goldStored)
+		{
+			if(this.tank.getLiquid().amount > this.goldStored)
+			{
+				this.goldStored = this.tank.getLiquid().amount;
+			}
+			else if (this.tank.getLiquid().amount < this.goldStored)
+			{
+				this.tank.getLiquid().amount = this.goldStored;
+			}
+		}*/
+	
 		
 		this.meltingTicks = Config.CPprocessTicks;
 		this.ticksToWarm = Config.CPticksToWarm;
@@ -88,6 +101,12 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		 * Attempts to charge from battery in slot 1.
 		 */
 		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
+		if (this.didFill == true)
+		{
+			this.goldStored = this.CPtank.getLiquid().amount;
+			this.didFill = false;
+		}
+		
 		/**
 		 * Trys to press the coins, if it can, it press the coins, and then checks to see if the molds break.
 		 */
@@ -217,15 +236,15 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		if(add)
 		{
 		this.goldStored += goldAmount;
-		this.tank.getLiquid().amount = this.goldStored;
+		this.CPtank.getLiquid().amount = this.goldStored;
 		}
 		else
 		{
 			this.goldStored -= goldAmount;
 			//this.tank.setCapacity(this.tank.getLiquid().amount - goldAmount);
-			this.tank.getLiquid().amount = this.goldStored;
+			this.CPtank.getLiquid().amount = this.goldStored;
 		}
-		System.out.println(this.tank.getLiquid().amount);
+		System.out.println(this.CPtank.getLiquid().amount);
 		if (this.goldStored >= this.maxGold)this.goldStored = this.maxGold;
 	}
 	//	Returns the amount of gold stored.
@@ -792,12 +811,12 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return 0;
 		}
-		else if (this.tank.getLiquid() != null && !resource.isLiquidEqual(this.tank.getLiquid()))
+		else if (this.CPtank.getLiquid() != null && !resource.isLiquidEqual(this.CPtank.getLiquid()))
 		{
 			return 0;
 		}
-		return this.tank.fill(resource, doFill);
-		
+		this.didFill = true;
+		return this.CPtank.fill(resource, doFill);
 	}
 
 	@Override
@@ -816,7 +835,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public ILiquidTank[] getTanks(ForgeDirection direction) 
 	{
 		
-		return new ILiquidTank[] { this.tank };	}
+		return new ILiquidTank[] { this.CPtank };	}
 
 	@Override
 	public ILiquidTank getTank(ForgeDirection direction, LiquidStack type) 
@@ -825,9 +844,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return null;
 		}
-		if (type.isLiquidEqual(this.tank.getLiquid()))
+		if (type.isLiquidEqual(this.CPtank.getLiquid()))
 		{
-			return this.tank;
+			return this.CPtank;
 		}
 		return null;
 	}
