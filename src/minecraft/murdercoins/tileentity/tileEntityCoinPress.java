@@ -72,6 +72,16 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	
 	Config						configLoader								= new Config();
 
+	public tileEntityCoinPress()
+	{
+		this.meltingTicks = Config.CPprocessTicks;
+		this.ticksToWarm = Config.CPticksToWarm;
+		this.ticksTillFreeze = Config.CPticksTillFreeze;
+		this.joulesPerSmelt = Config.CPjoulesPerUse;
+		this.tankJoules = Config.CPtankJoules;
+		this.unfreezeJoules = Config.CPunfreezeJoules;
+	}
+	
 	@Override
 	public void updateEntity()
 	{
@@ -88,14 +98,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				this.tank.getLiquid().amount = this.goldStored;
 			}
 		}*/
-	
-		
-		this.meltingTicks = Config.CPprocessTicks;
-		this.ticksToWarm = Config.CPticksToWarm;
-		this.ticksTillFreeze = Config.CPticksTillFreeze;
-		this.joulesPerSmelt = Config.CPjoulesPerUse;
-		this.tankJoules = Config.CPtankJoules;
-		this.unfreezeJoules = Config.CPunfreezeJoules;
 		super.updateEntity();
 		/**
 		 * Attempts to charge from battery in slot 1.
