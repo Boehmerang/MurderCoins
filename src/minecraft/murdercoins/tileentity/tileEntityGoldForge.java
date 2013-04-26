@@ -60,7 +60,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	public static double		joulesToWarm;
 	private double 				tankRunningJoules;// = 10.0D;
 	
-	public LiquidTank 			gFtank 										= new LiquidTank(this.maxGold);
+	public LiquidTank 			gFtank;//	= new LiquidTank(this.maxGold);
 	
 	public boolean 				isFrozen = false;
 	
@@ -77,7 +77,8 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		this.joulesPerSmelt = Config.GFjoulesPerUse;
 		this.tankRunningJoules = Config.GFtankJoules;
 		this.joulesToWarm = Config.GFunfreezeJoules;
-		this.gFtank.setLiquid(MurderCoins.goldLiquid);
+		gFtank	= new LiquidTank(this.maxGold);
+		gFtank.setLiquid(MurderCoins.goldLiquid);
 	}
 	
 	
@@ -104,7 +105,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 				{
 					if(this.tankWarmingTicks == 0)
 					{
-					this.tankWarmingTicks = (this.gFtank.getLiquid().amount/1000)*ticksToWarm;
+					this.tankWarmingTicks = (gFtank.getLiquid().amount/1000)*ticksToWarm;
 					}
 					else if(this.tankWarmingTicks > 1)
 					{
@@ -118,11 +119,11 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
-			/*if(this.gFtank.getLiquid() != null)
+			/*if(gFtank.getLiquid() != null)
             {
                   	for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS)
                     {
-                    	if(this.gFtank.getLiquid() == null || this.gFtank.getLiquid().amount <= 0)
+                    	if(gFtank.getLiquid() == null || gFtank.getLiquid().amount <= 0)
                     	{
                     		break;
                     	}
@@ -131,17 +132,17 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 
                         if(tileEntity instanceof ITankContainer)
                         {
-                        	int fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.gFtank.getLiquid(), false);
+                        	int fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), gFtank.getLiquid(), false);
                         	if(fill > 0)
                         	{
-                        		fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.gFtank.getLiquid(), true);
-                        		this.gFtank.drain(fill, true);
+                        		fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), gFtank.getLiquid(), true);
+                        		gFtank.drain(fill, true);
                         		                         
                         	}
                         }
                   }
             }*/
-			if(this.gFtank.getLiquid() != null) 
+			if(gFtank.getLiquid() != null) 
 			{
 				for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
 				{
@@ -149,11 +150,11 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 
 					if(tileEntity instanceof ITankContainer) 
 					{	
-						if(this.gFtank.getLiquid() == null || this.gFtank.getLiquid().amount <= 0) 
+						if(gFtank.getLiquid() == null || gFtank.getLiquid().amount <= 0) 
 						{
 							break;
 						}
-						this.gFtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.gFtank.getLiquid(), true), true);
+						gFtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), gFtank.getLiquid(), true), true);
 						//this.goldStored = this.tank.getLiquid().amount;
 					}
 				}
@@ -180,9 +181,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
 			 * machine will enter "Frozen" status.
 			 */
-			if (this.gFtank.getLiquid() != null)
+			if (gFtank.getLiquid() != null)
 			{
-				if (this.gFtank.getLiquid().amount > 0)
+				if (gFtank.getLiquid().amount > 0)
 				{
 					if(this.getJoules() < this.tankRunningJoules)
 					{
@@ -244,9 +245,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			{
 				this.processTicks = 0;
 			}
-			if(this.inventory[2] != null && this.gFtank.getLiquid() != null && this.isFrozen == false)
+			if(this.inventory[2] != null && gFtank.getLiquid() != null && this.isFrozen == false)
 			{
-				if (this.gFtank.getLiquid().amount >= this.goldPerBucket)
+				if (gFtank.getLiquid().amount >= this.goldPerBucket)
 				{
 					if(this.fillTicks == 0)
 					{
@@ -265,7 +266,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 								}
 							}
 							//this.setGold(goldPerBucket, false);
-							this.gFtank.drain(goldPerBucket, true);
+							gFtank.drain(goldPerBucket, true);
 							ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
 							if(this.inventory[3]==null)
 							{
@@ -287,7 +288,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-				if(this.gFtank.getLiquid() != null)
+				if(gFtank.getLiquid() != null)
 				{
 					this.setJoules(this.getJoules() - this.tankRunningJoules );
 				}
@@ -327,9 +328,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		if (this.gFtank.getLiquid() != null)
+		if (gFtank.getLiquid() != null)
 		{
-			return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), this.gFtank.getLiquid().amount, this.isFrozen, this.tankWarmingTicks);
+			return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), gFtank.getLiquid().amount, this.isFrozen, this.tankWarmingTicks);
 		}
 		else
 		{
@@ -344,7 +345,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		{
 			this.processTicks = dataStream.readInt();
 			this.setJoules(dataStream.readDouble());
-			this.gFtank.getLiquid().amount = dataStream.readInt();
+			gFtank.getLiquid().amount = dataStream.readInt();
 			this.isFrozen = dataStream.readBoolean();
 			this.tankWarmingTicks = dataStream.readInt();
 		}
@@ -384,14 +385,13 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			this.processTicks = 0;
 			return false;
 		}
-		if(this.gFtank.getLiquid()==null)
+		if(gFtank.getLiquid() != null)
 		{
-			return false;
-		}
-		if (this.gFtank.getLiquid().amount >= this.maxGold)
-		{
-			this.gFtank.getLiquid().amount = this.maxGold;
-			return false;
+			if (gFtank.getLiquid().amount >= this.maxGold)
+			{
+				gFtank.getLiquid().amount = this.maxGold;
+				return false;
+			}
 		}
 		if (inventory[1].isItemEqual(new ItemStack(Item.goldNugget)))
 		{
@@ -420,12 +420,12 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			if(!isNuggets)
 			{
 				this.decrStackSize(1, 1);
-				this.gFtank.fill(liquid, true);
+				gFtank.fill(liquid, true);
 			}
 			else
 			{
 				this.decrStackSize(1, 8);
-				this.gFtank.fill(liquid, true);
+				gFtank.fill(liquid, true);
 			}
 		}
 	}
@@ -443,7 +443,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 		if(par1NBTTagCompound.hasKey("liquidTank"))
     	{
-			this.gFtank.readFromNBT(par1NBTTagCompound.getCompoundTag("liquidTank"));
+			gFtank.readFromNBT(par1NBTTagCompound.getCompoundTag("liquidTank"));
     	}
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -466,9 +466,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("smeltingTicks", this.processTicks);
 		par1NBTTagCompound.setDouble("joulesStored", this.joulesStored);
-	    if(this.gFtank.getLiquid() != null)
+	    if(gFtank.getLiquid() != null)
         {
-	    	par1NBTTagCompound.setTag("liquidTank", this.gFtank.writeToNBT(new NBTTagCompound()));
+	    	par1NBTTagCompound.setTag("liquidTank", gFtank.writeToNBT(new NBTTagCompound()));
         }
 
 		NBTTagList var2 = new NBTTagList();
@@ -662,16 +662,16 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) 
 	{
-		if (tankIndex != 0 || this.gFtank.getLiquid() == null)
+		if (tankIndex != 0 || gFtank.getLiquid() == null)
 		{
 			return null;
 		}
-		LiquidStack stack = this.gFtank.getLiquid();
+		LiquidStack stack = gFtank.getLiquid();
 		if (maxDrain < stack.amount)
 		{
 			stack = this.getStack(stack, maxDrain);
 		}
-		return this.gFtank.drain(maxDrain, doDrain);
+		return gFtank.drain(maxDrain, doDrain);
 	}
 	public static LiquidStack getStack(LiquidStack stack, int vol)
 	{
@@ -684,7 +684,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public ILiquidTank[] getTanks(ForgeDirection direction) 
 	{
-		return new ILiquidTank[] { this.gFtank };
+		return new ILiquidTank[] { gFtank };
 	}
 
 	@Override
@@ -694,9 +694,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		{
 			return null;
 		}
-		if (type.isLiquidEqual(this.gFtank.getLiquid()))
+		if (type.isLiquidEqual(gFtank.getLiquid()))
 		{
-			return this.gFtank;
+			return gFtank;
 		}
 		return null;
 	}

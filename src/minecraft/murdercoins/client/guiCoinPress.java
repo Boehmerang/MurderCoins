@@ -76,12 +76,12 @@ public class guiCoinPress extends GuiContainer
 			int scale2 = (int) (((double) this.tileentity.joulesStored / (double) this.tileentity.getMaxJoules()) * 96);
 			this.drawTexturedModalRect(containerWidth + 28, containerHeight + 67, 2, 168, 0 + scale2, 9);
 		}
-		if (this.tileentity.getGold()>0)
+		if (this.tileentity.CPtank.getLiquid().amount > 0)
 		{
-			int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
+			int scale2 = (int) (((double) this.tileentity.getStoredGold().amount / (double) this.tileentity.maxGold) * 44);
 			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44-scale2);
 		}
-		if (this.tileentity.getGold()==0)
+		if (this.tileentity.getStoredGold().amount == 0)
 		{
 			//int scale2 = (int) (((double) this.tileentity.goldStored / (double) this.tileentity.maxGold) * 44);
 			this.drawTexturedModalRect(containerWidth + 12, containerHeight + 10/*54*/, 185, /*65*/21 ,16,44);
