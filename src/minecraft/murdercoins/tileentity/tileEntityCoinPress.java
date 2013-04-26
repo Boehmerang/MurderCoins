@@ -52,8 +52,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public int ticksToDrainBucket = 20;										// # of ticks it takes to drain a bucket
 	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
 	public int ticksTillFreeze = 1200;										// # of ticks until machine enters "Frozen" state
-	public int meltingTicks = 500;									// Ticks it takes to melt a gold ingot
-	//public int goldStored = 0;												// Amount of gold currently stored
+	public int meltingTicks = 500;											// Ticks it takes to melt a gold ingot
+	//public int goldStored = 0;											// Amount of gold currently stored
 	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;		// Max amount of gold the press can store
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;		// How much gold is in each bucket.
 	private int playersUsing = 0;											// Number of players using the machine
@@ -81,14 +81,14 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		this.joulesPerSmelt = Config.CPjoulesPerUse;
 		this.tankJoules = Config.CPtankJoules;
 		this.unfreezeJoules = Config.CPunfreezeJoules;
-		CPtank = new LiquidTank(this.maxGold);
+		this.CPtank = new LiquidTank(this.maxGold);
 	}
 	
 	@Override
 	public void updateEntity()
 	{
-		if ( CPtank.getLiquid() == null){	 CPtank.setLiquid(MurderCoins.goldLiquid);}
-		//this.goldStored = CPtank.getLiquid().amount;
+		if ( this.CPtank.getLiquid() == null){	 this.CPtank.setLiquid(MurderCoins.goldLiquid);}
+		//this.goldStored = this.CPtank.getLiquid().amount;
 		/*if (this.tank.getLiquid().amount != this.goldStored)
 		{
 			if(this.tank.getLiquid().amount > this.goldStored)
@@ -107,7 +107,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
 		/*if (this.didFill == true)
 		{
-			this.goldStored = CPtank.getLiquid().amount;
+			this.goldStored = this.CPtank.getLiquid().amount;
 			this.didFill = false;
 		}*/
 		
@@ -143,7 +143,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
 			 * machine will enter "Frozen" status.
 			 */
-			else if ( CPtank.getLiquid() != null)
+			else if ( this.CPtank.getLiquid() != null)
 			{
 				if(this.getJoules() < this.tankJoules)
 				{
@@ -161,9 +161,18 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			if(this.inventory[6] != null && this.isFrozen == false)
 			{
-				if( CPtank.getLiquid()!=null)
-				{
-					if( CPtank.getLiquid().amount < this.maxGold)
+				if( this.CPtank.getLiquid()!=null)
+				{			
+					for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
+					{
+					
+						TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
+
+					
+					if(tileEntity instanceof ITankContainer) 
+					{
+					
+					if( this.CPtank.getLiquid().amount < this.maxGold)
 					{
 						if(this.inventory[2] != null)
 						{
@@ -181,15 +190,24 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 							this.drainBucketTicks--;
 							if (this.drainBucketTicks < 1)
 			    			{
+								if(CPtank.getLiquid() == null || CPtank.getLiquid().amount <= 0) 
+								{
+									break;
+								}
+								
 								LiquidStack liquid = LiquidDictionary.getLiquid("Gold", this.goldPerBucket);
 								//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
 								//this.setGold(goldPerBucket, true);
-								 CPtank.fill(liquid, true);
+								//this.CPtank.fill(liquid, true);
+								CPtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), CPtank.getLiquid(), true), true);
+
 								this.decrStackSize(6, 1);
 								this.getEmptyBucket();
 								this.drainBucketTicks=0;
 			    			}
 						}
+					}
+					}
 					}
 				}
 			}
@@ -231,9 +249,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			{
 				if (this.ticks % 3 == 0)
 				{
-					if( CPtank.getLiquid() != null)
+					if( this.CPtank.getLiquid() != null)
 					{
-						if ( CPtank.getLiquid().amount > 0)
+						if ( this.CPtank.getLiquid().amount > 0)
 						{
 							this.setJoules(this.getJoules() - this.tankJoules );
 						}
@@ -243,33 +261,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			}
 		}
 	}
-
-	/*	Sets the amount of gold stored (additive or subtractive)
-	public void setGold(int goldAmount, boolean add)
-	{
-		if(add)
-		{
-		this.goldStored += goldAmount;
-		 CPtank.getLiquid().amount = this.goldStored;
-		}
-		else
-		{
-			this.goldStored -= goldAmount;
-			//this.tank.setCapacity(this.tank.getLiquid().amount - goldAmount);
-			 CPtank.getLiquid().amount = this.goldStored;
-		}
-		System.out.println( CPtank.getLiquid().amount);
-		if (this.goldStored >= this.maxGold)this.goldStored = this.maxGold;
-	}*/
-	//	Returns the amount of gold stored.
-	/*public int getGold()
-	{
-		if ( CPtank.getLiquid() == null)
-		{
-			return 0;
-		}
-		return CPtank.getLiquid().amount;
-	}*/
 
 	@Override
 	public boolean canConnect(ForgeDirection direction)
@@ -308,7 +299,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		if( CPtank.getLiquid() != null)
+		if( this.CPtank.getLiquid() != null)
 		{
 			return PacketManager.getPacket("MurderCoins", this, this.processTicks, this.getJoules(), this.getStoredGold().itemID, this.getStoredGold().amount, this.getStoredGold().itemMeta, this.isFrozen, this.tankWarmingTicks);
 		}
@@ -325,7 +316,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			this.processTicks = dataStream.readInt();
 			this.setJoules(dataStream.readDouble());
-			CPtank.setLiquid(new LiquidStack(dataStream.readInt(), dataStream.readInt(), dataStream.readInt()));
+			this.CPtank.setLiquid(new LiquidStack(dataStream.readInt(), dataStream.readInt(), dataStream.readInt()));
 			this.isFrozen = dataStream.readBoolean();
 			this.tankWarmingTicks = dataStream.readInt();
 		}
@@ -386,14 +377,14 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			return false;
 			}
 		}
-		if ( CPtank.getLiquid() == null)
+		if ( this.CPtank.getLiquid() == null)
 		{
 			this.processTicks = 0;
 			return false;
 		}
-		if ( CPtank.getLiquid() != null)
+		if ( this.CPtank.getLiquid() != null)
 		{
-			if( CPtank.getLiquid().amount < this.goldPerBucket)
+			if( this.CPtank.getLiquid().amount < this.goldPerBucket)
 			{
 				this.processTicks = 0;
 				return false;
@@ -509,7 +500,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					this.inventory[7].stackSize += 4;
 				}
 				//this.setGold(goldPerBucket, false);
-				 CPtank.drain(goldPerBucket, true);
+				 this.CPtank.drain(goldPerBucket, true);
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
@@ -525,7 +516,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 				this.decrStackSize(5, 1);
 				//this.setGold(goldPerBucket, false);
-				 CPtank.drain(goldPerBucket, true);
+				 this.CPtank.drain(goldPerBucket, true);
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
@@ -541,7 +532,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 				this.decrStackSize(5, 1);
 				//this.setGold(goldPerBucket, false);
-				 CPtank.drain(goldPerBucket, true);
+				 this.CPtank.drain(goldPerBucket, true);
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 		}
@@ -564,7 +555,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					{
 						this.inventory[7].stackSize += 4;
 					}
-					 CPtank.drain(goldPerBucket, true);
+					 this.CPtank.drain(goldPerBucket, true);
 					//this.setGold(goldPerBucket, false);
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
@@ -581,7 +572,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					}
 					this.decrStackSize(5, 1);
 					//this.setGold(goldPerBucket, false);
-					 CPtank.drain(goldPerBucket, true);
+					 this.CPtank.drain(goldPerBucket, true);
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
 				else if (this.inventory[5].isItemEqual(tStack))
@@ -597,7 +588,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					}
 					this.decrStackSize(5, 1);
 					//this.setGold(goldPerBucket, false);
-					 CPtank.drain(goldPerBucket, true);
+					 this.CPtank.drain(goldPerBucket, true);
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
 			}
@@ -650,7 +641,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 
 		if(par1NBTTagCompound.hasKey("liquidTank"))
     	{
-			 CPtank.readFromNBT(par1NBTTagCompound.getCompoundTag("liquidTank"));
+			 this.CPtank.readFromNBT(par1NBTTagCompound.getCompoundTag("liquidTank"));
     	}
 		
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
@@ -679,9 +670,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		par1NBTTagCompound.setInteger("tankWarmingTicks", this.tankWarmingTicks);
 		par1NBTTagCompound.setInteger("ticksWithoutPower", this.ticksWithoutPower);
 		   
-		if( CPtank.getLiquid() != null)
+		if( this.CPtank.getLiquid() != null)
 	    {
-		   	par1NBTTagCompound.setTag("liquidTank", CPtank.writeToNBT(new NBTTagCompound()));
+		   	par1NBTTagCompound.setTag("liquidTank", this.CPtank.writeToNBT(new NBTTagCompound()));
 	    }
 		
 		NBTTagList var2 = new NBTTagList();
@@ -865,12 +856,12 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return 0;
 		}
-		else if ( CPtank.getLiquid() != null && !resource.isLiquidEqual( CPtank.getLiquid()))
+		else if ( this.CPtank.getLiquid() != null && !resource.isLiquidEqual( this.CPtank.getLiquid()))
 		{
 			return 0;
 		}
 		//this.didFill = true;
-		return CPtank.fill(resource, doFill);
+		return this.CPtank.fill(resource, doFill);
 	}
 
 	@Override
@@ -898,7 +889,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return null;
 		}
-		if (type.isLiquidEqual( CPtank.getLiquid()))
+		if (type.isLiquidEqual( this.CPtank.getLiquid()))
 		{
 			return CPtank;
 		}
