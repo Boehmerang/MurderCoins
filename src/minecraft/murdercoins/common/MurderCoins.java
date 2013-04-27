@@ -261,11 +261,11 @@ public class MurderCoins
 			GameRegistry.registerBlock(pulverisor);
 			LanguageRegistry.addName(pulverisor, "Pulverisor");
 		}
-		
+		/*
 		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
 		GameRegistry.registerBlock(WindmillBase, "Windmill");
 		LanguageRegistry.addName(WindmillBase, "Windmill");
-		
+		*/
 	}
 	
 	public void itemRegistration()
@@ -291,13 +291,12 @@ public class MurderCoins
 			itemDiamondDust = new itemDDust(configLoader.dDustID).setUnlocalizedName("dDust");
 			LanguageRegistry.addName(itemDiamondDust, "Diamond Dust");
 		}
+		/*
 		itemWindmillBlade = new itemWindmillBlade(4001).setUnlocalizedName("wBlade");
 		LanguageRegistry.addName(itemWindmillBlade, "Windmill Blades");
 		itemWindmillTurbine = new itemWindmillTurbine(4002).setUnlocalizedName("wTurbine");
 		LanguageRegistry.addName(itemWindmillTurbine, "Windmill Turbine");
-		//itemGoldForge = new itemGoldForge(configLoader.goldForgeID - 256, goldForge).setUnlocalizedName("gForge");
-		
-	
+		*/
 	}
 	
 	public void addCraftingRecipes()
@@ -305,10 +304,14 @@ public class MurderCoins
 		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(bucketGold, 1), 0.1f);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemCoinMold, 1), brokenMold, Item.ingotIron);
-		GameRegistry.addRecipe(new ItemStack(itemCoinMold, 1), new Object[] { "YXY", "XXX", "YXY", 'X', Item.ingotIron, 'Y', Item.bucketEmpty });
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(itemCoinMold, 1), new Object[] { "YXY", "XZX", "YXY", 'X', Item.ingotIron, 'Y', Item.bucketEmpty, 'Z', "plateSteel" }));
 		GameRegistry.addRecipe(new ItemStack(manualCoinPress, 1), new Object[] { "YTY", "XRX", "YTY", 'T', Block.pistonBase, 'Y', Item.ingotIron, 'R', Item.redstoneRepeater, 'X', new ItemStack(Item.redstone, 1) });
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.coinPress, 1), new Object[] { "XTX", "OVO", "XTX", 'T', new ItemStack(Block.pistonBase, 1), 'X', "plateSteel", 'O', "basicCircuit", 'V', "motor" }));
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.goldForge, 1), new Object[] { "XTX", "OVO", "XTX", 'V', new ItemStack(Block.furnaceIdle, 1), 'X', "plateSteel", 'O', "basicCircuit", 'T', new ItemStack(Item.redstone, 1) }));
+		if(this.MekanismLoaded == false)
+		{
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.pulverisor,1),new Object[] {"XVX", "OTO", "XVX", 'V', new ItemStack(Block.pistonBase, 1), 'X', "plateSteel", 'O', "ingotSteel", 'T', new ItemStack(Item.redstone, 1) }));
+		}
 	}
 	
 	public void addMekanismRecipes()
@@ -327,7 +330,7 @@ public class MurderCoins
 		GameRegistry.registerTileEntity(tileEntityCoinPress.class, "TileCoinPress");
 		GameRegistry.registerTileEntity(tileEntityManPress.class, "TileManPress");
 		GameRegistry.registerTileEntity(tileEntityPulverisor.class, "TilePulverisor");
-		GameRegistry.registerTileEntity(tileEntityWindmillBase.class, "TileWindmillBase");
+		//GameRegistry.registerTileEntity(tileEntityWindmillBase.class, "TileWindmillBase");
 	}
 	
 	public static File[] ListLanguages()

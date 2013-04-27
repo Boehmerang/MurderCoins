@@ -222,4 +222,28 @@ public class blockCoinPress extends BlockAdvanced
 	{
 		return new tileEntityCoinPress();
 	}
+	/**
+	* The type of render function that is called for this block
+	*/
+	public int getRenderType()
+	{
+	return -2;
+	}
+
+	/**
+	* Is this block (a) opaque and (B) a full 1m cube? This determines whether or not to render the shared face of two
+	* adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
+	*/
+	public boolean isOpaqueCube()
+	{
+	return false;
+	}
+
+	/**
+	* If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
+	*/
+	public boolean renderAsNormalBlock()
+	{
+	return false;
+	}
 }

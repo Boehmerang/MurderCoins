@@ -231,4 +231,5 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		// TODO Auto-generated method stub
 
 	}
+	
 }
