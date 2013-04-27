@@ -53,7 +53,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
 	public int ticksTillFreeze = 1200;										// # of ticks until machine enters "Frozen" state
 	public int meltingTicks = 500;											// Ticks it takes to melt a gold ingot
-	//public int goldStored = 0;											// Amount of gold currently stored
+	//public int goldStored = 0;												// Amount of gold currently stored
 	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;		// Max amount of gold the press can store
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;		// How much gold is in each bucket.
 	private int playersUsing = 0;											// Number of players using the machine
@@ -87,29 +87,14 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public void updateEntity()
 	{
-		if ( this.CPtank.getLiquid() == null){	 this.CPtank.setLiquid(MurderCoins.goldLiquid);}
-		//this.goldStored = this.CPtank.getLiquid().amount;
-		/*if (this.tank.getLiquid().amount != this.goldStored)
-		{
-			if(this.tank.getLiquid().amount > this.goldStored)
-			{
-				this.goldStored = this.tank.getLiquid().amount;
-			}
-			else if (this.tank.getLiquid().amount < this.goldStored)
-			{
-				this.tank.getLiquid().amount = this.goldStored;
-			}
-		}*/
+		//if ( this.CPtank.getLiquid() == null){	 this.CPtank.setLiquid(MurderCoins.goldLiquid);}
+
 		super.updateEntity();
 		/**
 		 * Attempts to charge from battery in slot 1.
 		 */
 		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
-		/*if (this.didFill == true)
-		{
-			this.goldStored = this.CPtank.getLiquid().amount;
-			this.didFill = false;
-		}*/
+
 		
 		/**
 		 * Trys to press the coins, if it can, it press the coins, and then checks to see if the molds break.
@@ -161,17 +146,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			 */
 			if(this.inventory[6] != null && this.isFrozen == false)
 			{
+				LiquidStack liquid = LiquidDictionary.getLiquid("Gold", this.goldPerBucket);
 				if( this.CPtank.getLiquid()!=null)
-				{			
-					for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
-					{
-					
-						TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
-
-					
-					if(tileEntity instanceof ITankContainer) 
-					{
-					
+				{
 					if( this.CPtank.getLiquid().amount < this.maxGold)
 					{
 						if(this.inventory[2] != null)
@@ -190,26 +167,47 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 							this.drainBucketTicks--;
 							if (this.drainBucketTicks < 1)
 			    			{
-								if(CPtank.getLiquid() == null || CPtank.getLiquid().amount <= 0) 
-								{
-									break;
-								}
 								
-								LiquidStack liquid = LiquidDictionary.getLiquid("Gold", this.goldPerBucket);
 								//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
 								//this.setGold(goldPerBucket, true);
-								//this.CPtank.fill(liquid, true);
-								CPtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), CPtank.getLiquid(), true), true);
-
+								this.CPtank.fill(liquid, true);
 								this.decrStackSize(6, 1);
 								this.getEmptyBucket();
 								this.drainBucketTicks=0;
 			    			}
 						}
 					}
+				}
+				else if (this.CPtank.getLiquid()==null)
+				{
+					
+					if(this.inventory[2] != null)
+					{
+						if (this.inventory[2].stackSize >= 16)
+						{
+							return;
+						}
 					}
+					if(this.drainBucketTicks == 0)
+					{
+						this.drainBucketTicks = this.ticksToDrainBucket;
+					}
+					else if (this.drainBucketTicks > 0)
+					{
+						this.drainBucketTicks--;
+						if (this.drainBucketTicks < 1)
+		    			{
+							
+							//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
+							//this.setGold(goldPerBucket, true);
+							this.CPtank.setLiquid(liquid);
+							this.decrStackSize(6, 1);
+							this.getEmptyBucket();
+							this.drainBucketTicks=0;
+		    			}
 					}
 				}
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 			/*
 			 * Checks to see if it can process, and then presses the coins.
@@ -261,6 +259,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 			}
 		}
 	}
+
 
 	@Override
 	public boolean canConnect(ForgeDirection direction)
