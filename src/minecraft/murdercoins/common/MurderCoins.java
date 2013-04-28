@@ -3,6 +3,7 @@ package murdercoins.common;
 import java.io.File;
 
 import murdercoins.block.blockCoinPress;
+import murdercoins.block.blockFakeBlock;
 import murdercoins.block.blockGoldFlowing;
 import murdercoins.block.blockGoldForge;
 import murdercoins.block.blockGoldStill;
@@ -24,6 +25,7 @@ import murdercoins.items.itemWindmillBlade;
 import murdercoins.items.itemWindmillTurbine;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
+import murdercoins.tileentity.tileEntityGoldForgeTop;
 import murdercoins.tileentity.tileEntityManPress;
 import murdercoins.tileentity.tileEntityPulverisor;
 import murdercoins.tileentity.tileEntityWindmillBase;
@@ -58,7 +60,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.1.1a", dependencies = "after:Mekanism;after:BasicComponents")
+@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.1a", dependencies = "after:Mekanism;after:BasicComponents")
 @NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
@@ -114,6 +116,7 @@ public class MurderCoins
 	public static Block						GoldStill;
 	public static Block						GoldFlowing;
 	public static Block						pulverisor;
+	public static Block						fakeBlock;
 	public static Block 					WindmillBase;
 	
 	
@@ -261,6 +264,8 @@ public class MurderCoins
 			GameRegistry.registerBlock(pulverisor);
 			LanguageRegistry.addName(pulverisor, "Pulverisor");
 		}
+		
+		fakeBlock = new blockFakeBlock(configLoader.fakeBlockID, null).setUnlocalizedName("fakeblock");
 		/*
 		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
 		GameRegistry.registerBlock(WindmillBase, "Windmill");
@@ -330,7 +335,7 @@ public class MurderCoins
 		GameRegistry.registerTileEntity(tileEntityCoinPress.class, "TileCoinPress");
 		GameRegistry.registerTileEntity(tileEntityManPress.class, "TileManPress");
 		GameRegistry.registerTileEntity(tileEntityPulverisor.class, "TilePulverisor");
-		//GameRegistry.registerTileEntity(tileEntityWindmillBase.class, "TileWindmillBase");
+		GameRegistry.registerTileEntity(tileEntityGoldForgeTop.class, "TileGoldForgeTop");
 	}
 	
 	public static File[] ListLanguages()

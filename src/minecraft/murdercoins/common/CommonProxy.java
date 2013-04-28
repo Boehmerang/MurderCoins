@@ -9,7 +9,4 @@ public class CommonProxy
 	{
 	}
 	
-	public void InitRendering()
-	{
-	}
 }

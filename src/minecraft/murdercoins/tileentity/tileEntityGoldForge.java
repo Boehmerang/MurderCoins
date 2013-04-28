@@ -144,19 +144,20 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
             }*/
 			if(this.gFtank.getLiquid() != null) 
 			{
-				for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
-				{
+				//for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
+				//{
+					ForgeDirection orientation = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 					TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
 
 					if(tileEntity instanceof ITankContainer) 
 					{	
 						if(this.gFtank.getLiquid() == null || this.gFtank.getLiquid().amount <= 0) 
 						{
-							break;
+							return;
 						}
 						this.gFtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.gFtank.getLiquid(), true), true);
 						//this.goldStored = this.tank.getLiquid().amount;
-					}
+					//}
 				}
 			}
 			/*int originalVolume = 0;
@@ -300,7 +301,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+		return direction == ForgeDirection.UP;//ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 
 	@Override
@@ -724,11 +725,11 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		}
 		return null;
 	}
-
+	
 	@Override
 	public boolean canTubeConnect(ForgeDirection side) 
 	{
-	
-		return true;
+		
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 	}
 }

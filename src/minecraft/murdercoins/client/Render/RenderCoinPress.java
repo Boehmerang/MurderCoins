@@ -9,10 +9,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public class RenderCoinPress  extends TileEntitySpecialRenderer
 {	
-	ModelCoinPress cpModel;
+	public static final ModelCoinPress cpModel  = new ModelCoinPress();;
 	public RenderCoinPress()
 	{
-		cpModel = new ModelCoinPress();
+		//cpModel = new ModelCoinPress();
 	}
 	public void renderAModelAt(tileEntityCoinPress tile, double d, double d1, double d2, float f) {
 

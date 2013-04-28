@@ -2,9 +2,13 @@ package murdercoins.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityPulverisor;
+import murdercoins.client.Render.BlockRenderingHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -47,6 +51,7 @@ public class blockCoinPress extends BlockAdvanced
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
 	{
 		int metadata = world.getBlockMetadata(x, y, z);
@@ -71,6 +76,7 @@ public class blockCoinPress extends BlockAdvanced
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
 		if (side == 0 || side == 1) // bottom and top
@@ -222,12 +228,15 @@ public class blockCoinPress extends BlockAdvanced
 	{
 		return new tileEntityCoinPress();
 	}
+
 	/**
 	* The type of render function that is called for this block
 	*/
+	@SideOnly(Side.CLIENT)
+	@Override
 	public int getRenderType()
 	{
-	return -2;
+	return BlockRenderingHandler.ID;
 	}
 
 	/**

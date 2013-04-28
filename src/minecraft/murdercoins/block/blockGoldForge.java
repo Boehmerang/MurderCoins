@@ -5,6 +5,7 @@ import java.util.Random;
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityPulverisor;
+import  murdercoins.client.Render.RenderGoldForge;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -37,6 +38,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		super(id, Material.iron);
 		this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
 		this.setStepSound(soundMetalFootstep);
+		this.setBlockBounds(0F, 0F, 0F, 1, 2F, 1);
 	}
 	public void registerIcons(IconRegister par1IconRegister)
 	{
@@ -87,14 +89,6 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		{
 			return this.gFOn;
 		}
-		/*
-		 * Removed till Liquid is added.
-		 *
-		if(side == metadata + 5)//gold out.
-		{
-		return this.gFGold;
-		}
-		*/
 		else //sides
 		{
 		return this.gFSide;
@@ -109,8 +103,19 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 			int metadata = par1World.getBlockMetadata(x, y, z);
 			if (!par1World.isRemote)
 			{
+				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+				return true;
+				/*
+				if (metadata <=3)
+				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
+				}
+				else if (metadata==8)
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y-1, z);
+					return true;
+				}*/
 			}
 			return true;
 		}
@@ -125,15 +130,19 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		    {
 		       case 0:
 		           par1World.setBlock(x, y, z, this.blockID, 0, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
 		           break;
 		       case 1:
 		           par1World.setBlock(x, y, z, this.blockID, 3, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
 		           break;
 		       case 2:
 		           par1World.setBlock(x, y, z, this.blockID, 1, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
 		           break;
 		       case 3:
 		           par1World.setBlock(x, y, z, this.blockID, 2, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
 		           break;
 		      }
 
@@ -144,6 +153,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
        @Override
        public void breakBlock(World world, int x, int y, int z, int i, int j){
                dropItems(world, x, y, z);
+               world.setBlock(x, y+1, z, 0);
                super.breakBlock(world, x, y, z, i, j);
                }
 
@@ -206,8 +216,10 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
    				change = 0;
    				break;
    		}
-
-   		par1World.setBlock(x, y, z, this.blockID, change, 0);
+   		
+   		//par1World.setBlockMetadataWithNotify(x, y-1, z, change, 0);
+   		par1World.setBlockMetadataWithNotify(x, y, z, change, 0);
+   		//par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID);
    		par1World.markBlockForRenderUpdate(x, y, z);
 
    		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
@@ -231,5 +243,28 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		// TODO Auto-generated method stub
 
 	}
-	
+	/**
+	* The type of render function that is called for this block
+	*/
+	public int getRenderType()
+	{
+	return RenderGoldForge.gfModelID;
+	}
+
+	/**
+	* Is this block (a) opaque and (B) a full 1m cube? This determines whether or not to render the shared face of two
+	* adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
+	*/
+	public boolean isOpaqueCube()
+	{
+	return false;
+	}
+
+	/**
+	* If this block doesn't render as an ordinary block it will return False (examples: signs, buttons, stairs, etc)
+	*/
+	public boolean renderAsNormalBlock()
+	{
+	return false;
+	}
 }
