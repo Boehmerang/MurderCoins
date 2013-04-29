@@ -93,6 +93,8 @@ public class MurderCoins
 	private static final String[]			LANGUAGES_SUPPORTED	= new String[] { "en_US" };
 	public static final String				LANGUAGE_PATH		= "/mods/MurderCoins/language";
 	
+	public static double					MJToJoules=0.04;
+	public static double					EUToJoules=0.1;
 	public static Item						itemGoldCoin;
 	public static Item						itemDiamondCoin;
 	public static Item						itemEmeraldCoin;
@@ -117,7 +119,8 @@ public class MurderCoins
 	public static Block						GoldFlowing;
 	public static Block						pulverisor;
 	public static Block						fakeBlock;
-	public static Block 					WindmillBase;
+	public static Block						cpBoundingBlock;
+	//public static Block 					WindmillBase;
 	
 	
 	public static LiquidStack				goldLiquid;

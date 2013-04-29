@@ -19,30 +19,65 @@ public class RenderCoinPress  extends TileEntitySpecialRenderer
 		int rotation = 0;
 		if(tile.worldObj != null)
 		{
-		rotation = tile.getBlockMetadata();
+			int temp = tile.getBlockMetadata();
+			switch (temp)
+			{
+			case 0:
+				rotation = 0;
+				break;
+			case 1:
+				rotation = 0;
+				break;
+			case 2:
+				rotation = 90;
+				break;
+			case 3:
+				rotation = 0;
+				break;
+			default:
+				rotation = 0;
+				break;
+			}				
 		}
 		bindTextureByName("CoinPress.png"); //texture
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
-		GL11.glRotatef(rotation*90, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(rotation, 0.0F, 1.0F, 0.0F);
 		cpModel.render(0.0625F);
 		GL11.glPopMatrix(); //end
 		}
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1, double d2, float f) 
 	{
-		// TODO Auto-generated method stub
 		int rotation = 0;
 		if(tileentity.worldObj != null)
 		{
-		rotation = tileentity.getBlockMetadata();
+			int temp = tileentity.getBlockMetadata();
+			switch (temp)
+			{
+			case 0:
+				rotation = 180;
+				break;
+			case 1:
+				rotation = 0;
+				break;
+			case 2:
+				rotation = 90;
+				break;
+			case 3:
+				rotation = 270;
+				break;
+			default:
+				rotation = 0;
+				break;
+			}				
 		}
 		bindTextureByName("/mods/MurderCoins/textures/models/CoinPress.png"); //texture
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d0 + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
-		GL11.glRotatef(rotation*90, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(rotation, 0.0F, 1.0F, 0.0F);
 		cpModel.render(0.0625F);
 		GL11.glPopMatrix(); //end
 	}

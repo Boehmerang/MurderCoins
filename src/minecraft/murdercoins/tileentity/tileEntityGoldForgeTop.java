@@ -23,6 +23,10 @@ public class tileEntityGoldForgeTop extends TileEntityConductor
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(xCoord, yCoord-1, zCoord) + 2).getOpposite() || direction == ForgeDirection.DOWN;
+		if(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) == 1)
+		{
+			return direction == ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(xCoord, yCoord-1, zCoord) + 2).getOpposite() || direction == ForgeDirection.DOWN;
+		}
+		return false;
 	}
 }

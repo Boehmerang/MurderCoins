@@ -126,16 +126,28 @@ public class blockCoinPress extends BlockAdvanced
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlock(x, y, z, this.blockID, 0, 0);
+				par1World.setBlock(x, y, z, this.blockID, 0, 1);
+				par1World.setBlock(x, y, z-1, MurderCoins.fakeBlock.blockID, 2, 1);
+				par1World.setBlock(x-1, y, z-1, MurderCoins.fakeBlock.blockID, 3, 1);
+				par1World.setBlock(x-1, y, z, MurderCoins.fakeBlock.blockID, 4, 1);
 				break;
 			case 1:
-				par1World.setBlock(x, y, z, this.blockID, 3, 0);
+				par1World.setBlock(x, y, z, this.blockID, 3, 1);
+				par1World.setBlock(x, y, z-1, MurderCoins.fakeBlock.blockID, 5, 1);
+				par1World.setBlock(x+1, y, z-1, MurderCoins.fakeBlock.blockID, 6, 1);
+				par1World.setBlock(x+1, y, z, MurderCoins.fakeBlock.blockID, 7, 1);
 				break;
 			case 2:
-				par1World.setBlock(x, y, z, this.blockID, 1, 0);
+				par1World.setBlock(x, y, z, this.blockID, 1, 1);
+				par1World.setBlock(x, y, z+1, MurderCoins.fakeBlock.blockID, 8, 1);
+				par1World.setBlock(x+1, y, z+1, MurderCoins.fakeBlock.blockID, 9, 1);
+				par1World.setBlock(x+1, y, z, MurderCoins.fakeBlock.blockID, 10, 1);
 				break;
 			case 3:
-				par1World.setBlock(x, y, z, this.blockID, 2, 0);
+				par1World.setBlock(x, y, z, this.blockID, 2, 1);
+				par1World.setBlock(x, y, z+1, MurderCoins.fakeBlock.blockID, 11, 1);
+				par1World.setBlock(x-1, y, z+1, MurderCoins.fakeBlock.blockID, 12, 1);
+				par1World.setBlock(x-1, y, z, MurderCoins.fakeBlock.blockID, 13, 1);
 				break;
 		}
 
@@ -146,10 +158,56 @@ public class blockCoinPress extends BlockAdvanced
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int i, int j)
 	{
+		int metadata = world.getBlockMetadata(x, y, z);
+		breakConnected(world, x, y, z, metadata);		
 		dropItems(world, x, y, z);
 		super.breakBlock(world, x, y, z, i, j);
 	}
 
+	public void breakConnected(World world, int x, int y, int z, int meta)
+	{
+		if (meta == 0)
+    	{
+			int tempblock = world.getBlockId(x, y, z-1);
+			if(tempblock == MurderCoins.fakeBlock.blockID)
+			{
+            world.setBlock(x, y, z-1, 0);
+            world.setBlock(x-1, y, z-1, 0);
+            world.setBlock(x-1, y, z, 0);
+			}
+       	}
+     	if (meta == 1)
+    	{
+     		int tempblock = world.getBlockId(x, y, z+1);
+			if(tempblock == MurderCoins.fakeBlock.blockID)
+			{
+            world.setBlock(x, y, z+1, 0);
+			}
+            //world.setBlock(x+1, y, z-1, 0);
+            //world.setBlock(x+1, y, z, 0);   
+    	}
+       	if (meta == 2)
+    	{
+       		int tempblock = world.getBlockId(x-1, y, z+1);
+			if(tempblock == MurderCoins.fakeBlock.blockID)
+			{
+            world.setBlock(x-1, y, z+1, 0);
+            //world.setBlock(x+1, y, z+1, 0);
+            //world.setBlock(x+1, y, z, 0);
+			}
+        }
+       	if (meta == 3)
+    	{
+       		int tempblock = world.getBlockId(x+1, y, z-1);
+			if(tempblock == MurderCoins.fakeBlock.blockID)
+			{
+            world.setBlock(x+1, y, z-1, 0);
+       		//world.setBlock(x-1, y, z+1, 0);
+            //world.setBlock(x-1, y, z, 0);
+			}
+    	}
+	}
+	
 	private void dropItems(World world, int x, int y, int z)
 	{
 		Random rand = new Random();
@@ -194,7 +252,7 @@ public class blockCoinPress extends BlockAdvanced
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
+		/*int metadata = par1World.getBlockMetadata(x, y, z);
 
 		int change = 0;
 
@@ -219,7 +277,7 @@ public class blockCoinPress extends BlockAdvanced
 		par1World.markBlockForRenderUpdate(x, y, z);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-
+		 */
 		return true;
 	}
 

@@ -130,19 +130,19 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		    {
 		       case 0:
 		           par1World.setBlock(x, y, z, this.blockID, 0, 0);
-		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 1, 0);
 		           break;
 		       case 1:
 		           par1World.setBlock(x, y, z, this.blockID, 3, 0);
-		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 1, 0);
 		           break;
 		       case 2:
 		           par1World.setBlock(x, y, z, this.blockID, 1, 0);
-		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 1, 0);
 		           break;
 		       case 3:
 		           par1World.setBlock(x, y, z, this.blockID, 2, 0);
-		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 8, 0);
+		           par1World.setBlock(x, y+1, z, MurderCoins.fakeBlock.blockID, 1, 0);
 		           break;
 		      }
 
