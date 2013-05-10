@@ -50,6 +50,7 @@ public class blockCoinPress extends BlockAdvanced
 		this.cPPow = par1IconRegister.registerIcon("MurderCoins:coinPress-Pow");
 	}
 	
+	/*
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
@@ -97,7 +98,8 @@ public class blockCoinPress extends BlockAdvanced
 			return this.cPSide;
 		}
 	}
-
+	*/
+	
 	/**
 	 * Called when the block is right clicked by the player
 	 */
@@ -127,27 +129,27 @@ public class blockCoinPress extends BlockAdvanced
 		{
 			case 0:
 				par1World.setBlock(x, y, z, this.blockID, 0, 1);
-				par1World.setBlock(x, y, z-1, MurderCoins.fakeBlock.blockID, 2, 1);
-				par1World.setBlock(x-1, y, z-1, MurderCoins.fakeBlock.blockID, 3, 1);
-				par1World.setBlock(x-1, y, z, MurderCoins.fakeBlock.blockID, 4, 1);
+				par1World.setBlock(x, y, z-1, MurderCoins.cpBoundingBlock.blockID, 2, 1);
+				par1World.setBlock(x-1, y, z-1, MurderCoins.cpBoundingBlock.blockID, 3, 1);
+				par1World.setBlock(x-1, y, z, MurderCoins.cpBoundingBlock.blockID, 4, 1);
 				break;
 			case 1:
 				par1World.setBlock(x, y, z, this.blockID, 3, 1);
-				par1World.setBlock(x, y, z-1, MurderCoins.fakeBlock.blockID, 5, 1);
-				par1World.setBlock(x+1, y, z-1, MurderCoins.fakeBlock.blockID, 6, 1);
-				par1World.setBlock(x+1, y, z, MurderCoins.fakeBlock.blockID, 7, 1);
+				par1World.setBlock(x, y, z-1, MurderCoins.cpBoundingBlock.blockID, 5, 1);
+				par1World.setBlock(x+1, y, z-1, MurderCoins.cpBoundingBlock.blockID, 6, 1);
+				par1World.setBlock(x+1, y, z, MurderCoins.cpBoundingBlock.blockID, 7, 1);
 				break;
 			case 2:
 				par1World.setBlock(x, y, z, this.blockID, 1, 1);
-				par1World.setBlock(x, y, z+1, MurderCoins.fakeBlock.blockID, 8, 1);
-				par1World.setBlock(x+1, y, z+1, MurderCoins.fakeBlock.blockID, 9, 1);
-				par1World.setBlock(x+1, y, z, MurderCoins.fakeBlock.blockID, 10, 1);
+				par1World.setBlock(x, y, z+1, MurderCoins.cpBoundingBlock.blockID, 8, 1);
+				par1World.setBlock(x+1, y, z+1, MurderCoins.cpBoundingBlock.blockID, 9, 1);
+				par1World.setBlock(x+1, y, z, MurderCoins.cpBoundingBlock.blockID, 10, 1);
 				break;
 			case 3:
 				par1World.setBlock(x, y, z, this.blockID, 2, 1);
-				par1World.setBlock(x, y, z+1, MurderCoins.fakeBlock.blockID, 11, 1);
-				par1World.setBlock(x-1, y, z+1, MurderCoins.fakeBlock.blockID, 12, 1);
-				par1World.setBlock(x-1, y, z, MurderCoins.fakeBlock.blockID, 13, 1);
+				par1World.setBlock(x, y, z+1, MurderCoins.cpBoundingBlock.blockID, 11, 1);
+				par1World.setBlock(x-1, y, z+1, MurderCoins.cpBoundingBlock.blockID, 12, 1);
+				par1World.setBlock(x-1, y, z, MurderCoins.cpBoundingBlock.blockID, 13, 1);
 				break;
 		}
 
@@ -169,7 +171,7 @@ public class blockCoinPress extends BlockAdvanced
 		if (meta == 0)
     	{
 			int tempblock = world.getBlockId(x, y, z-1);
-			if(tempblock == MurderCoins.fakeBlock.blockID)
+			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x, y, z-1, 0);
             world.setBlock(x-1, y, z-1, 0);
@@ -179,7 +181,7 @@ public class blockCoinPress extends BlockAdvanced
      	if (meta == 1)
     	{
      		int tempblock = world.getBlockId(x, y, z+1);
-			if(tempblock == MurderCoins.fakeBlock.blockID)
+			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x, y, z+1, 0);
 			}
@@ -189,7 +191,7 @@ public class blockCoinPress extends BlockAdvanced
        	if (meta == 2)
     	{
        		int tempblock = world.getBlockId(x-1, y, z+1);
-			if(tempblock == MurderCoins.fakeBlock.blockID)
+			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x-1, y, z+1, 0);
             //world.setBlock(x+1, y, z+1, 0);
@@ -199,7 +201,7 @@ public class blockCoinPress extends BlockAdvanced
        	if (meta == 3)
     	{
        		int tempblock = world.getBlockId(x+1, y, z-1);
-			if(tempblock == MurderCoins.fakeBlock.blockID)
+			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x+1, y, z-1, 0);
        		//world.setBlock(x-1, y, z+1, 0);
@@ -290,7 +292,6 @@ public class blockCoinPress extends BlockAdvanced
 	/**
 	* The type of render function that is called for this block
 	*/
-	@SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{

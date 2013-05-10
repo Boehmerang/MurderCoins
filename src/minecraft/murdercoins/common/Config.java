@@ -27,6 +27,7 @@ public class Config
 	public static int GoldFlowingID;
 	public static int pulverisorID;
 	public static int fakeBlockID;
+	public static int cpBoundID;
 	
 	//		Power Use and Ticks per process of Gold Forge
 	
@@ -80,6 +81,7 @@ public class Config
 		manPressID = config.getBlock("manPress", 3016).getInt();
 		pulverisorID = config.getBlock("pulverisor", 3017).getInt();
 		fakeBlockID = config.getBlock("fakeBlock", 3018).getInt();
+		cpBoundID = config.getBlock("cpBounding", 3019).getInt();
 
 		GoldStillID = config.getItem("GoldStill", 1001).getInt();
 		GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();

@@ -224,11 +224,15 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 							}
-							else
+							else if(this.inventory[1].getItem() == Item.ingotGold)
 							{
 								this.smeltItem(false);
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
+							}
+							else
+							{
+								return;
 							}
 						}
 					}
@@ -381,6 +385,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	{
 		if(this.isFrozen == true)
 		{
+			this.processTicks = 0;
 			return false;
 		}
 		if(inventory[1] == null)
@@ -393,19 +398,25 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			if (gFtank.getLiquid().amount >= this.maxGold)
 			{
 				gFtank.getLiquid().amount = this.maxGold;
+				this.processTicks = 0;
 				return false;
 			}
 		}
 		if (inventory[1].isItemEqual(new ItemStack(Item.goldNugget)))
 		{
-			return true;
+			if (inventory[1].stackSize >= 8)
+			{
+				return true;
+			}
+			this.processTicks = 0;
+			return false;
 		}
 		if(inventory[1].isItemEqual(new ItemStack(Item.ingotGold)))
 		{
 			return true;
 		}
-
-		return true;
+		this.processTicks = 0;
+		return false;
 	}
 
 	/**
@@ -587,31 +598,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	}
 
 	/**
-	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
-	 * the given slot.
-	 */
-	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
-	{
-		//return slotID == 1 ? itemStack.isItemEqual(new ItemStack(Item.ingotGold)) : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : (slotID == 2 ? itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)): false));
-		if(itemStack.getItem() instanceof IItemElectric)
-		{
-			return slotID == 0;
-		}
-		else if(itemStack.isItemEqual(new ItemStack(Item.ingotGold))||itemStack.isItemEqual(new ItemStack(Item.goldNugget)))
-		{
-			return slotID == 1;
-		}
-		else if(slotID==2)
-		{
-			return true;
-		}
-		return slotID == 2;
-	}
-
-	/**
 	 * Get the size of the side inventory.
 	 */
+	/*
 	@Override
 	public int[] getSizeInventorySide(int side)
 	{
@@ -629,6 +618,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	{
 		return slotID == 3;
 	}
+	*/
 	/*
 	 * 				Read the amount of gold in the tank and send it to the gui.
 	 */
@@ -731,5 +721,66 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	{
 		
 		return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+	}
+
+	/**
+	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
+	 * the given slot.
+	 */
+	@Override
+	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
+	{
+		ItemStack ingotStack = new ItemStack(Item.ingotGold);
+		ItemStack nuggetStack = new ItemStack(Item.goldNugget);
+		if(itemStack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+		else if(itemStack.isItemEqual(ingotStack))
+		{
+			return slotID == 1;
+		}
+		else if(itemStack.isItemEqual(nuggetStack))
+		{
+			return slotID == 1;
+		}
+		else if(itemStack.isItemEqual(new ItemStack(Item.bucketEmpty)))
+		{
+			return slotID == 2;
+		}
+		return false;
+	}
+
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) 
+	{
+		if (side == 0)
+		{
+			return new int[] {0,3};
+		}
+		else if (side != 0)
+		{
+			return new int[] {0,1,2};
+		}
+		return null;
+	}
+
+
+	@Override
+	public boolean canInsertItem(int slotID, ItemStack itemstack, int side)
+	{
+		return isStackValidForSlot(slotID, itemstack);
+	}
+
+
+	@Override
+	public boolean canExtractItem(int slotID, ItemStack itemstack, int side) 
+	{
+		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() == 0) 
+		{
+			return slotID==0;
+		}
+		return (slotID == 3);
 	}
 }

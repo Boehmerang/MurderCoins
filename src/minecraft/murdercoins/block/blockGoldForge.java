@@ -5,6 +5,7 @@ import java.util.Random;
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityPulverisor;
+import murdercoins.client.Render.BlockRenderingHandler;
 import  murdercoins.client.Render.RenderGoldForge;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -49,6 +50,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		this.gFPow = par1IconRegister.registerIcon("MurderCoins:gForge-Pow");
 		this.gFGold = par1IconRegister.registerIcon("MurderCoins:gForge-Gold");
 	}
+	/*
 	@Override
 	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
 	{
@@ -94,6 +96,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		return this.gFSide;
 		}
 	}
+	*/
 		/**
 		 * Called when the block is right clicked by the player
 		 */
@@ -248,7 +251,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 	*/
 	public int getRenderType()
 	{
-	return RenderGoldForge.gfModelID;
+	return BlockRenderingHandler.ID;
 	}
 
 	/**

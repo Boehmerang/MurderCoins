@@ -1,25 +1,27 @@
 package murdercoins.tileentity;
 
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.prefab.tile.TileEntityConductor;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
+import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 
-public class tileEntityGoldForgeTop extends TileEntityConductor
+public class tileEntityGoldForgeTop extends TileEntityElectricityRunnable
 {
+	TileEntity mainTE;	
 	public tileEntityGoldForgeTop()
 	{
-		this.channel = "MurderCoins";
+	
 	}
 	@Override
-	public double getResistance() {
-		// TODO Auto-generated method stub
-		return 0.05;
+	public void updateEntity()
+	{
+		super.updateEntity();
+		this.worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, 3, 4, 1);
 	}
 
-	@Override
-	public double getCurrentCapcity() {
-		// TODO Auto-generated method stub
-		return 200;
-	}
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
@@ -28,5 +30,38 @@ public class tileEntityGoldForgeTop extends TileEntityConductor
 			return direction == ForgeDirection.getOrientation(this.worldObj.getBlockMetadata(xCoord, yCoord-1, zCoord) + 2).getOpposite() || direction == ForgeDirection.DOWN;
 		}
 		return false;
+	}
+	@Override
+	public ElectricityPack getRequest()
+	{
+		ForgeDirection orientation = ForgeDirection.getOrientation(0);
+		TileEntity tileentity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
+		if (tileentity instanceof tileEntityGoldForge)
+		{
+			return new ElectricityPack((((tileEntityGoldForge)tileentity).getMaxJoules() - ((tileEntityGoldForge)tileentity).getJoules()) / ((tileEntityGoldForge)tileentity).getVoltage(), ((tileEntityGoldForge)tileentity).getVoltage());
+		}
+		return new ElectricityPack();
+	}
+
+	@Override
+	public void onReceive(ElectricityPack electricityPack)
+	{
+		/**
+		 * Creates an explosion if the voltage is too high.
+		 */	
+		ForgeDirection orientation = ForgeDirection.getOrientation(0);
+		TileEntity tileentity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
+		if (UniversalElectricity.isVoltageSensitive)
+		{
+			if (electricityPack.voltage > ((tileEntityGoldForge)tileentity).getVoltage())
+			{
+				this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5f, true);
+				return;
+			}
+		}
+		if (tileentity instanceof tileEntityGoldForge)
+		{
+			((tileEntityGoldForge)tileentity).setJoules(((tileEntityGoldForge)tileentity).getJoules() + electricityPack.getWatts());
+		}
 	}
 }

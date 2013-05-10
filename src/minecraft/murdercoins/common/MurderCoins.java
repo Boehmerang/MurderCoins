@@ -2,6 +2,7 @@ package murdercoins.common;
 
 import java.io.File;
 
+import murdercoins.block.blockCPBoundingBlock;
 import murdercoins.block.blockCoinPress;
 import murdercoins.block.blockFakeBlock;
 import murdercoins.block.blockGoldFlowing;
@@ -44,8 +45,9 @@ import net.minecraftforge.liquids.LiquidContainerData;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import universalelectricity.prefab.network.ConnectionHandler;
+//import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -61,7 +63,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.1a", dependencies = "after:Mekanism;after:BasicComponents")
-@NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+@NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false,/* connectionHandler = ConnectionHandler.class,*/ packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
  * packetHandler =
@@ -93,8 +95,8 @@ public class MurderCoins
 	private static final String[]			LANGUAGES_SUPPORTED	= new String[] { "en_US" };
 	public static final String				LANGUAGE_PATH		= "/mods/MurderCoins/language";
 	
-	public static double					MJToJoules=0.04;
-	public static double					EUToJoules=0.1;
+	//public static double					MJToJoules=0.04;
+	//public static double					EUToJoules=0.1;
 	public static Item						itemGoldCoin;
 	public static Item						itemDiamondCoin;
 	public static Item						itemEmeraldCoin;
@@ -269,6 +271,7 @@ public class MurderCoins
 		}
 		
 		fakeBlock = new blockFakeBlock(configLoader.fakeBlockID, null).setUnlocalizedName("fakeblock");
+		cpBoundingBlock = new blockCPBoundingBlock(configLoader.cpBoundID,null).setUnlocalizedName("cpBounding");
 		/*
 		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
 		GameRegistry.registerBlock(WindmillBase, "Windmill");
@@ -294,10 +297,12 @@ public class MurderCoins
 		LanguageRegistry.addName(bucketGold, "Bucket of melted Gold");
 		itemEmeraldDust = new itemEDust(configLoader.eDustID).setUnlocalizedName("eDust");
 		LanguageRegistry.addName(itemEmeraldDust, "Emerald Dust");
+		OreDictionary.registerOre("dustEmerald", new ItemStack(itemEmeraldDust));
 		if (MekanismLoaded == false)
 		{
 			itemDiamondDust = new itemDDust(configLoader.dDustID).setUnlocalizedName("dDust");
 			LanguageRegistry.addName(itemDiamondDust, "Diamond Dust");
+			OreDictionary.registerOre("dustDiamond", new ItemStack(itemDiamondDust));
 		}
 		/*
 		itemWindmillBlade = new itemWindmillBlade(4001).setUnlocalizedName("wBlade");

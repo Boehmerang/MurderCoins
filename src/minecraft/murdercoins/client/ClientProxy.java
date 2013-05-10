@@ -24,7 +24,7 @@ public class ClientProxy extends CommonProxy
 		*  MinecraftForgeClient.preloadTexture("/mods/murder/MurderCoins/goldForgeGui.png");
 		   MinecraftForgeClient.preloadTexture("/mods/murder/murderCoins/coinPressGui.png");
 		*/
-		//RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
+		RenderingRegistry.registerBlockHandler(new BlockRenderingHandler());
 		ClientRegistry.bindTileEntitySpecialRenderer(tileEntityCoinPress.class, new RenderCoinPress());
 		ClientRegistry.bindTileEntitySpecialRenderer(tileEntityGoldForge.class, new RenderGoldForge());
 			

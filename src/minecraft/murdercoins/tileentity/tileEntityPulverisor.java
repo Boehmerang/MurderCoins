@@ -345,34 +345,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 
 		par1NBTTagCompound.setTag("Items", var2);
 	}
-	@Override
-	public int[] getSizeInventorySide(int side)
-	{
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
-	}
-	@Override
-	public boolean func_102007_a(int slotID, ItemStack itemstack, int j) 
-	{
-		return this.isStackValidForSlot(slotID, itemstack);
-	}
-	@Override
-	public boolean func_102008_b(int slotID, ItemStack itemstack, int j) 
-	{
-		if(slotID==2)return true;
-		return false;
-	}
-	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) {
-		if(itemstack.getItem() instanceof IItemElectric)
-		{
-			return slotID == 0;
-		}
-		else if(itemstack.isItemEqual(new ItemStack(Item.diamond))||itemstack.isItemEqual(new ItemStack(Item.emerald)))
-		{
-			return slotID == 1;
-		}
-		return false;
-	}
+
 	@Override
 	public int getSizeInventory()
 	{
@@ -487,5 +460,63 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	{
 		if (this.isRunning == true)return true;
 		return false;
+	}
+	/*
+	@Override
+	public int[] getSizeInventorySide(int side)
+	{
+		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
+	}
+	@Override
+	public boolean func_102007_a(int slotID, ItemStack itemstack, int j) 
+	{
+		return this.isStackValidForSlot(slotID, itemstack);
+	}
+	@Override
+	public boolean func_102008_b(int slotID, ItemStack itemstack, int j) 
+	{
+		if(slotID==2)return true;
+		return false;
+	}
+	*/
+	@Override
+	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) 
+	{
+		if(itemstack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+		else if(itemstack.isItemEqual(new ItemStack(Item.diamond))||itemstack.isItemEqual(new ItemStack(Item.emerald)))
+		{
+			return slotID == 1;
+		}
+		return false;
+	}
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) 
+	{
+		if (side == 0)
+		{
+			return new int[] {0,2};
+		}
+		else if (side != 0)
+		{
+			return new int[] {0,1};
+		}
+		return null;
+	}
+	@Override
+	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
+	{
+		return this.isStackValidForSlot(slotID, itemstack);
+	}
+	@Override
+	public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
+	{
+		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() == 0) 
+		{
+			return slotID==0;
+		}
+		return (slotID == 2);
 	}
 }

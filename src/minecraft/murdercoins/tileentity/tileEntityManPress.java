@@ -1,5 +1,7 @@
 package murdercoins.tileentity;
 
+import java.util.ArrayList;
+
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -33,6 +35,7 @@ import net.minecraftforge.liquids.ILiquidTank;
 import net.minecraftforge.liquids.ITankContainer;
 import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class tileEntityManPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, ITankContainer, IRedstoneReceptor
 {
@@ -49,6 +52,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	
 	public boolean hasPower = false;
 	public boolean didRun = false;
+	
 	
 	private ItemStack[] inventory = new ItemStack[6];
 	
@@ -306,37 +310,85 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 			this.decrStackSize(4, 1);
 			this.getEmptyBucket();
 		}
-		else if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
+		if(MurderCoins.MekanismLoaded == false)
 		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
-			if (this.inventory[5] == null)
+			if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
 			{
+				ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
+				if (this.inventory[5] == null)
+				{
 				this.inventory[5] = itemstack;
+				}
+				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
+				{
+					this.inventory[5].stackSize += 4;
+				}
+				this.decrStackSize(3, 1);
+				this.decrStackSize(4, 1);
+				this.getEmptyBucket();
 			}
-			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+			else if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
 			{
-				this.inventory[5].stackSize += 4;
+				ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
+				if (this.inventory[5] == null)
+				{
+					this.inventory[5] = itemstack;
+				}
+				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+				{
+					this.inventory[5].stackSize += 4;
+				}
+				this.decrStackSize(3, 1);
+				this.decrStackSize(4, 1);
+				this.getEmptyBucket();
 			}
-			this.decrStackSize(3, 1);
-			this.decrStackSize(4, 1);
-			this.getEmptyBucket();
 		}
-		else if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
+		else
 		{
-			ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
-			if (this.inventory[5] == null)
+			if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
 			{
+				ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
+				if (this.inventory[5] == null)
+				{
 				this.inventory[5] = itemstack;
+				}
+				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
+				{
+					this.inventory[5].stackSize += 4;
+				}
+				this.decrStackSize(3, 1);
+				this.decrStackSize(4, 1);
+				this.getEmptyBucket();
 			}
-			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
+			else 
 			{
-				this.inventory[5].stackSize += 4;
+				ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
+				for (int i = 0; i < tList.size(); i++)
+				{
+					ItemStack tStack = tList.get(i);
+					tStack = tStack.copy();
+					tStack.stackSize = 1;
+					if (this.inventory[3].isItemEqual(tStack))
+					{
+						ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
+						if (this.inventory[5] == null)
+						{
+							this.inventory[5] = itemstack;
+						}
+						else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+						{
+							this.inventory[5].stackSize += 4;
+						}
+						this.decrStackSize(3, 1);
+						this.decrStackSize(4, 1);
+						this.getEmptyBucket();
+					}
+				}
 			}
-			this.decrStackSize(3, 1);
-			this.decrStackSize(4, 1);
-			this.getEmptyBucket();
+			
 		}
 	}
+	
 	public void breakMolds()
 	{
 		ItemStack broken = new ItemStack(MurderCoins.brokenMold,1);
@@ -513,12 +565,39 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+		//return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
+		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
+		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
+		ItemStack meltedBuck = new ItemStack(MurderCoins.bucketGold);
+		ItemStack emDust = new ItemStack (MurderCoins.itemEmeraldDust);
+		for (int i = 0; i < dList.size(); i++)
+		{
+			ItemStack dStack = dList.get(i);
+			dStack = dStack.copy();
+			dStack.stackSize = 1;
+			ItemStack eStack = eList.get(i);
+			eStack = eStack.copy();
+			eStack.stackSize = 1;
+			if (itemStack.isItemEqual(dStack)||itemStack.isItemEqual(eStack))
+			{
+				return slotID == 3;
+			}
+		}
+		if (itemStack.isItemEqual(emDust))
+		{
+			return slotID == 4;
+		}
+		if (itemStack.isItemEqual(meltedBuck))
+		{
+			return slotID == 4;
+		}
+		return false;
 	}
 
 	/**
 	 * Get the size of the side inventory.
 	 */
+	/*
 	@Override
 	public int[] getSizeInventorySide(int side)
 	{
@@ -536,6 +615,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	{
 		return slotID == 3;
 	}
+	*/
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
 		// TODO Auto-generated method stub
@@ -587,5 +667,41 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		//this.hasPower = false;
 		//this.didRun = false;
 		System.out.println("debug");
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side)
+	{
+		// TODO Auto-generated method stub
+		if (side == 0)
+		{
+			return new int[] {0,5};//(side == 0 || side == 1) ? new int[] { side } : new int[] {};
+		}
+		else if (side == 1)
+		{
+			return new int[] {3,4};
+		}
+		return null;
+	}
+
+	@Override
+	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
+	{
+		return isStackValidForSlot(slotID, itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slotID, ItemStack itemstack, int side) 
+	{
+		return (slotID == 0 || slotID == 5);
+		/*if(slotID == 0)
+		{
+			return true;
+		}
+		else if (slotID==5)
+		{
+			return true;
+		}
+		return false;*/
 	}
 }

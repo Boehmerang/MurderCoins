@@ -100,6 +100,21 @@ public class blockFakeBlock extends BlockAdvanced
 			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x-1, y, z);
 			return true;
 		}
+		else if (metadata == 11)
+		{
+			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z-1);
+			return true;
+		}
+		else if (metadata == 12)
+		{
+			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z-1);
+			return true;
+		}
+		else if (metadata == 13)
+		{
+			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z);
+			return true;
+		}
 		return true;
 		
 	}

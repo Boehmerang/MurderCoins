@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.Tessellator;
 @SideOnly(Side.CLIENT)
 public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 {
+	public static BlockRenderingHandler instance = new BlockRenderingHandler();
 	public static final int ID = RenderingRegistry.getNextAvailableRenderId();
 	
 	public ModelCoinPress coinPress = new ModelCoinPress();
@@ -32,28 +33,35 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 			GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
 
 			if (block instanceof blockGoldForge)
-			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/GoldForge.png"));
-				GL11.glTranslated(0.5, 1.9, 0.5);
-				GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-				GL11.glScalef(1.3f, 1.3f, 1.3f);
-				goldForge.render(0.0560F);
+			{   
+				//GL11.glScalef((float) 0.5F, (float) -0.5F, (float) -0.5F);
+		        //GL11.glPushMatrix();
+		        //GL11.glRotatef(180f, 0f, 0f, 1f);
+		        GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/GoldForge.png"));
+				GL11.glTranslatef((float) 0.0F, (float) 0.3F, (float) 0.0F);
+				GL11.glRotatef(180f, 90f, 0f, 1f);
+		        goldForge.render(0.0400F);
+		        GL11.glPopMatrix();
 			}
 			else if (block instanceof blockCoinPress)
 			{
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/CoinPress.png"));
-				GL11.glTranslated(0.5, 1.9, 0.5);
-				GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-				GL11.glScalef(1.3f, 1.3f, 1.3f);
-				coinPress.render(0.0560F);
+				
+		    	/*
+		        GL11.glPushMatrix();
+				GL11.glTranslatef((float)0.5F, (float)1.5F, (float)0.5F);
+				GL11.glScalef(1.0F, -1F, -1F);
+				GL11.glRotatef(180f, 0.0F, 1.0F, 0.0F);
+				*/
+		        GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/CoinPress.png"));
+		        GL11.glTranslatef((float)-1.F, (float)1.2F, (float)0.5F);
+		        GL11.glRotatef(180f, 180.0F, 1.0F, 0.0F);
+				coinPress.render(0.0400F);
+				GL11.glPopMatrix(); //end
+
 			}
-	  		else {
-    	        renderItem(renderer, metadata, block);
-    		}
-		
 		
 	}
-	public void renderItem(RenderBlocks renderer, int metadata, Block block)
+/*	public void renderItem(RenderBlocks renderer, int metadata, Block block)
 	{
 		block.setBlockBoundsForItemRender();
 
@@ -72,48 +80,46 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, -1.0F, 0.0F);
-        renderer.renderBottomFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(0, metadata));
+       // renderer.renderBottomFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(0, metadata));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 1.0F, 0.0F);
-        renderer.renderTopFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(1, metadata));
+       // renderer.renderTopFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(1, metadata));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, -1.0F);
-        renderer.renderEastFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(2, metadata));
+       // renderer.renderEastFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(2, metadata));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(0.0F, 0.0F, 1.0F);
-        renderer.renderWestFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(3, metadata));
+       // renderer.renderWestFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(3, metadata));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-        renderer.renderNorthFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(4, metadata));
+       // renderer.renderNorthFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(4, metadata));
         tessellator.draw();
         tessellator.startDrawingQuads();
         tessellator.setNormal(1.0F, 0.0F, 0.0F);
-        renderer.renderSouthFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(5, metadata));
+        //renderer.renderSouthFace(block, 0.0D, 0.0D, 0.0D, block.getIcon(5, metadata));
         tessellator.draw();
         GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-	}
+	}*/
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) 
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean shouldRender3DInInventory() 
 	{
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
-	public int getRenderId() {
-		// TODO Auto-generated method stub
+	public int getRenderId() 
+	{
 		return ID;
 	}
 

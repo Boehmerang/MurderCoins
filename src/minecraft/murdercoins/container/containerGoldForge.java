@@ -1,5 +1,6 @@
 package murdercoins.container;
 
+import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityGoldForge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,13 +23,13 @@ public class containerGoldForge extends Container {
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
 		// Gold Slot
-		this.addSlotToContainer(new Slot(tile_entity, 1, 52, 25));
+		this.addSlotToContainer(new Slot(tile_entity, 1, 52, 25));//,new ItemStack(Item.ingotGold)));
 
 		// Bucket Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 154, 26, new ItemStack(Item.bucketEmpty)));
 
-		// Smelting result
-		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 3, 154, 46));
+		// Filled Bucket Slot
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 3, 154, 46, new ItemStack(MurderCoins.bucketGold)));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)

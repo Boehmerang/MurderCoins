@@ -784,28 +784,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	/**
-	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
-	 * the given slot.
-	 */
-	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
-	{
-		//return slotID == 3 ? itemStack.getItem() instanceof ItemCoinMold :(slotID == 4 ? itemStack.getItem() instanceof ItemCoinMold: (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID==6 ? itemStack.getItem() instanceof ItemMeltedBucket: false)));
-		if(itemStack.getItem() instanceof IItemElectric)
-		{
-			return slotID == 0;
-		}
-		if(itemStack.getItem() instanceof IItemDust)
-		{
-			return slotID == 5; 
-		}	
-		
-		return true;
-	}
-
-	/**
 	 * Get the size of the side inventory.
 	 */
+	/*
 	@Override
 	public int[] getSizeInventorySide(int side)
 	{
@@ -823,7 +804,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	{
 		return slotID == 3;
 	}
-
+*/
 	@Override
 	public double getJoules()
 	{
@@ -899,5 +880,75 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public boolean canTubeConnect(ForgeDirection side) 
 	{
 		return true;
+	}
+	
+	/**
+	 * Returns true if automation is allowed to insert the given stack (ignoring stack size) into
+	 * the given slot.
+	 */
+	@Override
+	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
+	{
+		//return slotID == 3 ? itemStack.getItem() instanceof ItemCoinMold :(slotID == 4 ? itemStack.getItem() instanceof ItemCoinMold: (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID==6 ? itemStack.getItem() instanceof ItemMeltedBucket: false)));
+		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
+		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
+		ItemStack meltedBuck = new ItemStack(MurderCoins.bucketGold);
+		ItemStack emDust = new ItemStack (MurderCoins.itemEmeraldDust);
+		for (int i = 0; i < dList.size(); i++)
+		{
+			ItemStack dStack = dList.get(i);
+			dStack = dStack.copy();
+			dStack.stackSize = 1;
+			ItemStack eStack = eList.get(i);
+			eStack = eStack.copy();
+			eStack.stackSize = 1;
+			if (itemStack.isItemEqual(dStack)||itemStack.isItemEqual(eStack))
+			{
+				return slotID == 5;
+			}
+		}
+		if (itemStack.isItemEqual(emDust))
+		{
+			return slotID == 5;
+		}
+		if (itemStack.isItemEqual(new ItemStack(MurderCoins.bucketGold)))//(meltedBuck))
+		{
+			return slotID == 6;
+		}
+		if(itemStack.getItem() instanceof IItemElectric)
+		{
+			return slotID == 0;
+		}
+		return false;
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) 
+	{
+		if (side == 0)
+		{
+			return new int[] {0,2,7};//(side == 0 || side == 1) ? new int[] { side } : new int[] {};
+		}
+		else if (side == 1)
+		{
+			return new int[] {0,5,6};
+		}
+		return null;
+	}
+
+	@Override
+	public boolean canInsertItem(int slotID, ItemStack itemstack, int side)
+	{
+		return isStackValidForSlot(slotID, itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
+	{
+		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() == 0) 
+		{
+			return slotID==0;
+		}
+		return (slotID == 2 || slotID == 7);
 	}
 }

@@ -1,6 +1,7 @@
 package murdercoins.container;
 
 import murdercoins.common.MurderCoins;
+import murdercoins.common.helpers.iItemCoins;
 import murdercoins.items.itemCoinMold;
 import murdercoins.tileentity.tileEntityManPress;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,8 +34,8 @@ public class containerManPress extends Container
 		// Bucket Slot
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 4, 49, 38, new ItemStack(MurderCoins.bucketGold)));
 
-		// Smelting result
-		this.addSlotToContainer(new SlotFurnace(player_inventory.player, tile_entity, 5, 108, 25));
+		// Coin Output
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 5, 108, 25, iItemCoins.class));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)
