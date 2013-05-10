@@ -29,6 +29,11 @@ public class Config
 	public static int fakeBlockID;
 	public static int cpBoundID;
 	
+	// 		Max Damage allowed for the Molds and Hydraulic Piston
+	
+	public static int moldDamage;
+	public static int hPistonDamage;
+	
 	//		Power Use and Ticks per process of Gold Forge
 	
 	public static int GFprocessTicks;
@@ -108,10 +113,15 @@ public class Config
 		
 		GFprocessTicks = config.get("Gold Forge", "Ticks needed to melt the gold", 500).getInt();
 		GFticksToWarm = config.get("Gold Forge", "Ticks(multiplied by gold Stored) needed to warm the tank", 1000).getInt();
-		GFticksTillFreeze = config.get("Coin Press", "Ticks until the tank will freeze", 1200).getInt();
+		GFticksTillFreeze = config.get("Gold Forge", "Ticks until the tank will freeze", 1200).getInt();
 		GFjoulesPerUse = config.get("Gold Forge", "Joules used to press coins", 50000.0D).getDouble(50000.0D);
 		GFtankJoules = config.get("Gold Forge", "Joules used to keep tank warm", 10.0D).getDouble(10.0D);
 		GFunfreezeJoules = config.get("Gold Forge", "Joules(multiplied by gold Stored) needed to unfreeze the tank", 15000.0D).getDouble(15000.0D);
+		
+		//		Item Damage amounts
+		
+		moldDamage = config.get("Item Damage", "Max Damage for Coin Mold", 50).getInt();
+		hPistonDamage = config.get("Item Damage", "Max Damage for Hydraulic Piston", 50).getInt();
 		
 		config.save(); // Saves the file
 

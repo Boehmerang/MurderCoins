@@ -262,9 +262,9 @@ public class MurderCoins
 		LanguageRegistry.addName(itemDiamondCoin, "Diamond Coin(s)");
 		itemEmeraldCoin = new itemECoin(configLoader.eCoinID).setUnlocalizedName("eCoin");
 		LanguageRegistry.addName(itemEmeraldCoin, "Emerald Coin(s)");
-		itemCoinMold = new itemCoinMold(configLoader.coinMoldID).setUnlocalizedName("coinMold").setMaxStackSize(1).setMaxDamage(10);
+		itemCoinMold = new itemCoinMold(configLoader.coinMoldID).setUnlocalizedName("coinMold").setMaxStackSize(1).setMaxDamage(configLoader.moldDamage);
 		LanguageRegistry.addName(itemCoinMold, "Coin Mold");
-		itemPressArm = new ItemPressArm(configLoader.pressArmID).setUnlocalizedName("pressArm").setMaxStackSize(1).setMaxDamage(10);
+		itemPressArm = new ItemPressArm(configLoader.pressArmID).setUnlocalizedName("pressArm").setMaxStackSize(1).setMaxDamage(configLoader.hPistonDamage);
 		LanguageRegistry.addName(itemPressArm, "Hydraulic Piston");
 		itemGoldNugBucket = new itemNugBucket(configLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(1);
 		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
