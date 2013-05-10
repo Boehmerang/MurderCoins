@@ -4,12 +4,10 @@ import murdercoins.container.containerCoinPress;
 import murdercoins.container.containerGoldForge;
 import murdercoins.container.containerManPress;
 import murdercoins.container.containerPulverisor;
-import murdercoins.container.containerWindmillBase;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityManPress;
 import murdercoins.tileentity.tileEntityPulverisor;
-import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -36,10 +34,6 @@ public class guiHandler implements IGuiHandler{
 			{
 				return new containerPulverisor((tileEntityPulverisor) tile_entity, player.inventory);
 			}
-			if(tile_entity instanceof tileEntityWindmillBase)
-			{
-				return new containerWindmillBase((tileEntityWindmillBase) tile_entity, player.inventory);
-			}
 			return null;
 		}
 
@@ -61,10 +55,6 @@ public class guiHandler implements IGuiHandler{
             if(tile_entity instanceof tileEntityPulverisor)
   			{
   				return new guiPulverisor(player.inventory,(tileEntityPulverisor) tile_entity);
-  			}
-            if(tile_entity instanceof tileEntityWindmillBase)
-  			{
-  				return new guiWindmill(player.inventory,(tileEntityWindmillBase) tile_entity);
   			}
             return null;
 		}

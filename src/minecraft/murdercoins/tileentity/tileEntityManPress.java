@@ -118,7 +118,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	public boolean canConnect(ForgeDirection direction)
 	{
 		return false;
-		//return direction == ForgeDirection.getOrientation(3);
 	}
 
 	@Override
@@ -142,7 +141,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 			}
 		}
 
-		//this.setJoules(this.getJoules() + electricityPack.getWatts());
+	
 	}
 	@Override
 	public Packet getDescriptionPacket()
@@ -210,16 +209,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 			return false;
 			}
 		}
-		/*if (this.inventory[5] == null)
-		 *{
-		 *
-		 * if(this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))) { return
-		 * true; } /*if (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket)))
-		 * { return true; } /*if (pipeConnected()) { return true; }
-		 *
-		 *	return false;
-		 *}
-		 */
 		if (this.inventory[4] == null)
 		{
 			return false;
@@ -276,11 +265,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 				}
 			}
 		}
-		/*
-		 * else if (this.inventory[5].isItemEqual(new ItemStack(murderCoins.eDust))) { if
-		 * (this.inventory[6].isItemEqual(new ItemStack(murderCoins.meltedBucket))){ return true; }
-		 * this.processTicks = 0; return false; }
-		 */
 
 		return true;
 	}
@@ -306,7 +290,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 			{
 				this.inventory[5].stackSize += 4;
 			}
-			// this.decrStackSize(5, 1); no dust to downgrade.
 			this.decrStackSize(4, 1);
 			this.getEmptyBucket();
 		}
@@ -565,7 +548,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		//return slotID == 1 ? FurnaceRecipes.smelting().getSmeltingResult(itemStack) != null : (slotID == 0 ? itemStack.getItem() instanceof IItemElectric : false);
 		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
 		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
 		ItemStack meltedBuck = new ItemStack(MurderCoins.bucketGold);
@@ -594,28 +576,6 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		return false;
 	}
 
-	/**
-	 * Get the size of the side inventory.
-	 */
-	/*
-	@Override
-	public int[] getSizeInventorySide(int side)
-	{
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
-	}
-
-	@Override
-	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return this.isStackValidForSlot(slotID, par2ItemStack);
-	}
-
-	@Override
-	public boolean func_102008_b(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return slotID == 3;
-	}
-	*/
 	@Override
 	public int fill(ForgeDirection from, LiquidStack resource, boolean doFill) {
 		// TODO Auto-generated method stub
@@ -672,10 +632,9 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side)
 	{
-		// TODO Auto-generated method stub
 		if (side == 0)
 		{
-			return new int[] {0,5};//(side == 0 || side == 1) ? new int[] { side } : new int[] {};
+			return new int[] {0,5};
 		}
 		else if (side == 1)
 		{
@@ -694,14 +653,5 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	public boolean canExtractItem(int slotID, ItemStack itemstack, int side) 
 	{
 		return (slotID == 0 || slotID == 5);
-		/*if(slotID == 0)
-		{
-			return true;
-		}
-		else if (slotID==5)
-		{
-			return true;
-		}
-		return false;*/
 	}
 }

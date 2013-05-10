@@ -783,28 +783,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		return true;
 	}
 
-	/**
-	 * Get the size of the side inventory.
-	 */
-	/*
-	@Override
-	public int[] getSizeInventorySide(int side)
-	{
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
-	}
-
-	@Override
-	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return this.isStackValidForSlot(slotID, par2ItemStack);
-	}
-
-	@Override
-	public boolean func_102008_b(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return slotID == 3;
-	}
-*/
 	@Override
 	public double getJoules()
 	{
@@ -927,7 +905,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	{
 		if (side == 0)
 		{
-			return new int[] {0,2,7};//(side == 0 || side == 1) ? new int[] { side } : new int[] {};
+			return new int[] {0,2,7};
 		}
 		else if (side == 1)
 		{

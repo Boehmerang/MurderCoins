@@ -50,56 +50,6 @@ public class blockCoinPress extends BlockAdvanced
 		this.cPPow = par1IconRegister.registerIcon("MurderCoins:coinPress-Pow");
 	}
 	
-	/*
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
-	{
-		int metadata = world.getBlockMetadata(x, y, z);
-		//tileEntityPulverisor tileEntity = (tileEntityPulverisor) world.getBlockTileEntity(x, y, z);
-		if (side == 0 || side == 1) // bottom and top
-		{
-			return this.cPTop;
-		}
-		if (side == metadata + 2) // front
-		{
-			return this.cPOn;//tileEntity.isRunning == true ? this.cPOn : this.cPOff;
-		}
-		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
-		{
-			return this.cPPow;
-		}
-		else
-		// sides
-		{
-			return this.cPSide;
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata)
-	{
-		if (side == 0 || side == 1) // bottom and top
-		{
-			return this.cPTop;
-		}
-		if (side == metadata + 2) // front
-		{
-			return this.cPPow;
-		}
-		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
-		{
-			return this.cPOn;
-		}
-		else
-		// sides
-		{
-			return this.cPSide;
-		}
-	}
-	*/
-	
 	/**
 	 * Called when the block is right clicked by the player
 	 */
@@ -184,9 +134,7 @@ public class blockCoinPress extends BlockAdvanced
 			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x, y, z+1, 0);
-			}
-            //world.setBlock(x+1, y, z-1, 0);
-            //world.setBlock(x+1, y, z, 0);   
+			}  
     	}
        	if (meta == 2)
     	{
@@ -194,8 +142,6 @@ public class blockCoinPress extends BlockAdvanced
 			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x-1, y, z+1, 0);
-            //world.setBlock(x+1, y, z+1, 0);
-            //world.setBlock(x+1, y, z, 0);
 			}
         }
        	if (meta == 3)
@@ -204,8 +150,6 @@ public class blockCoinPress extends BlockAdvanced
 			if(tempblock == MurderCoins.cpBoundingBlock.blockID)
 			{
             world.setBlock(x+1, y, z-1, 0);
-       		//world.setBlock(x-1, y, z+1, 0);
-            //world.setBlock(x-1, y, z, 0);
 			}
     	}
 	}
@@ -254,32 +198,6 @@ public class blockCoinPress extends BlockAdvanced
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		/*int metadata = par1World.getBlockMetadata(x, y, z);
-
-		int change = 0;
-
-		// Re-orient the block
-		switch (metadata)
-		{
-			case 0:
-				change = 3;
-				break;
-			case 3:
-				change = 1;
-				break;
-			case 1:
-				change = 2;
-				break;
-			case 2:
-				change = 0;
-				break;
-		}
-
-		par1World.setBlock(x, y, z, this.blockID, change, 0);
-		par1World.markBlockForRenderUpdate(x, y, z);
-
-		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-		 */
 		return true;
 	}
 

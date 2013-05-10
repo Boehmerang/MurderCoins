@@ -50,53 +50,6 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		this.gFPow = par1IconRegister.registerIcon("MurderCoins:gForge-Pow");
 		this.gFGold = par1IconRegister.registerIcon("MurderCoins:gForge-Gold");
 	}
-	/*
-	@Override
-	public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
-	{
-		int metadata = world.getBlockMetadata(x, y, z);
-		//tileEntityPulverisor tileEntity = (tileEntityPulverisor) world.getBlockTileEntity(x, y, z);
-		if (side == 0 || side == 1) // bottom and top
-		{
-			return this.gFTop;
-		}
-		if (side == metadata + 2) // front
-		{
-			return this.gFOn;//tileEntity.isRunning == true ? this.pOn : this.pOff;
-		}
-		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) // back
-		{
-			return this.gFPow;
-		}
-		else
-		// sides
-		{
-			return this.gFSide;
-		}
-	}
-	
-	@Override
-	public Icon getIcon(int side, int metadata)//getBlockTextureFromSideAndMetadata(int side, int metadata) 
-	{
-		int frontSide = metadata+2;
-	    if (side == 0||side == 1) //bottom and top
-		{
-			return this.gFTop;
-		}
-		if (side == metadata + 2) //front
-		{
-			return this.gFPow;
-		}
-		if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) //back
-		{
-			return this.gFOn;
-		}
-		else //sides
-		{
-		return this.gFSide;
-		}
-	}
-	*/
 		/**
 		 * Called when the block is right clicked by the player
 		 */
@@ -108,17 +61,6 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 			{
 				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 				return true;
-				/*
-				if (metadata <=3)
-				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
-					return true;
-				}
-				else if (metadata==8)
-				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y-1, z);
-					return true;
-				}*/
 			}
 			return true;
 		}

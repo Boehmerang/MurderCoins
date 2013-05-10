@@ -10,7 +10,6 @@ import murdercoins.block.blockGoldForge;
 import murdercoins.block.blockGoldStill;
 import murdercoins.block.blockManPress;
 import murdercoins.block.blockPulverisor;
-import murdercoins.block.blockWindmillBase;
 import murdercoins.client.guiHandler;
 import murdercoins.items.itemBrokenMold;
 import murdercoins.items.itemCoinMold;
@@ -29,7 +28,6 @@ import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityGoldForgeTop;
 import murdercoins.tileentity.tileEntityManPress;
 import murdercoins.tileentity.tileEntityPulverisor;
-import murdercoins.tileentity.tileEntityWindmillBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -47,7 +45,6 @@ import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-//import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -122,7 +119,6 @@ public class MurderCoins
 	public static Block						pulverisor;
 	public static Block						fakeBlock;
 	public static Block						cpBoundingBlock;
-	//public static Block 					WindmillBase;
 	
 	
 	public static LiquidStack				goldLiquid;
@@ -133,9 +129,7 @@ public class MurderCoins
 	@PreInit()
 	public void PreInitMurderCoins(FMLPreInitializationEvent e)
 	{
-		// UniversalElectricity.register(this, 1, 2, 6, false);
-		if (Loader.isModLoaded("Mekanism"))
-			MekanismLoaded = true;
+		if (Loader.isModLoaded("Mekanism")){	MekanismLoaded = true;	}
 		Config.loadConfig(e);
 		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());		
 		itemRegistration();
@@ -147,15 +141,10 @@ public class MurderCoins
 		LanguageRegistry.instance().addStringLocalization("itemGroup.murdercoins", "en_US", "Murder Coins");
 		proxy.registerRenderThings();
 		blockRegistration();
-		// itemRegistration();
 		addCraftingRecipes();
 		if (MekanismLoaded == true)
 		{
 			addMekanismRecipes();
-		}
-		else
-		{
-			addChipperandDusts();
 		}
 		networkRegisters();
 		tileEntityRegisters();
@@ -197,12 +186,6 @@ public class MurderCoins
 		unofficialLanguages = langLoad();
 		
 		System.out.println("MurderCoins" + ": Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
-	}
-	
-	private void addChipperandDusts()
-	{
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void chestHooks()
@@ -272,11 +255,6 @@ public class MurderCoins
 		
 		fakeBlock = new blockFakeBlock(configLoader.fakeBlockID, null).setUnlocalizedName("fakeblock");
 		cpBoundingBlock = new blockCPBoundingBlock(configLoader.cpBoundID,null).setUnlocalizedName("cpBounding");
-		/*
-		WindmillBase = new blockWindmillBase(4000).setUnlocalizedName("Windmill");
-		GameRegistry.registerBlock(WindmillBase, "Windmill");
-		LanguageRegistry.addName(WindmillBase, "Windmill");
-		*/
 	}
 	
 	public void itemRegistration()
@@ -291,9 +269,9 @@ public class MurderCoins
 		LanguageRegistry.addName(itemCoinMold, "Coin Mold");
 		brokenMold = new itemBrokenMold(configLoader.brokenMoldID).setUnlocalizedName("brokenMold").setMaxStackSize(1);
 		LanguageRegistry.addName(brokenMold, "Broken Coin Mold");
-		itemGoldNugBucket = new itemNugBucket(configLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(16);
+		itemGoldNugBucket = new itemNugBucket(configLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(1);
 		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
-		bucketGold = new itemMeltedBucket(configLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(16).setContainerItem(Item.bucketEmpty);
+		bucketGold = new itemMeltedBucket(configLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(1).setContainerItem(Item.bucketEmpty);
 		LanguageRegistry.addName(bucketGold, "Bucket of melted Gold");
 		itemEmeraldDust = new itemEDust(configLoader.eDustID).setUnlocalizedName("eDust");
 		LanguageRegistry.addName(itemEmeraldDust, "Emerald Dust");
@@ -304,12 +282,6 @@ public class MurderCoins
 			LanguageRegistry.addName(itemDiamondDust, "Diamond Dust");
 			OreDictionary.registerOre("dustDiamond", new ItemStack(itemDiamondDust));
 		}
-		/*
-		itemWindmillBlade = new itemWindmillBlade(4001).setUnlocalizedName("wBlade");
-		LanguageRegistry.addName(itemWindmillBlade, "Windmill Blades");
-		itemWindmillTurbine = new itemWindmillTurbine(4002).setUnlocalizedName("wTurbine");
-		LanguageRegistry.addName(itemWindmillTurbine, "Windmill Turbine");
-		*/
 	}
 	
 	public void addCraftingRecipes()

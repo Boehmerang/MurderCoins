@@ -62,7 +62,6 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 					{
 						this.processTicks = this.crushingTicks;
 						this.setRunning(true);
-						//System.out.println(isRunning);
 					}
 					else if (this.processTicks > 0)
 					{
@@ -79,7 +78,6 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
-								//System.out.println(isRunning);
 							}
 							else if(this.inventory[1].getItem() == Item.emerald)
 							{
@@ -87,7 +85,6 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 								this.processTicks = 0;
 								this.setJoules(getJoules() - joulesPerSmelt);
 								this.setRunning(false);
-								//System.out.println(isRunning);
 							}
 						}
 					}
@@ -259,18 +256,14 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		if(running == true)
 		{
 			this.isRunning = true;
-			//System.out.println(isRunning);
 		}
 		else
 		{
 			this.isRunning = false;
-			//System.out.println(isRunning);
 		}
-		//System.out.println(isRunning);
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
 		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
 		this.worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, 1, 1);
-		//this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 	@Override
 	public Packet getDescriptionPacket()
@@ -461,24 +454,6 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		if (this.isRunning == true)return true;
 		return false;
 	}
-	/*
-	@Override
-	public int[] getSizeInventorySide(int side)
-	{
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
-	}
-	@Override
-	public boolean func_102007_a(int slotID, ItemStack itemstack, int j) 
-	{
-		return this.isStackValidForSlot(slotID, itemstack);
-	}
-	@Override
-	public boolean func_102008_b(int slotID, ItemStack itemstack, int j) 
-	{
-		if(slotID==2)return true;
-		return false;
-	}
-	*/
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) 
 	{

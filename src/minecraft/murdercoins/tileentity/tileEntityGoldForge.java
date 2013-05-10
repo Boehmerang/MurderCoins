@@ -119,33 +119,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 					}
 				}
 			}
-			/*if(gFtank.getLiquid() != null)
-            {
-                  	for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS)
-                    {
-                    	if(gFtank.getLiquid() == null || gFtank.getLiquid().amount <= 0)
-                    	{
-                    		break;
-                    	}
-       
-                        TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
-
-                        if(tileEntity instanceof ITankContainer)
-                        {
-                        	int fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), gFtank.getLiquid(), false);
-                        	if(fill > 0)
-                        	{
-                        		fill = ((ITankContainer)tileEntity).fill(orientation.getOpposite(), gFtank.getLiquid(), true);
-                        		gFtank.drain(fill, true);
-                        		                         
-                        	}
-                        }
-                  }
-            }*/
 			if(this.gFtank.getLiquid() != null) 
 			{
-				//for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
-				//{
+				
 					ForgeDirection orientation = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 					TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
 
@@ -156,27 +132,9 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 							return;
 						}
 						this.gFtank.drain(((ITankContainer)tileEntity).fill(orientation.getOpposite(), this.gFtank.getLiquid(), true), true);
-						//this.goldStored = this.tank.getLiquid().amount;
-					//}
+				
 				}
 			}
-			/*int originalVolume = 0;
-
-			if (this.tank.getLiquid() != null)
-			{
-				originalVolume = this.tank.getLiquid().amount;
-
-				if (ticks % (random.nextInt(4) * 5 + 10) >= 0)
-				{
-					this.drain(ForgeDirection.DOWN, this.goldPerBucket,  true);
-					this.goldStored = this.tank.getLiquid().amount;
-				}
-
-				if ((this.tank.getLiquid() == null && originalVolume != 0) || (this.tank.getLiquid() != null && this.tank.getLiquid().amount != originalVolume))
-				{
-					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-				}
-			}*/
 
 			/*
 			 * checks to see if there is gold in tank, and if there is enough power to warm it. If not the
@@ -265,12 +223,11 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 							{
 								if(this.inventory[3] != null)
 								{
-									if (this.inventory[3].stackSize >= 16)
+									if (this.inventory[3].stackSize >= 1)
 									{
 										return;
 									}
 								}
-								//this.setGold(goldPerBucket, false);
 								this.gFtank.drain(goldPerBucket, true);
 								System.out.println("drained gold");
 								ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
@@ -278,14 +235,14 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 								{
 									this.inventory[3] = itemstack;
 								}
-								else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
+								/*else if(this.inventory[3].isItemEqual(new ItemStack(MurderCoins.bucketGold)))
 								{
 									this.inventory[3].stackSize += 1;
 								}
 								else if(this.inventory[3].stackSize >16)
 								{
 									this.inventory[3].stackSize = 16;
-								}
+								}*/
 								this.decrStackSize(2, 1);
 							}
 						}
@@ -305,7 +262,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == ForgeDirection.UP;//ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+		return direction == ForgeDirection.UP;
 	}
 
 	@Override
@@ -597,28 +554,6 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 		return true;
 	}
 
-	/**
-	 * Get the size of the side inventory.
-	 */
-	/*
-	@Override
-	public int[] getSizeInventorySide(int side)
-	{
-		return side == 0 ? new int[] { 2 } : (side == 1 ? new int[] { 0, 1 } : new int[] { 0 });
-	}
-
-	@Override
-	public boolean func_102007_a(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return this.isStackValidForSlot(slotID, par2ItemStack);
-	}
-
-	@Override
-	public boolean func_102008_b(int slotID, ItemStack par2ItemStack, int par3)
-	{
-		return slotID == 3;
-	}
-	*/
 	/*
 	 * 				Read the amount of gold in the tank and send it to the gui.
 	 */
