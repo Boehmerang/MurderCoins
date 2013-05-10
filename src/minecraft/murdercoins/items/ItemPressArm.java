@@ -6,9 +6,9 @@ import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class itemBrokenMold extends Item
+public class ItemPressArm extends Item
 {
-	public itemBrokenMold(int id)
+	public ItemPressArm(int id)
 	{
      super(id);
      this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
@@ -17,7 +17,7 @@ public class itemBrokenMold extends Item
 	@Override
 	public void registerIcons(IconRegister iconRegister)
 	{
-		this.itemIcon = iconRegister.registerIcon("MurderCoins:brokenMold");
+		this.itemIcon = iconRegister.registerIcon("MurderCoins:pressArm");
 	}
 	/*public void updateIcons(IconRegister iconregister)
 	{

@@ -227,13 +227,11 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 						if (this.inventory[5] == null)
 						{
 							pressCoins(false);
-							breakMolds();
 							this.processTicks = 0;
 						}
 						else
 						{
 							pressCoins(true);
-							breakMolds();
 							this.processTicks = 0;
 						}
 					}
@@ -362,7 +360,12 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		if (this.inventory[3] != null)
 		{
-			if (this.inventory[3].getItem() != MurderCoins.itemCoinMold)
+			if (this.inventory[3].getItem() != MurderCoins.itemPressArm)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+			if (this.inventory[3].getItemDamage() >= MurderCoins.itemPressArm.getMaxDamage())
 			{
 			this.processTicks = 0;
 			return false;
@@ -371,6 +374,11 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		if (this.inventory[4] != null)
 		{
 			if (this.inventory[4].getItem() != MurderCoins.itemCoinMold)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+			if (this.inventory[4].getItemDamage() >= MurderCoins.itemCoinMold.getMaxDamage())
 			{
 			this.processTicks = 0;
 			return false;
@@ -499,7 +507,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					this.inventory[7].stackSize += 4;
 				}
 				//this.setGold(goldPerBucket, false);
-				 this.CPtank.drain(goldPerBucket, true);
+				this.CPtank.drain(goldPerBucket, true);
+				this.damageItems();
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
@@ -515,7 +524,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 				this.decrStackSize(5, 1);
 				//this.setGold(goldPerBucket, false);
-				 this.CPtank.drain(goldPerBucket, true);
+				this.CPtank.drain(goldPerBucket, true);
+				this.damageItems();
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
@@ -531,7 +541,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 				}
 				this.decrStackSize(5, 1);
 				//this.setGold(goldPerBucket, false);
-				 this.CPtank.drain(goldPerBucket, true);
+				this.CPtank.drain(goldPerBucket, true);
+				this.damageItems();
 				this.setJoules(this.getJoules() - this.joulesPerSmelt);
 			}
 		}
@@ -554,8 +565,9 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					{
 						this.inventory[7].stackSize += 4;
 					}
-					 this.CPtank.drain(goldPerBucket, true);
+					this.CPtank.drain(goldPerBucket, true);
 					//this.setGold(goldPerBucket, false);
+					this.damageItems();
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
 				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
@@ -571,7 +583,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					}
 					this.decrStackSize(5, 1);
 					//this.setGold(goldPerBucket, false);
-					 this.CPtank.drain(goldPerBucket, true);
+					this.CPtank.drain(goldPerBucket, true);
+					this.damageItems();
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
 				else if (this.inventory[5].isItemEqual(tStack))
@@ -587,25 +600,23 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					}
 					this.decrStackSize(5, 1);
 					//this.setGold(goldPerBucket, false);
-					 this.CPtank.drain(goldPerBucket, true);
+					this.CPtank.drain(goldPerBucket, true);
+					this.damageItems();
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
 				}
 			}
 		}
 	}
-	public void breakMolds()
+	
+	public void damageItems()
 	{
-		ItemStack broken = new ItemStack(MurderCoins.brokenMold,1);
-		double moldbreak = Math.random() * 10;
-		if(moldbreak==5)
+		if (this.inventory[3].getItem() != null)
 		{
-			this.inventory[3] = null;
-			this.inventory[3] = broken;
+			this.inventory[3].setItemDamage(this.inventory[3].getItemDamage()+1);
 		}
-		if(moldbreak ==9)
+		if (this.inventory[4].getItem() != null)
 		{
-			this.inventory[4] = null;
-			this.inventory[4] = broken;
+			this.inventory[4].setItemDamage(this.inventory[4].getItemDamage()+1);
 		}
 	}
 

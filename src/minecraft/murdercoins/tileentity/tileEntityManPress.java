@@ -86,14 +86,12 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 						if (this.inventory[3] == null)
 						{
 							pressCoins(false);
-							breakMolds();
 							this.processTicks = 0;
 							//this.didRun = true;
 						}
 						else
 						{
 							pressCoins(true);
-							breakMolds();
 							this.processTicks = 0;
 							//this.didRun = true;
 						}
@@ -195,7 +193,12 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		}
 		if (this.inventory[1] != null)
 		{
-			if (this.inventory[1].getItem() != MurderCoins.itemCoinMold)
+			if (this.inventory[1].getItem() != MurderCoins.itemPressArm)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+			if (this.inventory[1].getItemDamage() >= MurderCoins.itemPressArm.getMaxDamage())
 			{
 			this.processTicks = 0;
 			return false;
@@ -204,6 +207,11 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		if (this.inventory[2] != null)
 		{
 			if (this.inventory[2].getItem() != MurderCoins.itemCoinMold)
+			{
+			this.processTicks = 0;
+			return false;
+			}
+			if (this.inventory[2].getItemDamage() >= MurderCoins.itemCoinMold.getMaxDamage())
 			{
 			this.processTicks = 0;
 			return false;
@@ -291,6 +299,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 				this.inventory[5].stackSize += 4;
 			}
 			this.decrStackSize(4, 1);
+			this.damageItems();
 			this.getEmptyBucket();
 		}
 		if(MurderCoins.MekanismLoaded == false)
@@ -308,6 +317,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 				}
 				this.decrStackSize(3, 1);
 				this.decrStackSize(4, 1);
+				this.damageItems();
 				this.getEmptyBucket();
 			}
 			else if (this.inventory[3].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
@@ -323,6 +333,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 				}
 				this.decrStackSize(3, 1);
 				this.decrStackSize(4, 1);
+				this.damageItems();
 				this.getEmptyBucket();
 			}
 		}
@@ -341,6 +352,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 				}
 				this.decrStackSize(3, 1);
 				this.decrStackSize(4, 1);
+				this.damageItems();
 				this.getEmptyBucket();
 			}
 			else 
@@ -364,6 +376,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 						}
 						this.decrStackSize(3, 1);
 						this.decrStackSize(4, 1);
+						this.damageItems();
 						this.getEmptyBucket();
 					}
 				}
@@ -372,21 +385,18 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		}
 	}
 	
-	public void breakMolds()
+	public void damageItems()
 	{
-		ItemStack broken = new ItemStack(MurderCoins.brokenMold,1);
-		double moldbreak = Math.random() * 10;
-		if(moldbreak==5)
+		if (this.inventory[1].getItem() != null)
 		{
-			this.inventory[1] = null;
-			this.inventory[1] = broken;
+			this.inventory[1].setItemDamage(this.inventory[1].getItemDamage()+1);
 		}
-		if(moldbreak ==9)
+		if (this.inventory[2].getItem() != null)
 		{
-			this.inventory[2] = null;
-			this.inventory[2] = broken;
+			this.inventory[2].setItemDamage(this.inventory[2].getItemDamage()+1);
 		}
 	}
+	
 	private void getEmptyBucket()  //returns an empty bucket in slot 7.
 	{
 		if(inventory[0] == null)
@@ -636,7 +646,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		{
 			return new int[] {0,5};
 		}
-		else if (side == 1)
+		else if (side != 0)
 		{
 			return new int[] {3,4};
 		}

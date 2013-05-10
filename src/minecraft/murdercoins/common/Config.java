@@ -10,7 +10,7 @@ public class Config
 	public static int dCoinID;
 	public static int eCoinID;
 	public static int coinMoldID;
-	public static int brokenMoldID;
+	public static int pressArmID;
 	public static int nugBucketID;
 	public static int meltedBucketID;
 	public static int goldForgeID;
@@ -74,7 +74,7 @@ public class Config
 		meltedBucketID = config.getItem("meltedBucket", 205).getInt(); 
 		dDustID = config.getItem("dDust", 3010).getInt();
 		eDustID = config.getItem("eDust", 3011).getInt();
-		brokenMoldID = config.getItem("brokenMold", 3012).getInt();
+		pressArmID = config.getItem("brokenMold", 3012).getInt();
 		coinPressID = config.getBlock("coinPress", 3013).getInt();
 		goldForgeID = config.getBlock("goldForge", 3014).getInt();
 		//itemGoldForgeID = config.getItem("goldForge", 3015).getInt();

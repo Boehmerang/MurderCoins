@@ -2,6 +2,7 @@ package murdercoins.container;
 
 import murdercoins.common.MurderCoins;
 import murdercoins.common.helpers.iItemCoins;
+import murdercoins.items.ItemPressArm;
 import murdercoins.items.itemCoinMold;
 import murdercoins.tileentity.tileEntityManPress;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +27,7 @@ public class containerManPress extends Container
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 46, ItemBucket.class));
 
 		// CoinMoldslots
-		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 28, 10, itemCoinMold.class));
+		this.addSlotToContainer(new SlotSpecific(tile_entity, 1, 28, 10, ItemPressArm.class));
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 2, 28, 38, itemCoinMold.class));
 
 		// Dust Slot
