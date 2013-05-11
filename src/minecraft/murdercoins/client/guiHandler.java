@@ -1,9 +1,11 @@
 package murdercoins.client;
 
+import murdercoins.container.containerBasicVault;
 import murdercoins.container.containerCoinPress;
 import murdercoins.container.containerGoldForge;
 import murdercoins.container.containerManPress;
 import murdercoins.container.containerPulverisor;
+import murdercoins.tileentity.tileEntityBasicVault;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityManPress;
@@ -34,6 +36,10 @@ public class guiHandler implements IGuiHandler{
 			{
 				return new containerPulverisor((tileEntityPulverisor) tile_entity, player.inventory);
 			}
+			if(tile_entity instanceof tileEntityBasicVault)
+			{
+				return new containerBasicVault((tileEntityBasicVault) tile_entity, player.inventory);
+			}
 			return null;
 		}
 
@@ -56,6 +62,10 @@ public class guiHandler implements IGuiHandler{
   			{
   				return new guiPulverisor(player.inventory,(tileEntityPulverisor) tile_entity);
   			}
+			if(tile_entity instanceof tileEntityBasicVault)
+			{
+				return new guiBasicVault(player.inventory,(tileEntityBasicVault) tile_entity);
+			}
             return null;
 		}
 }

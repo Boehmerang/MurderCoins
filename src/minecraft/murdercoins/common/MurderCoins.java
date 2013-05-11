@@ -2,6 +2,7 @@ package murdercoins.common;
 
 import java.io.File;
 
+import murdercoins.block.blockBasicVault;
 import murdercoins.block.blockCPBoundingBlock;
 import murdercoins.block.blockCoinPress;
 import murdercoins.block.blockFakeBlock;
@@ -20,6 +21,7 @@ import murdercoins.items.itemEDust;
 import murdercoins.items.itemGCoin;
 import murdercoins.items.itemMeltedBucket;
 import murdercoins.items.itemNugBucket;
+import murdercoins.tileentity.tileEntityBasicVault;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityGoldForgeTop;
@@ -116,6 +118,7 @@ public class MurderCoins
 	public static Block						pulverisor;
 	public static Block						fakeBlock;
 	public static Block						cpBoundingBlock;
+	public static Block						basicVault;
 	
 	
 	public static LiquidStack				goldLiquid;
@@ -235,6 +238,10 @@ public class MurderCoins
 		GameRegistry.registerBlock(manualCoinPress);
 		LanguageRegistry.addName(manualCoinPress, "Manual Coin Press");
 		
+		basicVault = new blockBasicVault(configLoader.basicVaultID).setUnlocalizedName("basicVault");
+		GameRegistry.registerBlock(basicVault, "basicVault");
+		LanguageRegistry.addName(basicVault, "Basic Vault");
+		
 		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
 		GameRegistry.registerBlock(GoldStill, "Gold_Still");
 		LanguageRegistry.addName(GoldStill, "Gold Still");
@@ -312,6 +319,7 @@ public class MurderCoins
 		GameRegistry.registerTileEntity(tileEntityManPress.class, "TileManPress");
 		GameRegistry.registerTileEntity(tileEntityPulverisor.class, "TilePulverisor");
 		GameRegistry.registerTileEntity(tileEntityGoldForgeTop.class, "TileGoldForgeTop");
+		GameRegistry.registerTileEntity(tileEntityBasicVault.class, "TileBasicVault");
 	}
 	
 	public static File[] ListLanguages()
