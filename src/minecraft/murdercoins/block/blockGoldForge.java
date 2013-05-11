@@ -64,6 +64,17 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 			}
 			return true;
 		}
+		
+		/**
+		 * Called to see if a block can be placed in the world.
+		 */
+		@Override
+		public boolean canPlaceBlockAt(World par1World, int x, int y, int z)
+		{
+			if (par1World.getBlockId(x, y+1, z) == 0) {	return true; 	}
+		  return false;
+		}
+		
 		/**
 		 * Called when the block is placed in the world.
 		 */

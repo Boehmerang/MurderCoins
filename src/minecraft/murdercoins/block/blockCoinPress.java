@@ -64,10 +64,49 @@ public class blockCoinPress extends BlockAdvanced
 		}
 		return true;
 	}
-
+	
 	/**
-	 * Called when the block is placed in the world.
+	 * Called to see if a block can be placed in the world.
 	 */
+	@Override
+	public boolean canPlaceBlockAt(World par1World, int x, int y, int z)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
+		EntityLiving par5EntityLiving = par1World.getClosestPlayer(x, y, z, 10);
+		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+							
+		if(angle == 0)
+		{
+			if (par1World.getBlockId(x, y, z-1) == 0 && par1World.getBlockId(x-1, y, z-1) == 0 && par1World.getBlockId(x-1, y, z) == 0)
+			{
+				return true;
+			}
+		}
+		if(angle == 1)
+		{
+			if (par1World.getBlockId(x, y, z-1) == 0 && par1World.getBlockId(x+1, y, z-1) == 0 && par1World.getBlockId(x+1, y, z) == 0)
+			{
+				return true;
+			}
+		}
+		if(angle == 2)
+		{
+			if (par1World.getBlockId(x, y, z+1) == 0 && par1World.getBlockId(x+1, y, z+1) == 0 && par1World.getBlockId(x+1, y, z) == 0)
+			{
+				return true;
+			}
+		}
+		if(angle == 3)
+		{
+			if (par1World.getBlockId(x, y, z+1) == 0 && par1World.getBlockId(x-1, y, z+1) == 0 && par1World.getBlockId(x-1, y, z) == 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 	/**
 	 * Called when the block is placed in the world.
 	 */
