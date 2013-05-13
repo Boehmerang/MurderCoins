@@ -71,14 +71,15 @@ public class blockBasicVault  extends BlockAdvanced
 		public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 		{
 			int metadata = par1World.getBlockMetadata(x, y, z);
-			System.out.println(this.owner);
+			TileEntity temp = par1World.getBlockTileEntity(x, y, z);
+			//System.out.println(this.owner);
 			if (!par1World.isRemote)
 			{
-				if (par5EntityPlayer.getEntityName() == this.owner)
-				{
+				//if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner)
+				//{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
-				}
+				//}
 			}
 			return true;
 		}
@@ -92,8 +93,6 @@ public class blockBasicVault  extends BlockAdvanced
 		@Override
 		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 		{
-			this.owner = par5EntityLiving.getEntityName();
-			System.out.println(this.owner);
 			int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			switch (angle)
 			{
@@ -110,8 +109,12 @@ public class blockBasicVault  extends BlockAdvanced
 					par1World.setBlock(x, y, z, this.blockID, 2, 0);
 					break;
 			}
+	        if (par5EntityLiving instanceof EntityPlayer && (TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z) instanceof tileEntityBasicVault)
+	        {
+	            ((tileEntityBasicVault) par1World.getBlockTileEntity(x, y, z)).setOwners(par5EntityLiving.getEntityName(), 1);
+	        }
 
-			((TileEntity) par1World.getBlockTileEntity(x, y, z)).updateEntity();
+			((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).updateEntity();
 			par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		}
 
@@ -191,6 +194,7 @@ public class blockBasicVault  extends BlockAdvanced
 			par1World.markBlockForRenderUpdate(x, y, z);
 
 			((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+
 
 			return true;
 		}

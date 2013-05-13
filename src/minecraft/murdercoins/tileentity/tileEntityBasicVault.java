@@ -7,6 +7,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
+import murdercoins.common.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -17,24 +19,90 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
-public class tileEntityBasicVault extends TileEntity implements IInventory, ISidedInventory, IPacketReceiver
+public class tileEntityBasicVault extends TileEntityAdvanced implements IInventory, ISidedInventory, IPacketReceiver
 {
-
-	private int playersUsing = 0;
-	private ItemStack[] inventory = new ItemStack[45];
 	
+	private int playersUsing = 0;
+	private int derp;
+	private ItemStack[] inventory = new ItemStack[27];
+	public String vaultOwner1 = " ";
+	public String vaultOwner2 = " ";
+	public String vaultOwner3 = " ";
+	public String vaultOwner4 = " ";
+	public String vaultOwner5 = " ";
+	public String vaultOwner6 = " ";
+	
+	public tileEntityBasicVault()
+	{
+		this.vaultOwner2 = "Squidicuz";
+	}
+	public void setOwners(String playerName, int ownerNumber)
+	{
+		switch (ownerNumber)
+		{
+			case 1:
+				this.vaultOwner1 = playerName;
+				System.out.println(this.vaultOwner1);
+				break;
+			case 2:
+				this.vaultOwner2 = playerName;
+				System.out.println(this.vaultOwner2);
+				break;
+			case 3:
+				this.vaultOwner3 = playerName;
+				System.out.println(this.vaultOwner3);
+				break;
+			case 4:
+				this.vaultOwner4 = playerName;
+				System.out.println(this.vaultOwner4);
+				break;
+			case 5:
+				this.vaultOwner5 = playerName;
+				System.out.println(this.vaultOwner5);
+				break;
+			case 6:
+				this.vaultOwner6 = playerName;
+				System.out.println(this.vaultOwner6);
+				break;
+		}
+		
+	}
+	
+	@Override
+	public void updateEntity()
+	{	
+		super.updateEntity();
+	}
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("MurderCoins", this);
+		return PacketManager.getPacket("MurderCoins", this, this.vaultOwner1, this.vaultOwner2, this.vaultOwner3, this.vaultOwner4, this.vaultOwner5, this.vaultOwner6);
 	}
 	@Override
-	public void handlePacketData(INetworkManager network, int packetType,
-			Packet250CustomPayload packet, EntityPlayer player,
-			ByteArrayDataInput dataStream) {
-		// TODO Auto-generated method stub
-		
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	{
+		try
+		{
+		this.vaultOwner1 = dataStream.readUTF();
+		this.vaultOwner2 = dataStream.readUTF();
+		this.vaultOwner3 = dataStream.readUTF();
+		this.vaultOwner4 = dataStream.readUTF();
+		this.vaultOwner5 = dataStream.readUTF();
+		this.vaultOwner6 = dataStream.readUTF();
+		}
+		catch (Exception e)
+		{
+			this.vaultOwner1 = " ";
+			this.vaultOwner2 = " ";
+			this.vaultOwner3 = " ";
+			this.vaultOwner4 = " ";
+			this.vaultOwner5 = " ";
+			this.vaultOwner6 = " ";
+			System.out.print("Failed to sync owners of Vault at: " + Integer.toString(this.xCoord) + ", " + Integer.toString(this.yCoord) + ", " + Integer.toString(this.zCoord) + ".");
+		}
 	}
 
 	@Override
@@ -185,6 +253,12 @@ public class tileEntityBasicVault extends TileEntity implements IInventory, ISid
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
+		this.vaultOwner1 = par1NBTTagCompound.getString("owner1");
+		this.vaultOwner2 = par1NBTTagCompound.getString("owner2");
+		this.vaultOwner3 = par1NBTTagCompound.getString("owner3");
+		this.vaultOwner4 = par1NBTTagCompound.getString("owner4");
+		this.vaultOwner5 = par1NBTTagCompound.getString("owner5");
+		this.vaultOwner6 = par1NBTTagCompound.getString("owner6");
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.inventory = new ItemStack[this.getSizeInventory()];
 
@@ -207,6 +281,12 @@ public class tileEntityBasicVault extends TileEntity implements IInventory, ISid
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setString("owner1", this.vaultOwner1);
+		par1NBTTagCompound.setString("owner2", this.vaultOwner2);
+		par1NBTTagCompound.setString("owner3", this.vaultOwner3);
+		par1NBTTagCompound.setString("owner4", this.vaultOwner4);
+		par1NBTTagCompound.setString("owner5", this.vaultOwner5);
+		par1NBTTagCompound.setString("owner6", this.vaultOwner6);
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)

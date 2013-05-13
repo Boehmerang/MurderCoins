@@ -229,7 +229,7 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 									}
 								}
 								this.gFtank.drain(goldPerBucket, true);
-								System.out.println("drained gold");
+								//System.out.println("drained gold");
 								ItemStack itemstack = new ItemStack(MurderCoins.bucketGold);
 								if(this.inventory[3]==null)
 								{
@@ -392,14 +392,14 @@ public class tileEntityGoldForge extends  TileEntityElectricityRunnable implemen
 			{
 				this.decrStackSize(1, 1);
 				this.gFtank.fill(liquid, true);
-				System.out.println("filled gold");
+				//System.out.println("filled gold");
 				
 			}
 			else
 			{
 				this.decrStackSize(1, 8);
 				this.gFtank.fill(liquid, true);
-				System.out.println("filled gold");
+				//System.out.println("filled gold");
 			}
 		}
 	}

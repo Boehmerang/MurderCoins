@@ -23,12 +23,14 @@ public class containerBasicVault extends Container
 		this.tile_entity = tile_entity;
 		
 		int var3;
+		int slot = 0;
 		
-		for (var3 = 0; var3 < 4; ++var3)
+		for (var3 = 0; var3 < 3; ++var3)
 		{
 			for (int var4 = 0; var4 < 9; ++var4)
 			{
-				this.addSlotToContainer(new Slot(tile_entity, var4 + var3 * 9 + 9, 8 + var4 * 18, 7 + var3 * 18));
+				this.addSlotToContainer(new Slot(tile_entity, slot /*var4 + var3 * 9 + 98*/, 8 + var4 * 18, 7 + var3 * 18));
+				slot++;
 			}
 		}
 		
