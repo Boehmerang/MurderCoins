@@ -3,19 +3,25 @@ package murdercoins.client;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+import murdercoins.common.MurderCoins;
 import murdercoins.container.containerBasicTrader;
 import murdercoins.tileentity.tileEntityBasicTrader;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonMerchant;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerMerchant;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.Icon;
 import net.minecraft.village.MerchantRecipeList;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -30,6 +36,11 @@ public class guiBasicTrader extends GuiContainer
 	private int tradeID;
 	
 	private tileEntityBasicTrader tileentity;
+	
+	//Icons
+	private Icon gCoin;
+	private Icon dCoin;
+	private Icon eCoin;
 
 	//Owners
 	private GuiTextField Owner1;
@@ -61,8 +72,19 @@ public class guiBasicTrader extends GuiContainer
 		super(new containerBasicTrader(tile_entity, player_inventory));
 		this.tileentity = tile_entity;
 		this.tradeID = 0;
+		
 	}
-	
+	public void sendPacket()
+	{
+    	PacketDispatcher.sendPacketToServer(PacketManager.getPacket(   "MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(),
+    			this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText(), this.tileentity.safeAttached, this.tileentity.getPrice(0, 1),
+    			this.tileentity.getPrice(1, 1), this.tileentity.getPrice(2, 1), this.tileentity.getPrice(3, 1), this.tileentity.getPrice(4, 1), this.tileentity.getPrice(5, 1),
+    			this.tileentity.getPrice(6, 1), this.tileentity.getPrice(7, 1), this.tileentity.getPrice(8, 1),this.tileentity.getPrice(0, 2),
+    			this.tileentity.getPrice(1, 2), this.tileentity.getPrice(2, 2), this.tileentity.getPrice(3, 2), this.tileentity.getPrice(4, 2), this.tileentity.getPrice(5, 2),
+    			this.tileentity.getPrice(6, 2), this.tileentity.getPrice(7, 2), this.tileentity.getPrice(8, 2), this.tileentity.getPrice(0, 3),
+    			this.tileentity.getPrice(1, 3), this.tileentity.getPrice(2, 3), this.tileentity.getPrice(3, 3), this.tileentity.getPrice(4, 3), this.tileentity.getPrice(5, 3),
+    			this.tileentity.getPrice(6, 3), this.tileentity.getPrice(7, 3), this.tileentity.getPrice(8, 3)	));
+	}
 	@Override
 	public void initGui()
 	{
@@ -160,36 +182,42 @@ public class guiBasicTrader extends GuiContainer
         	this.tileentity.setPrice(this.gCoinPrice + 1, this.tradeID, 1);
             this.gCoinPrice = this.tileentity.getPrice(this.tradeID, 1);
             flag = true;
+            sendPacket();
         }
         else if (par1GuiButton == this.gCoinDn)
         {
         	this.tileentity.setPrice(this.gCoinPrice - 1, this.tradeID, 1);
         	this.gCoinPrice = this.tileentity.getPrice(this.tradeID, 1);
             flag = true;
+            sendPacket();
         }
         else if (par1GuiButton == this.dCoinUp)
         {
             this.tileentity.setPrice(this.dCoinPrice + 1, this.tradeID, 2);
             this.dCoinPrice = this.tileentity.getPrice(this.tradeID, 2);
             flag = true;
+            sendPacket();
         }
         else if (par1GuiButton == this.dCoinDn)
         {
             this.tileentity.setPrice(this.dCoinPrice - 1, this.tradeID, 2);
             this.dCoinPrice = this.tileentity.getPrice(this.tradeID, 2);
             flag = true;
+            sendPacket();
         }
         else if (par1GuiButton == this.eCoinUp)
         {
         	this.tileentity.setPrice(this.eCoinPrice + 1, this.tradeID, 3);
             this.eCoinPrice = this.tileentity.getPrice(this.tradeID, 3);
             flag = true;
+            sendPacket();
         }
         else if (par1GuiButton == this.eCoinDn)
         {
         	this.tileentity.setPrice(this.eCoinPrice - 1, this.tradeID, 3);
             this.eCoinPrice = this.tileentity.getPrice(this.tradeID, 3);
             flag = true;
+            sendPacket();
         }
         
         
@@ -292,10 +320,43 @@ public class guiBasicTrader extends GuiContainer
         super.onGuiClosed();
         Keyboard.enableRepeatEvents(false);
     }
-	
+    /**
+     * Draws the screen and all the components in it.
+     */
+    public void drawScreen(int par1, int par2, float par3)
+    {
+    	super.drawScreen(par1, par2, par3);
+        int k = ((this.width - this.xSize) / 2);
+        int l = ((this.height - this.ySize) / 2);
+        
+		ItemStack gCoins = new ItemStack(MurderCoins.itemGoldCoin);
+		ItemStack dCoins = new ItemStack(MurderCoins.itemDiamondCoin);
+		ItemStack eCoins = new ItemStack(MurderCoins.itemEmeraldCoin);
+		RenderHelper.enableGUIStandardItemLighting();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        itemRenderer.zLevel = 100.0F;
+        itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, gCoins, k + 32, l + 34);
+        itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, gCoins, k + 32, l + 34);
+        itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, dCoins, k + 80, l + 34);
+        itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, dCoins, k + 80, l + 34);
+        itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, eCoins, k + 125, l + 34);
+        itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, eCoins, k + 125, l + 34);
+        
+        ItemStack tradeItem = this.tileentity.getStackInSafeSlot(this.tradeID);
+        if (tradeItem != null)
+        {
+        	itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
+        	itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
+        }       
+        
+    }
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) 
 	{
+
 		this.drawString(this.fontRenderer, "OWNERS" , 185, 10, 4210752);
 		this.Owner1.drawTextBox();
 		this.Owner2.drawTextBox();
@@ -311,6 +372,9 @@ public class guiBasicTrader extends GuiContainer
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.gCoinPrice), 40, 52, 0xffffff);
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.dCoinPrice), 88, 52, 0xffffff);
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.eCoinPrice), 133, 52, 0xffffff);
+		
+
+
 		//this.drawCenteredString(par1FontRenderer, par2Str, par3, par4, par5)
 	}
 
@@ -350,37 +414,37 @@ public class guiBasicTrader extends GuiContainer
         if (this.Owner1.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner1.getText(), 1);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner2.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner3.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner3.getText(), 3);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner4.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner4.getText(), 4);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner5.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner5.getText(), 5);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner6.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner6.getText(), 6);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else if (this.Owner7.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner7.getText(), 7);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        	sendPacket();
         }
         else
     	{

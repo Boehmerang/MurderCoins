@@ -22,16 +22,16 @@ public class containerBasicTrader extends Container {
 		this.addSlotToContainer(new SlotSpecific(tile_entity, 0, 154, 6, IItemElectric.class));
 
 		// Transaction Item
-		this.addSlotToContainer(new Slot(tile_entity, 1, 80, 9));
+		//this.addSlotToContainer(new Slot(tile_entity, 1, 80, 9));
 
 		// Gold Coin Slot
-		this.addSlotToContainer(new Slot(tile_entity, 2, 32, 34));
+		//this.addSlotToContainer(new Slot(tile_entity, 2, 32, 34));
 
 		// Diamond Coin Slot
-		this.addSlotToContainer(new Slot(tile_entity, 3, 80, 34));
+		//this.addSlotToContainer(new Slot(tile_entity, 3, 80, 34));
 		
 		// Emerald Coin Slot
-		this.addSlotToContainer(new Slot(tile_entity, 4, 125, 34));
+		//this.addSlotToContainer(new Slot(tile_entity, 4, 125, 34));
 		
 		int var3;
 
@@ -78,9 +78,9 @@ public class containerBasicTrader extends Container {
 			ItemStack var4 = var3.getStack();
 			var2 = var4.copy();
 
-			if (par1 == 2)
+			if (par1 == 0)
 			{
-				if (!this.mergeItemStack(var4, 3, 39, true)) { return null; }
+				if (!this.mergeItemStack(var4, 1, 37, true)) { return null; }
 
 				var3.onSlotChange(var4, var2);
 			}
@@ -88,15 +88,21 @@ public class containerBasicTrader extends Container {
 			{
 				if (var4.getItem() instanceof IItemElectric)
 				{
-					if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
+					Slot temp = (Slot) this.inventorySlots.get(0);
+					if (!temp.getHasStack())
+					{
+						temp.putStack(var4);
+						var3.decrStackSize(1);
+					}
+					if (!this.mergeItemStack(var4, 0, 0, false)) { return null; }
 				}
-				else if (par1 >= 3 && par1 < 30)
+				else if (par1 >= 1 && par1 < 28)
 				{
-					if (!this.mergeItemStack(var4, 30, 39, false)) { return null; }
+					if (!this.mergeItemStack(var4, 29, 37, false)) { return null; }
 				}
-				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
+				else if (par1 >= 29 && par1 < 37 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
 			}
-			else if (!this.mergeItemStack(var4, 3, 39, false)) { return null; }
+			else if (!this.mergeItemStack(var4, 3, 37, false)) { return null; }
 
 			if (var4.stackSize == 0)
 			{

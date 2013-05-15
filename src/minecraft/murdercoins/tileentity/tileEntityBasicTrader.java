@@ -22,11 +22,11 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInventory, ISidedInventory, IPacketReceiver
+public class tileEntityBasicTrader extends TileEntityAdvanced implements IInventory, ISidedInventory, IPacketReceiver
 {
 		//Normal Stuff
 		private int playersUsing = 0;
-		private ItemStack[] inventory = new ItemStack[5];
+		private ItemStack[] inventory = new ItemStack[2];
 		
 		//Stuff for Safe interaction
 		public Boolean safeAttached;
@@ -42,33 +42,33 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 		public String botOwner7 = " ";
 		
 		//Prices
-		public int slot1GPrice;
-		public int slot1DPrice;
-		public int slot1EPrice;
-		public int slot2GPrice;
-		public int slot2DPrice;
-		public int slot2EPrice;
-		public int slot3GPrice;
-		public int slot3DPrice;
-		public int slot3EPrice;
-		public int slot4GPrice;
-		public int slot4DPrice;
-		public int slot4EPrice;
-		public int slot5GPrice;
-		public int slot5DPrice;
-		public int slot5EPrice;
-		public int slot6GPrice;
-		public int slot6DPrice;
-		public int slot6EPrice;
-		public int slot7GPrice;
-		public int slot7DPrice;
-		public int slot7EPrice;
-		public int slot8GPrice;
-		public int slot8DPrice;
-		public int slot8EPrice;
-		public int slot9GPrice;
-		public int slot9DPrice;
-		public int slot9EPrice;
+		public int slot1GPrice = 0;
+		public int slot1DPrice = 0;
+		public int slot1EPrice = 0;
+		public int slot2GPrice = 0;
+		public int slot2DPrice = 0;
+		public int slot2EPrice = 0;
+		public int slot3GPrice = 0;
+		public int slot3DPrice = 0;
+		public int slot3EPrice = 0;
+		public int slot4GPrice = 0;
+		public int slot4DPrice = 0;
+		public int slot4EPrice = 0;
+		public int slot5GPrice = 0;
+		public int slot5DPrice = 0;
+		public int slot5EPrice = 0;
+		public int slot6GPrice = 0;
+		public int slot6DPrice = 0;
+		public int slot6EPrice = 0;
+		public int slot7GPrice = 0;
+		public int slot7DPrice = 0;
+		public int slot7EPrice = 0;
+		public int slot8GPrice = 0;
+		public int slot8DPrice = 0;
+		public int slot8EPrice = 0;
+		public int slot9GPrice = 0;
+		public int slot9DPrice = 0;
+		public int slot9EPrice = 0;
 		
 		public tileEntityBasicTrader()
 		{
@@ -317,34 +317,53 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 				return this.botOwner1;
 			}
 		}
+		public ItemStack getStackInSafeSlot(int slotID)
+		{
+			if(this.safeAttached == false)
+				return null;
+			if(this.safeAttached == true)
+			{
+				return ((tileEntityBasicVault)this.attachedSafe).getStackInSlot(slotID);
+			}
+			return null;
+		}
 		
 		@Override
 		public void updateEntity()
 		{	
 			super.updateEntity();
-			if (!this.safeAttached)
-			{
 				for(ForgeDirection orientation : ForgeDirection.VALID_DIRECTIONS) 
 				{
-					TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
+					TileEntity tileEntity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), orientation);
 
 					if(tileEntity instanceof tileEntityBasicVault) 
 					{
+						if(!this.safeAttached)
+						{
 						this.attachedSafe = tileEntity;
+						((tileEntityBasicVault)this.attachedSafe).initiate();
 						this.safeAttached = true;
-
+						}
+					}
+					else
+					{
+						if(this.safeAttached)
+						{
+							this.attachedSafe = null;
+							this.safeAttached = false;
+						}
 					}
 				}
-			}
+			
 		}
 
 		@Override
 		public Packet getDescriptionPacket()
 		{
-			return PacketManager.getPacket("MurderCoins", this, this.botOwner1, this.botOwner2, this.botOwner3, this.botOwner4, this.botOwner5, this.botOwner6, this.botOwner7, this.safeAttached);//,
-					//this.slot1GPrice, this.slot2GPrice, this.slot3GPrice, this.slot4GPrice, this.slot5GPrice, this.slot6GPrice, this.slot7GPrice, this.slot8GPrice, this.slot9GPrice,
-					//this.slot1DPrice, this.slot2DPrice, this.slot3DPrice, this.slot4DPrice, this.slot5DPrice, this.slot6DPrice, this.slot7DPrice, this.slot8DPrice, this.slot9DPrice,
-					//this.slot1EPrice, this.slot2EPrice, this.slot3EPrice, this.slot4EPrice, this.slot5EPrice, this.slot6EPrice, this.slot7EPrice, this.slot8EPrice, this.slot9EPrice);
+			return PacketManager.getPacket("MurderCoins", this, this.botOwner1, this.botOwner2, this.botOwner3, this.botOwner4, this.botOwner5, this.botOwner6, this.botOwner7, this.safeAttached,
+					this.slot1GPrice, this.slot2GPrice, this.slot3GPrice, this.slot4GPrice, this.slot5GPrice, this.slot6GPrice, this.slot7GPrice, this.slot8GPrice, this.slot9GPrice,
+					this.slot1DPrice, this.slot2DPrice, this.slot3DPrice, this.slot4DPrice, this.slot5DPrice, this.slot6DPrice, this.slot7DPrice, this.slot8DPrice, this.slot9DPrice,
+					this.slot1EPrice, this.slot2EPrice, this.slot3EPrice, this.slot4EPrice, this.slot5EPrice, this.slot6EPrice, this.slot7EPrice, this.slot8EPrice, this.slot9EPrice);
 		}
 		@Override
 		public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
@@ -359,7 +378,6 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 			this.botOwner6 = dataStream.readUTF();
 			this.botOwner7 = dataStream.readUTF();
 			this.safeAttached = dataStream.readBoolean();
-			/*
 			this.slot1GPrice = dataStream.readInt();
 			this.slot2GPrice = dataStream.readInt();
 			this.slot3GPrice = dataStream.readInt();
@@ -387,7 +405,6 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 			this.slot7EPrice = dataStream.readInt();
 			this.slot8EPrice = dataStream.readInt();
 			this.slot9EPrice = dataStream.readInt();
-			*/
 			}
 			catch (Exception e)
 			{
@@ -414,7 +431,7 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 		@Override
 		public int[] getAccessibleSlotsFromSide(int side) 
 		{
-			return new int[] {0,1,2,3,4};
+			return new int[] {0,1};
 		}
 
 		@Override
@@ -546,13 +563,13 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 		public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 		{
 			super.readFromNBT(par1NBTTagCompound);
-			this.botOwner1 = par1NBTTagCompound.getString("owner1");
-			this.botOwner2 = par1NBTTagCompound.getString("owner2");
-			this.botOwner3 = par1NBTTagCompound.getString("owner3");
-			this.botOwner4 = par1NBTTagCompound.getString("owner4");
-			this.botOwner5 = par1NBTTagCompound.getString("owner5");
-			this.botOwner6 = par1NBTTagCompound.getString("owner6");
-			this.botOwner7 = par1NBTTagCompound.getString("owner7");
+			this.botOwner1 = par1NBTTagCompound.getString("towner1");
+			this.botOwner2 = par1NBTTagCompound.getString("towner2");
+			this.botOwner3 = par1NBTTagCompound.getString("towner3");
+			this.botOwner4 = par1NBTTagCompound.getString("towner4");
+			this.botOwner5 = par1NBTTagCompound.getString("towner5");
+			this.botOwner6 = par1NBTTagCompound.getString("towner6");
+			this.botOwner7 = par1NBTTagCompound.getString("towner7");
 			this.slot1GPrice = par1NBTTagCompound.getInteger("slot1GPrice");
 			this.slot2GPrice = par1NBTTagCompound.getInteger("slot2GPrice");
 			this.slot3GPrice = par1NBTTagCompound.getInteger("slot3GPrice");
@@ -602,13 +619,13 @@ public class tileEntityBasicTrader 	extends TileEntityAdvanced implements IInven
 		public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 		{
 			super.writeToNBT(par1NBTTagCompound);
-			par1NBTTagCompound.setString("owner1", this.botOwner1);
-			par1NBTTagCompound.setString("owner2", this.botOwner2);
-			par1NBTTagCompound.setString("owner3", this.botOwner3);
-			par1NBTTagCompound.setString("owner4", this.botOwner4);
-			par1NBTTagCompound.setString("owner5", this.botOwner5);
-			par1NBTTagCompound.setString("owner6", this.botOwner6);
-			par1NBTTagCompound.setString("owner7", this.botOwner7);
+			par1NBTTagCompound.setString("towner1", this.botOwner1);
+			par1NBTTagCompound.setString("towner2", this.botOwner2);
+			par1NBTTagCompound.setString("towner3", this.botOwner3);
+			par1NBTTagCompound.setString("towner4", this.botOwner4);
+			par1NBTTagCompound.setString("towner5", this.botOwner5);
+			par1NBTTagCompound.setString("towner6", this.botOwner6);
+			par1NBTTagCompound.setString("towner7", this.botOwner7);
 			par1NBTTagCompound.setInteger("slot1GPrice", this.slot1GPrice);
 			par1NBTTagCompound.setInteger("slot2GPrice", this.slot2GPrice);
 			par1NBTTagCompound.setInteger("slot3GPrice", this.slot3GPrice);

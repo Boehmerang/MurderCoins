@@ -25,7 +25,6 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 {
 	
 	private int playersUsing = 0;
-	private int derp;
 	private ItemStack[] inventory = new ItemStack[27];
 	public String vaultOwner1 = " ";
 	public String vaultOwner2 = " ";
