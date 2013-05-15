@@ -2,6 +2,7 @@ package murdercoins.common;
 
 import java.io.File;
 
+import murdercoins.block.blockBasicTrader;
 import murdercoins.block.blockBasicVault;
 import murdercoins.block.blockCPBoundingBlock;
 import murdercoins.block.blockCoinPress;
@@ -21,6 +22,7 @@ import murdercoins.items.itemEDust;
 import murdercoins.items.itemGCoin;
 import murdercoins.items.itemMeltedBucket;
 import murdercoins.items.itemNugBucket;
+import murdercoins.tileentity.tileEntityBasicTrader;
 import murdercoins.tileentity.tileEntityBasicVault;
 import murdercoins.tileentity.tileEntityCoinPress;
 import murdercoins.tileentity.tileEntityGoldForge;
@@ -119,7 +121,7 @@ public class MurderCoins
 	public static Block						fakeBlock;
 	public static Block						cpBoundingBlock;
 	public static Block						basicVault;
-	
+	public static Block						basicTrader;
 	
 	public static LiquidStack				goldLiquid;
 	public static boolean					MekanismLoaded		= false;
@@ -240,7 +242,11 @@ public class MurderCoins
 		
 		basicVault = new blockBasicVault(configLoader.basicVaultID).setUnlocalizedName("basicVault");
 		GameRegistry.registerBlock(basicVault, "basicVault");
-		LanguageRegistry.addName(basicVault, "Basic Vault");
+		LanguageRegistry.addName(basicVault, "Basic Trading Safe");
+		
+		basicTrader = new blockBasicTrader(configLoader.basicTraderID).setUnlocalizedName("basicTrader");
+		GameRegistry.registerBlock(basicTrader, "basicTrader");
+		LanguageRegistry.addName(basicTrader, "Basic TraderBot");
 		
 		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
 		GameRegistry.registerBlock(GoldStill, "Gold_Still");
@@ -320,6 +326,7 @@ public class MurderCoins
 		GameRegistry.registerTileEntity(tileEntityPulverisor.class, "TilePulverisor");
 		GameRegistry.registerTileEntity(tileEntityGoldForgeTop.class, "TileGoldForgeTop");
 		GameRegistry.registerTileEntity(tileEntityBasicVault.class, "TileBasicVault");
+		GameRegistry.registerTileEntity(tileEntityBasicTrader.class, "TileBasicTrader");
 	}
 	
 	public static File[] ListLanguages()

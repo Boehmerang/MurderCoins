@@ -29,6 +29,7 @@ public class Config
 	public static int fakeBlockID;
 	public static int cpBoundID;
 	public static int basicVaultID;
+	public static int basicTraderID;
 	
 	// 		Max Damage allowed for the Molds and Hydraulic Piston
 	
@@ -89,6 +90,7 @@ public class Config
 		fakeBlockID = config.getBlock("fakeBlock", 3018).getInt();
 		cpBoundID = config.getBlock("cpBounding", 3019).getInt();
 		basicVaultID = config.getBlock("basicVault", 3020).getInt();
+		basicTraderID = config.getBlock("basicTrader", 3021).getInt();
 
 		GoldStillID = config.getItem("GoldStill", 1001).getInt();
 		GoldFlowingID = config.getItem("GoldFlowing", 1000).getInt();

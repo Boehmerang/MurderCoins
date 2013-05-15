@@ -29,6 +29,7 @@ public class guiBasicVault extends GuiContainer
 	private GuiTextField Owner4;
 	private GuiTextField Owner5;
 	private GuiTextField Owner6;
+	private GuiTextField Owner7;
 	private tileEntityBasicVault tileentity;
 	
 	
@@ -43,35 +44,40 @@ public class guiBasicVault extends GuiContainer
 	{
 		super.initGui();
 		Keyboard.enableRepeatEvents(true);
-		Owner1 = new GuiTextField(this.fontRenderer, 180, 25, 70, 13);
+		Owner1 = new GuiTextField(this.fontRenderer, 181, 25, 70, 13);
 		Owner1.setText(this.tileentity.vaultOwner1);
 		Owner1.setFocused(false);
 		Owner1.setMaxStringLength(50);
 		
-		Owner2 = new GuiTextField(this.fontRenderer, 180, 40, 70, 13);
+		Owner2 = new GuiTextField(this.fontRenderer, 181, 40, 70, 13);
 		Owner2.setText(this.tileentity.vaultOwner2);
 		Owner2.setFocused(false);
 		Owner2.setMaxStringLength(50);
 		
-		Owner3 = new GuiTextField(this.fontRenderer, 180, 55, 70, 13);
+		Owner3 = new GuiTextField(this.fontRenderer, 181, 55, 70, 13);
 		Owner3.setText(this.tileentity.vaultOwner3);
 		Owner3.setFocused(false);
 		Owner3.setMaxStringLength(50);
 		
-		Owner4 = new GuiTextField(this.fontRenderer, 180, 70, 70, 13);
+		Owner4 = new GuiTextField(this.fontRenderer, 181, 70, 70, 13);
 		Owner4.setText(this.tileentity.vaultOwner4);
 		Owner4.setFocused(false);
 		Owner4.setMaxStringLength(50);
 		
-		Owner5 = new GuiTextField(this.fontRenderer, 180, 85, 70, 13);
+		Owner5 = new GuiTextField(this.fontRenderer, 181, 85, 70, 13);
 		Owner5.setText(this.tileentity.vaultOwner5);
 		Owner5.setFocused(false);
 		Owner5.setMaxStringLength(50);
 		
-		Owner6 = new GuiTextField(this.fontRenderer, 180, 100, 70, 13);
+		Owner6 = new GuiTextField(this.fontRenderer, 181, 100, 70, 13);
 		Owner6.setText(this.tileentity.vaultOwner6);
 		Owner6.setFocused(false);
 		Owner6.setMaxStringLength(50);
+		
+		Owner7 = new GuiTextField(this.fontRenderer, 181, 115, 70, 13);
+		Owner7.setText(this.tileentity.vaultOwner7);
+		Owner7.setFocused(false);
+		Owner7.setMaxStringLength(50);
 	}
     /**
      * Called when the screen is unloaded. Used to disable keyboard repeat events
@@ -93,6 +99,7 @@ public class guiBasicVault extends GuiContainer
 		this.Owner4.drawTextBox();
 		this.Owner5.drawTextBox();
 		this.Owner6.drawTextBox();
+		this.Owner7.drawTextBox();
 	}
 
 	@Override
@@ -113,12 +120,13 @@ public class guiBasicVault extends GuiContainer
     protected void mouseClicked(int par1, int par2, int par3)
     {
         super.mouseClicked(par1, par2, par3);
-        this.Owner1.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        //this.Owner1.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
         this.Owner2.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
         this.Owner3.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
         this.Owner4.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
         this.Owner5.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
         this.Owner6.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        this.Owner7.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
     }
     /**
      * Fired when a key is typed. This is the equivalent of
@@ -130,32 +138,37 @@ public class guiBasicVault extends GuiContainer
         if (this.Owner1.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner1.getText(), 1);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));//this.Owner3.getText(),this.Owner4.getText(),this.Owner5.getText(),this.Owner6.getText()));
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else if (this.Owner2.textboxKeyTyped(par1, par2))
         {
         	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));      
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else if (this.Owner3.textboxKeyTyped(par1, par2))
         {
-        	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));      
+        	this.tileentity.setOwners(this.Owner3.getText(), 3);
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else if (this.Owner4.textboxKeyTyped(par1, par2))
         {
-        	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));      
+        	this.tileentity.setOwners(this.Owner4.getText(), 4);
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else if (this.Owner5.textboxKeyTyped(par1, par2))
         {
-        	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));      
+        	this.tileentity.setOwners(this.Owner5.getText(), 5);
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else if (this.Owner6.textboxKeyTyped(par1, par2))
         {
-        	this.tileentity.setOwners(this.Owner2.getText(), 2);
-        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.tileentity.vaultOwner3, this.tileentity.vaultOwner4, this.tileentity.vaultOwner5, this.tileentity.vaultOwner6));      
+        	this.tileentity.setOwners(this.Owner6.getText(), 6);
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
+        }
+        else if (this.Owner7.textboxKeyTyped(par1, par2))
+        {
+        	this.tileentity.setOwners(this.Owner7.getText(), 7);
+        	PacketDispatcher.sendPacketToServer(PacketManager.getPacket("MurderCoins", this.tileentity, this.Owner1.getText(), this.Owner2.getText(), this.Owner3.getText(), this.Owner4.getText(), this.Owner5.getText(), this.Owner6.getText(), this.Owner7.getText()));
         }
         else
     	{

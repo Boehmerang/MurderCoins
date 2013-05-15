@@ -33,6 +33,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	public String vaultOwner4 = " ";
 	public String vaultOwner5 = " ";
 	public String vaultOwner6 = " ";
+	public String vaultOwner7 = " ";
 	
 	public tileEntityBasicVault()
 	{
@@ -66,8 +67,34 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 				this.vaultOwner6 = playerName;
 				System.out.println(this.vaultOwner6);
 				break;
+			case 7:
+				this.vaultOwner7 = playerName;
+				System.out.println(this.vaultOwner7);
+				break;
+			default:
+				break;
 		}
 		
+	}
+	public String getOwners(int owner)
+	{
+		switch(owner)
+		{
+		case 1:
+			return this.vaultOwner1;
+		case 2:
+			return this.vaultOwner2;
+		case 3:
+			return this.vaultOwner3;
+		case 4:
+			return this.vaultOwner4;
+		case 5:
+			return this.vaultOwner5;
+		case 6:
+			return this.vaultOwner6;
+		default:
+			return this.vaultOwner1;
+		}
 	}
 	
 	@Override
@@ -110,11 +137,11 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	{
 		if (side == 0)
 		{
-			return new int[] {0,5};
+			return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 		}
 		else if (side != 0)
 		{
-			return new int[] {3,4};
+			return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 		}
 		return null;
 	}

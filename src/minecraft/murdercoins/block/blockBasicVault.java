@@ -2,6 +2,8 @@ package murdercoins.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityBasicVault;
 import murdercoins.tileentity.tileEntityManPress;
@@ -70,16 +72,46 @@ public class blockBasicVault  extends BlockAdvanced
 		@Override
 		public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 		{
-			int metadata = par1World.getBlockMetadata(x, y, z);
-			TileEntity temp = par1World.getBlockTileEntity(x, y, z);
 			//System.out.println(this.owner);
 			if (!par1World.isRemote)
 			{
-				//if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner)
-				//{
+				TileEntity temp = par1World.getBlockTileEntity(x, y, z);
+				boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
+				if(isPlayerOp)
+				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
-				//}
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(1))// || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner2 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner3 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner4 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner5 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner6)
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(2))
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(3))
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(4))
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(5))
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(6))
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
 			}
 			return true;
 		}
