@@ -92,7 +92,8 @@ public class guiBasicVault extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) 
 	{
-		this.drawString(this.fontRenderer, "OWNERS" , 185, 10, 4210752);
+		this.drawCenteredString(this.fontRenderer, "OWNERS" , 215, 10, 4210752);
+		this.drawCenteredString(this.fontRenderer, "MONEY" , -41, 10, 4210752);
 		this.Owner1.drawTextBox();
 		this.Owner2.drawTextBox();
 		this.Owner3.drawTextBox();
@@ -100,6 +101,7 @@ public class guiBasicVault extends GuiContainer
 		this.Owner5.drawTextBox();
 		this.Owner6.drawTextBox();
 		this.Owner7.drawTextBox();
+		
 	}
 
 	@Override
@@ -111,7 +113,12 @@ public class guiBasicVault extends GuiContainer
 		containerWidth = ((this.width - this.xSize) / 2);
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize+80, this.ySize);
-
+		this.drawTexturedModalRect(containerWidth-79, containerHeight+6, 26, 168, 77, 53);
+		this.drawTexturedModalRect(containerWidth-79, containerHeight+59, 26+77, 168, 77, 80);
+		
+		//this.drawTexturedModalRect(containerWidth-63, containerHeight + 14, 26, 168, 54, 36);
+		//this.drawTexturedModalRect(containerWidth-63, containerHeight + 54, 26, 168, 54, 36);
+		//this.drawTexturedModalRect(containerWidth-63, containerHeight + 94, 26, 168, 54, 36);
 	}
     /**
      * Called when the mouse is clicked.

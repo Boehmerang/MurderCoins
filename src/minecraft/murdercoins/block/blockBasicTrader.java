@@ -73,8 +73,16 @@ public class blockBasicTrader extends BlockAdvanced
 		int metadata = par1World.getBlockMetadata(x, y, z);
 		if (!par1World.isRemote)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
-			return true;
+			if(!par5EntityPlayer.isSneaking())
+			{
+				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+				return true;
+			}
+			else
+			{
+				par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+				return true;
+			}
 		}
 		return true;
 	}

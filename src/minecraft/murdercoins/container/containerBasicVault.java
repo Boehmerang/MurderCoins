@@ -4,6 +4,9 @@ import murdercoins.common.MurderCoins;
 import murdercoins.common.helpers.iItemCoins;
 import murdercoins.items.ItemPressArm;
 import murdercoins.items.itemCoinMold;
+import murdercoins.items.itemDCoin;
+import murdercoins.items.itemECoin;
+import murdercoins.items.itemGCoin;
 import murdercoins.tileentity.tileEntityBasicVault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -35,6 +38,30 @@ public class containerBasicVault extends Container
 			for (int var4 = 0; var4 < 9; ++var4)
 			{
 				this.addSlotToContainer(new Slot(tile_entity, slot /*var4 + var3 * 9 + 98*/, 8 + var4 * 18, 36 + var3 * 18));
+				slot++;
+			}
+		}
+		for (var3 = 0; var3 < 2; ++var3)
+		{
+			for (int var4 = 0; var4 <3; ++var4)
+			{
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 21 + var3 * 18, itemGCoin.class));
+				slot++;
+			}
+		}
+		for (var3 = 0; var3 < 2; ++var3)
+		{
+			for (int var4 = 0; var4 < 3; ++var4)
+			{
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 61 + var3 * 18, itemDCoin.class));
+				slot++;
+			}
+		}
+		for (var3 = 0; var3 < 2; ++var3)
+		{
+			for (int var4 = 0; var4 < 3; ++var4)
+			{
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 100 + var3 * 18, itemECoin.class));
 				slot++;
 			}
 		}
@@ -79,50 +106,34 @@ public class containerBasicVault extends Container
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1)
+	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotID)
 	{
 		ItemStack var2 = null;
-		Slot var3 = (Slot) this.inventorySlots.get(par1);
+		Slot var3 = (Slot) this.inventorySlots.get(slotID);
 
 		if (var3 != null && var3.getHasStack())
 		{
 			ItemStack var4 = var3.getStack();
 			var2 = var4.copy();
 
-			if (par1 == 2)
+			if (slotID >= 0  && slotID < 45)
 			{
-				if (!this.mergeItemStack(var4, 3, 39, true))
-				{
-					return null;
-				}
-
-				var3.onSlotChange(var4, var2);
+				if (!this.mergeItemStack(var4, 45, 81, false)) { return null; }
 			}
-			else if (par1 != 1 && par1 != 0)
+			/*else if (slotID >= 27 && slotID < 33)
 			{
-				if (var4.getItem() instanceof IItemElectric)
-				{
-					if (!this.mergeItemStack(var4, 0, 1, false))
-					{
-						return null;
-					}
-				}
-				else if (par1 >= 3 && par1 < 30)
-				{
-					if (!this.mergeItemStack(var4, 30, 39, false))
-					{
-						return null;
-					}
-				}
-				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
-				{
-					return null;
-				}
+				if (!this.mergeItemStack(var4, 45, 81, false)) { return null; }
 			}
-			else if (!this.mergeItemStack(var4, 3, 39, false))
+			else if (slotID >= 33 && slotID < 39)
 			{
-				return null;
+				if (!this.mergeItemStack(var4, 45, 81, false)) { return null; }
 			}
+			else if (slotID >= 39 && slotID < 45)
+			{
+				if (!this.mergeItemStack(var4, 45, 81, false)) { return null; }
+			}*/
+			else if (slotID >= 45 && slotID < 81 && !this.mergeItemStack(var4, 9, 27, false)) { return null; }
+			else if (!this.mergeItemStack(var4, 5, 40, false)) { return null; }
 
 			if (var4.stackSize == 0)
 			{
@@ -133,14 +144,10 @@ public class containerBasicVault extends Container
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize)
-			{
-				return null;
-			}
+			if (var4.stackSize == var2.stackSize) { return null; }
 
 			var3.onPickupFromSlot(par1EntityPlayer, var4);
 		}
-
 		return var2;
 	}
 }

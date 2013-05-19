@@ -72,6 +72,7 @@ public class blockBasicVault  extends BlockAdvanced
 		@Override
 		public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 		{
+			
 			//System.out.println(this.owner);
 			if (!par1World.isRemote)
 			{
@@ -116,9 +117,8 @@ public class blockBasicVault  extends BlockAdvanced
 			return true;
 		}
 
-		/**
-		 * Called when the block is placed in the world.
-		 */
+		
+		
 		/**
 		 * Called when the block is placed in the world.
 		 */

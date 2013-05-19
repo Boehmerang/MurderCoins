@@ -1,6 +1,7 @@
 package murdercoins.client;
 
 import murdercoins.container.containerBasicTrader;
+import murdercoins.container.containerBasicTraderShop;
 import murdercoins.container.containerBasicVault;
 import murdercoins.container.containerCoinPress;
 import murdercoins.container.containerGoldForge;
@@ -44,7 +45,13 @@ public class guiHandler implements IGuiHandler{
 			}
 			if(tile_entity instanceof tileEntityBasicTrader)
 			{
-				return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory);
+				switch (ID)
+				{
+				case 0:
+					return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory, false);
+				case 1:
+					return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory, true);
+				}
 			}
 			return null;
 		}
@@ -74,7 +81,15 @@ public class guiHandler implements IGuiHandler{
 			}
 			if(tile_entity instanceof tileEntityBasicTrader)
 			{
-				return new guiBasicTrader(player.inventory,(tileEntityBasicTrader) tile_entity);
+				switch (ID)
+				{
+				case 0:
+					return new guiBasicTrader(player.inventory,(tileEntityBasicTrader) tile_entity);
+				case 1:
+					return new guiBasicTraderShop(player.inventory,(tileEntityBasicTrader) tile_entity);
+				default:
+					break;
+				}
 			}
             return null;
 		}

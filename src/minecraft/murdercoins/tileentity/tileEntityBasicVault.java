@@ -25,7 +25,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 {
 	
 	private int playersUsing = 0;
-	private ItemStack[] inventory = new ItemStack[27];
+	public ItemStack[] inventory = new ItemStack[45];
 	public String vaultOwner1 = " ";
 	public String vaultOwner2 = " ";
 	public String vaultOwner3 = " ";
@@ -99,7 +99,15 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	@Override
 	public void updateEntity()
 	{	
-		super.updateEntity();
+		if (!worldObj.isRemote)
+		{
+			super.updateEntity();
+			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			{
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+			}
+			this.onInventoryChanged();
+		}
 	}
 
 	@Override
@@ -134,15 +142,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) 
 	{
-		if (side == 0)
-		{
-			return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
-		}
-		else if (side != 0)
-		{
-			return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
-		}
-		return null;
+		return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
 	}
 
 	@Override
@@ -163,6 +163,11 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		return this.inventory.length;
 	}
 
+	public void putStackInSlot(int slotID, ItemStack stack)
+	{
+		this.inventory[slotID] = stack;
+	}
+	
 	@Override
 	public ItemStack getStackInSlot(int par1)
 	{
@@ -224,6 +229,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		{
 			par2ItemStack.stackSize = this.getInventoryStackLimit();
 		}
+		System.out.println("Set safe slot: " + Integer.toString(par1));
 	}
 
 	@Override
@@ -329,5 +335,54 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		par1NBTTagCompound.setTag("Items", var2);
 	}
 
+	
+	public Boolean safeHasCoins(int type)
+	{
+		switch (type)
+		{
+		case 1:
+			if ( getStackInSlot(27) != null)
+				return true;
+			if ( getStackInSlot(28) != null)
+				return true;
+			if ( getStackInSlot(29) != null)
+				return true;
+			if ( getStackInSlot(30) != null)
+				return true;
+			if ( getStackInSlot(31) != null)
+				return true;
+			if ( getStackInSlot(32) != null)
+				return true;
+		case 2:
+			if ( getStackInSlot(33) != null)
+				return true;
+			if ( getStackInSlot(34) != null)
+				return true;
+			if ( getStackInSlot(35) != null)
+				return true;
+			if ( getStackInSlot(36) != null)
+				return true;
+			if ( getStackInSlot(37) != null)
+				return true;
+			if ( getStackInSlot(38) != null)
+				return true;
+		case 3:
+			if ( getStackInSlot(39) != null)
+				return true;
+			if ( getStackInSlot(40) != null)
+				return true;
+			if ( getStackInSlot(41) != null)
+				return true;
+			if ( getStackInSlot(42) != null)
+				return true;
+			if ( getStackInSlot(43) != null)
+				return true;
+			if ( getStackInSlot(44) != null)
+				return true;
+		}
+		
+		return false;
+	}
+	
 
 }

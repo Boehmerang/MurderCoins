@@ -34,6 +34,7 @@ public class guiBasicTrader extends GuiContainer
 	private int containerWidth;
 	private int containerHeight;
 	private int tradeID;
+	public String tradeTypeString;
 	
 	private tileEntityBasicTrader tileentity;
 	
@@ -67,11 +68,21 @@ public class guiBasicTrader extends GuiContainer
 	private GuiButton eCoinUp;
 	private GuiButton eCoinDn;
 	
+	private GuiButton tradeType;
+	
 	public guiBasicTrader(InventoryPlayer player_inventory, tileEntityBasicTrader tile_entity) 
 	{
-		super(new containerBasicTrader(tile_entity, player_inventory));
+		super(new containerBasicTrader(tile_entity, player_inventory, false));
 		this.tileentity = tile_entity;
 		this.tradeID = 0;
+		if (this.tileentity.getSaleType(this.tradeID) == true)
+		{
+			this.tradeTypeString = "Sell";
+		}
+		else 
+		{
+			this.tradeTypeString = "Buy";
+		}
 		
 	}
 	public void sendPacket()
@@ -83,7 +94,9 @@ public class guiBasicTrader extends GuiContainer
     			this.tileentity.getPrice(1, 2), this.tileentity.getPrice(2, 2), this.tileentity.getPrice(3, 2), this.tileentity.getPrice(4, 2), this.tileentity.getPrice(5, 2),
     			this.tileentity.getPrice(6, 2), this.tileentity.getPrice(7, 2), this.tileentity.getPrice(8, 2), this.tileentity.getPrice(0, 3),
     			this.tileentity.getPrice(1, 3), this.tileentity.getPrice(2, 3), this.tileentity.getPrice(3, 3), this.tileentity.getPrice(4, 3), this.tileentity.getPrice(5, 3),
-    			this.tileentity.getPrice(6, 3), this.tileentity.getPrice(7, 3), this.tileentity.getPrice(8, 3)	));
+    			this.tileentity.getPrice(6, 3), this.tileentity.getPrice(7, 3), this.tileentity.getPrice(8, 3), this.tileentity.getSaleType(0),	this.tileentity.getSaleType(1),	
+    			this.tileentity.getSaleType(2),	this.tileentity.getSaleType(3),	this.tileentity.getSaleType(4),	this.tileentity.getSaleType(5),	this.tileentity.getSaleType(6),	
+    			this.tileentity.getSaleType(7), this.tileentity.getSaleType(8), false, this.tradeID	));
 	}
 	@Override
 	public void initGui()
@@ -137,6 +150,7 @@ public class guiBasicTrader extends GuiContainer
         this.buttonList.add(this.dCoinDn = new GuiButton(6, i + 98, j + 38, 8, 7, "-"));
         this.buttonList.add(this.eCoinUp = new GuiButton(7, i + 115, j + 38, 8, 7, "+"));
         this.buttonList.add(this.eCoinDn = new GuiButton(8, i + 143, j + 38, 8, 7, "-"));
+        this.buttonList.add(this.tradeType = new GuiButton(9, i + 113, j + 12, 23, 15, ""));
 
         this.nextSaleID.enabled = false;
         this.prevSaleID.enabled = false;
@@ -219,6 +233,20 @@ public class guiBasicTrader extends GuiContainer
             flag = true;
             sendPacket();
         }
+        else if (par1GuiButton == this.tradeType)
+        {
+        	this.tileentity.setSaleType(this.tradeID);
+    		if (this.tileentity.getSaleType(this.tradeID) == true)
+    		{
+    			this.tradeTypeString = "Buy";
+    		}
+    		else 
+    		{
+    			this.tradeTypeString = "Sell";
+    		}
+    		flag = true;
+    		sendPacket();
+        }
         
         
         if (flag)
@@ -279,35 +307,43 @@ public class guiBasicTrader extends GuiContainer
         	this.eCoinUp.enabled = true;
         	this.eCoinDn.enabled = false;
         }
-        if (this.gCoinPrice > 0 && this.gCoinPrice < 999)
+        if (this.gCoinPrice > 0 && this.gCoinPrice < 64)
         {
         	this.gCoinUp.enabled = true;
         	this.gCoinDn.enabled = true;
         }
-        if (this.dCoinPrice > 0 && this.dCoinPrice < 999)
+        if (this.dCoinPrice > 0 && this.dCoinPrice < 64)
         {
         	this.dCoinUp.enabled = true;
         	this.dCoinDn.enabled = true;
         }
-        if (this.eCoinPrice > 0 && this.eCoinPrice < 999)
+        if (this.eCoinPrice > 0 && this.eCoinPrice < 64)
         {
         	this.eCoinUp.enabled = true;
         	this.eCoinDn.enabled = true;
         }
-        if (this.gCoinPrice == 999)
+        if (this.gCoinPrice == 64)
         {
         	this.gCoinUp.enabled = false;
         	this.gCoinDn.enabled = true;
         }
-        if (this.dCoinPrice == 999)
+        if (this.dCoinPrice == 64)
         {
         	this.dCoinUp.enabled = false;
         	this.dCoinDn.enabled = true;
         }
-        if (this.eCoinPrice == 999)
+        if (this.eCoinPrice == 64)
         {
         	this.eCoinUp.enabled = false;
         	this.eCoinDn.enabled = true;
+        }
+        if (this.tileentity.getSaleType(this.tradeID) == true)
+        {
+        	this.tradeTypeString = "Sell";
+        }
+        if (this.tileentity.getSaleType(this.tradeID) == false)
+        {
+        	this.tradeTypeString = "Buy";
         }
     }
 	
@@ -344,14 +380,15 @@ public class guiBasicTrader extends GuiContainer
         itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, dCoins, k + 80, l + 34);
         itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, eCoins, k + 125, l + 34);
         itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, eCoins, k + 125, l + 34);
-        
-        ItemStack tradeItem = this.tileentity.getStackInSafeSlot(this.tradeID);
-        if (tradeItem != null)
+        if (this.tileentity.attachedSafe != null)
         {
-        	itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
-        	itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
-        }       
-        
+        	if (this.tileentity.attachedSafe.getStackInSlot(this.tradeID) != null)
+        	{
+        		ItemStack tradeItem = this.tileentity.attachedSafe.getStackInSlot(this.tradeID);
+        		itemRenderer.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
+        		itemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, tradeItem, k + 80, l + 9);
+        	}
+        }
     }
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) 
@@ -372,6 +409,7 @@ public class guiBasicTrader extends GuiContainer
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.gCoinPrice), 40, 52, 0xffffff);
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.dCoinPrice), 88, 52, 0xffffff);
 		this.drawCenteredString(this.fontRenderer, Integer.toString(this.eCoinPrice), 133, 52, 0xffffff);
+		this.drawCenteredString(this.fontRenderer, this.tradeTypeString, 125, 15, 0xffffff);
 		
 
 
