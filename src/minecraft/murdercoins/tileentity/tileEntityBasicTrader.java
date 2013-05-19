@@ -1190,15 +1190,15 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 				
 				if (gPaid && dPaid && ePaid)
 				{
-					if (this.inventory[4].stackSize - qty >= 1)
-					{
-						this.inventory[4].stackSize -= qty;
-					}
-					else if (this.inventory[4].stackSize - qty == 0)
+					if (this.inventory[4].stackSize == qty)
 					{
 						this.inventory[4] = null;
 					}
-					
+
+					else if (this.inventory[4].stackSize - qty >= 1)
+					{
+						this.inventory[4].stackSize -= qty;
+					}
 				}
 					
 			}
