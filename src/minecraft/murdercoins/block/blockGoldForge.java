@@ -2,6 +2,9 @@ package murdercoins.block;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityGoldForge;
 import murdercoins.tileentity.tileEntityPulverisor;
@@ -199,9 +202,12 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		// TODO Auto-generated method stub
 
 	}
+	
 	/**
 	* The type of render function that is called for this block
 	*/
+	@SideOnly(Side.CLIENT)
+	@Override
 	public int getRenderType()
 	{
 	return BlockRenderingHandler.ID;

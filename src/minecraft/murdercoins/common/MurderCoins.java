@@ -2,6 +2,8 @@ package murdercoins.common;
 
 import java.io.File;
 
+import basiccomponents.common.BasicComponents;
+
 import murdercoins.block.blockBasicTrader;
 import murdercoins.block.blockBasicVault;
 import murdercoins.block.blockCPBoundingBlock;
@@ -34,6 +36,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.server.MinecraftServer;
@@ -60,7 +63,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.5a", dependencies = "after:Mekanism;after:BasicComponents")
+@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.7a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
 @NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false,/* connectionHandler = ConnectionHandler.class,*/ packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
@@ -125,6 +128,7 @@ public class MurderCoins
 	
 	public static LiquidStack				goldLiquid;
 	public static boolean					MekanismLoaded		= false;
+	public static boolean					fluidMechLoaded		= false;
 	
 	Config									configLoader		= new Config();
 	
@@ -132,6 +136,7 @@ public class MurderCoins
 	public void PreInitMurderCoins(FMLPreInitializationEvent e)
 	{
 		if (Loader.isModLoaded("Mekanism")){	MekanismLoaded = true;	}
+		if (Loader.isModLoaded("Fluid Mechanics")){	fluidMechLoaded = true;	}
 		Config.loadConfig(e);
 		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());		
 		itemRegistration();
@@ -144,6 +149,7 @@ public class MurderCoins
 		proxy.registerRenderThings();
 		blockRegistration();
 		addCraftingRecipes();
+		requestFromBC();
 		if (MekanismLoaded == true)
 		{
 			addMekanismRecipes();
@@ -190,6 +196,13 @@ public class MurderCoins
 		System.out.println("MurderCoins" + ": Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
 	}
 	
+	private void requestFromBC()
+	{	
+		
+		BasicComponents.requestAll();
+		BasicComponents.register(this, "MurderCoins");
+	}
+
 	private void chestHooks()
 	{
 		// Adds Gold to the Mine-shaft Corridor chest spawns.
@@ -297,11 +310,32 @@ public class MurderCoins
 	public void addCraftingRecipes()
 	{
 		GameRegistry.addSmelting(itemGoldNugBucket.itemID, new ItemStack(bucketGold, 1), 0.1f);
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(itemCoinMold, 1), new Object[] { "YXY", "XZX", "YXY", 'X', Item.ingotIron, 'Y', Item.bucketEmpty, 'Z', "plateSteel" }));
-		GameRegistry.addRecipe(new ItemStack(manualCoinPress, 1), new Object[] { "YTY", "XRX", "YTY", 'T', Block.pistonBase, 'Y', Item.ingotIron, 'R', Item.redstoneRepeater, 'X', new ItemStack(Item.redstone, 1) });
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.coinPress, 1), new Object[] { "XTX", "OVO", "XTX", 'T', new ItemStack(Block.pistonBase, 1), 'X', "plateSteel", 'O', "basicCircuit", 'V', "motor" }));
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.goldForge, 1), new Object[] { "XTX", "OVO", "XTX", 'V', new ItemStack(Block.furnaceIdle, 1), 'X', "plateSteel", 'O', "basicCircuit", 'T', new ItemStack(Item.redstone, 1) }));
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.goldNugget, Item.goldNugget, Item.goldNugget,
+				Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldNugBucket, 1), Item.bucketEmpty, Item.ingotGold);
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(itemCoinMold, 1), new Object[] { "YXY", "XZX", "YXY", 'X', 
+			Item.ingotIron, 'Y', Item.bucketEmpty, 'Z', "plateSteel" }));
+		GameRegistry.addRecipe(new ItemStack(manualCoinPress, 1), new Object[] { "YTY", "XRX", "YTY", 'T', Block.pistonBase, 'Y', Item.ingotIron, 'R', 
+			Item.redstoneRepeater, 'X', new ItemStack(Item.redstone, 1) });
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.coinPress, 1), new Object[] { "XTX", "OVO", "XTX", 'T',
+			new ItemStack(Block.pistonBase, 1), 'X', "plateSteel", 'O', "basicCircuit", 'V', "motor" }));
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.goldForge, 1), new Object[] { "XTX", "OVO", "XTX", 'V',
+			new ItemStack(Block.furnaceIdle, 1), 'X', "plateSteel", 'O', "basicCircuit", 'T', new ItemStack(Item.redstone, 1) }));
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.basicTrader, 1), new Object[] { "XRX", "OVO", "XTX", 'R',
+			new ItemStack(Item.redstone), 'V', new ItemStack(Block.dispenser, 1), 'X', "plateSteel", 'O', "basicCircuit", 'T', "battery" }));
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.basicVault, 1), new Object[] { "XRX", "OVO", "XTX", 'R',
+			new ItemStack(Item.redstone), 'V', new ItemStack(Block.chest, 2), 'X', "plateSteel", 'O', "basicCircuit", 'T', "battery" }));
+		
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.itemPressArm, 1), new Object[] { "XRX", "OVO", "XRX", 'R',
+			new ItemStack(Block.pistonBase,1), 'V', "motor", 'X', "plateSteel", 'O', "basicCircuit" }));
+		
 		if(this.MekanismLoaded == false)
 		{
 			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(this.pulverisor,1),new Object[] {"XVX", "OTO", "XVX", 'V', new ItemStack(Block.pistonBase, 1), 'X', "plateSteel", 'O', "ingotSteel", 'T', new ItemStack(Item.redstone, 1) }));

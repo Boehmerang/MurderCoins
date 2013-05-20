@@ -249,6 +249,7 @@ public class blockCoinPress extends BlockAdvanced
 	/**
 	* The type of render function that is called for this block
 	*/
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{
