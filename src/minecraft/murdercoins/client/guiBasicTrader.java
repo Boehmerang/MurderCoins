@@ -35,6 +35,7 @@ public class guiBasicTrader extends GuiContainer
 	private int containerHeight;
 	private int tradeID;
 	public String tradeTypeString;
+	public String playerUsing;
 	
 	private tileEntityBasicTrader tileentity;
 	
@@ -74,6 +75,7 @@ public class guiBasicTrader extends GuiContainer
 	{
 		super(new containerBasicTrader(tile_entity, player_inventory, false));
 		this.tileentity = tile_entity;
+		this.playerUsing = player_inventory.player.username;
 		this.tradeID = 0;
 		if (this.tileentity.getSaleType(this.tradeID) == true)
 		{
@@ -436,12 +438,15 @@ public class guiBasicTrader extends GuiContainer
     {
         super.mouseClicked(par1, par2, par3);
         //this.Owner1.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner2.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner3.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner4.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner5.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner6.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner7.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        if (this.playerUsing.equalsIgnoreCase(this.tileentity.botOwner1))
+        {
+        	this.Owner2.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner3.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner4.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner5.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner6.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner7.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        }
     }
     /**
      * Fired when a key is typed. This is the equivalent of

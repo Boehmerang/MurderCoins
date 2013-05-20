@@ -31,6 +31,7 @@ public class guiBasicVault extends GuiContainer
 	private GuiTextField Owner5;
 	private GuiTextField Owner6;
 	private GuiTextField Owner7;
+	private String playerUsing;
 	private tileEntityBasicVault tileentity;
 	
 	
@@ -38,6 +39,7 @@ public class guiBasicVault extends GuiContainer
 	{
 		super(new containerBasicVault(tile_entity, player_inventory));
 		this.tileentity = tile_entity;
+		this.playerUsing = player_inventory.player.username;
 		this.xSize += 158;
 		
 	}
@@ -132,12 +134,15 @@ public class guiBasicVault extends GuiContainer
     {
         super.mouseClicked(par1, par2, par3);
         //this.Owner1.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner2.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner3.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner4.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner5.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner6.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
-        this.Owner7.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        if (this.playerUsing.equalsIgnoreCase(this.tileentity.vaultOwner1))
+        {
+        	this.Owner2.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner3.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner4.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner5.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner6.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        	this.Owner7.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        }
     }
     /**
      * Fired when a key is typed. This is the equivalent of
