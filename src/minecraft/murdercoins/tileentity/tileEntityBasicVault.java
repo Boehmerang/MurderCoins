@@ -9,6 +9,7 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import murdercoins.common.Config;
+import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -33,6 +34,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	public String vaultOwner5 = " ";
 	public String vaultOwner6 = " ";
 	public String vaultOwner7 = " ";
+	public EntityPlayer Owner1;
 	
 	public tileEntityBasicVault()
 	{
@@ -44,31 +46,31 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		{
 			case 1:
 				this.vaultOwner1 = playerName;
-				System.out.println(this.vaultOwner1);
+				//System.out.println(this.vaultOwner1);
 				break;
 			case 2:
 				this.vaultOwner2 = playerName;
-				System.out.println(this.vaultOwner2);
+				//System.out.println(this.vaultOwner2);
 				break;
 			case 3:
 				this.vaultOwner3 = playerName;
-				System.out.println(this.vaultOwner3);
+				//System.out.println(this.vaultOwner3);
 				break;
 			case 4:
 				this.vaultOwner4 = playerName;
-				System.out.println(this.vaultOwner4);
+				//System.out.println(this.vaultOwner4);
 				break;
 			case 5:
 				this.vaultOwner5 = playerName;
-				System.out.println(this.vaultOwner5);
+				//System.out.println(this.vaultOwner5);
 				break;
 			case 6:
 				this.vaultOwner6 = playerName;
-				System.out.println(this.vaultOwner6);
+				//System.out.println(this.vaultOwner6);
 				break;
 			case 7:
 				this.vaultOwner7 = playerName;
-				System.out.println(this.vaultOwner7);
+				//System.out.println(this.vaultOwner7);
 				break;
 			default:
 				break;
@@ -91,6 +93,8 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 			return this.vaultOwner5;
 		case 6:
 			return this.vaultOwner6;
+		case 7:
+			return this.vaultOwner7;
 		default:
 			return this.vaultOwner1;
 		}
@@ -99,9 +103,11 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	@Override
 	public void updateEntity()
 	{	
-		if (!worldObj.isRemote)
+		super.updateEntity();
+		
+		if (!this.worldObj.isRemote)
 		{
-			super.updateEntity();
+			
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
@@ -142,7 +148,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) 
 	{
-		return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+		return new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44};
 	}
 
 	@Override
@@ -229,7 +235,6 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		{
 			par2ItemStack.stackSize = this.getInventoryStackLimit();
 		}
-		System.out.println("Set safe slot: " + Integer.toString(par1));
 	}
 
 	@Override
@@ -274,9 +279,82 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int i, ItemStack itemstack) 
+	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) 
 	{
-		return true;
+		if(slotID >=27 && slotID <= 32) 
+		{
+			if (itemstack.getItem() == MurderCoins.itemGoldCoin)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if (slotID >= 33 && slotID <= 38) 
+		{
+			if (itemstack.isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if (slotID >= 39 && slotID <= 44) 
+		{
+			if (itemstack.getItem() == MurderCoins.itemEmeraldCoin)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if (slotID >=0 && slotID <= 8)
+		{
+			return false;
+		}
+		else if (slotID >=9 && slotID <= 17)
+		{
+			if (this.inventory[slotID-9] != null)
+			{
+				if (itemstack.getItem() == this.inventory[slotID-9].getItem())
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else if(this.inventory[slotID-9] == null)
+			{
+				return false;
+			}
+		}
+		else if (slotID >=18 && slotID <= 26)
+		{
+			if(this.inventory[slotID-18] != null)
+			{
+				if (itemstack.getItem() == this.inventory[slotID-18].getItem())
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			else if (this.inventory[slotID - 18] == null)
+			{
+				return false;
+			}
+		}
+		return false;
 	}
 	/**
 	 * Reads a tile entity from NBT.

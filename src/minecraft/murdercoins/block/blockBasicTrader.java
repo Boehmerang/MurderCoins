@@ -4,6 +4,7 @@ import java.util.Random;
 
 import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityBasicTrader;
+import murdercoins.tileentity.tileEntityBasicVault;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
@@ -71,12 +72,115 @@ public class blockBasicTrader extends BlockAdvanced
 	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
+		//boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
 		if (!par1World.isRemote)
 		{
-			if(!par5EntityPlayer.isSneaking())
+			
+			System.out.println("Player using the Trader: " + par5EntityPlayer.username);
+			System.out.println("Owner of the Trader: " + ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(1) );
+			/*if(isPlayerOp)
 			{
-				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
-				return true;
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+			}
+			else */ if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(1) ) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase(  ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(2)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase(  ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(3)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(4)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(5)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(6)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
+			}
+			else if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicTrader)par1World.getBlockTileEntity(x, y, z)).getOwners(7)) )
+			{
+				if(!par5EntityPlayer.isSneaking())
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}
+				else
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					return true;
+				}
 			}
 			else
 			{

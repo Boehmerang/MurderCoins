@@ -117,37 +117,37 @@ public class guiBasicTraderShop extends GuiContainer
 	{
 		super.initGui();
 		Keyboard.enableRepeatEvents(true);
-		Owner1 = new GuiTextField(this.fontRenderer, 181, 25, 70, 13);
+		Owner1 = new GuiTextField(this.fontRenderer, 181, 20, 70, 13);
 		Owner1.setText(this.tileentity.botOwner1);
 		Owner1.setFocused(false);
 		Owner1.setMaxStringLength(50);
 		
-		Owner2 = new GuiTextField(this.fontRenderer, 181, 40, 70, 13);
+		Owner2 = new GuiTextField(this.fontRenderer, 181, 48, 70, 13);
 		Owner2.setText(this.tileentity.botOwner2);
 		Owner2.setFocused(false);
 		Owner2.setMaxStringLength(50);
 		
-		Owner3 = new GuiTextField(this.fontRenderer, 181, 55, 70, 13);
+		Owner3 = new GuiTextField(this.fontRenderer, 181, 63, 70, 13);
 		Owner3.setText(this.tileentity.botOwner3);
 		Owner3.setFocused(false);
 		Owner3.setMaxStringLength(50);
 		
-		Owner4 = new GuiTextField(this.fontRenderer, 181, 70, 70, 13);
+		Owner4 = new GuiTextField(this.fontRenderer, 181, 78, 70, 13);
 		Owner4.setText(this.tileentity.botOwner4);
 		Owner4.setFocused(false);
 		Owner4.setMaxStringLength(50);
 		
-		Owner5 = new GuiTextField(this.fontRenderer, 181, 85, 70, 13);
+		Owner5 = new GuiTextField(this.fontRenderer, 181, 93, 70, 13);
 		Owner5.setText(this.tileentity.botOwner5);
 		Owner5.setFocused(false);
 		Owner5.setMaxStringLength(50);
 		
-		Owner6 = new GuiTextField(this.fontRenderer, 181, 100, 70, 13);
+		Owner6 = new GuiTextField(this.fontRenderer, 181, 108, 70, 13);
 		Owner6.setText(this.tileentity.botOwner6);
 		Owner6.setFocused(false);
 		Owner6.setMaxStringLength(50);
 		
-		Owner7 = new GuiTextField(this.fontRenderer, 181, 115, 70, 13);
+		Owner7 = new GuiTextField(this.fontRenderer, 181, 123, 70, 13);
 		Owner7.setText(this.tileentity.botOwner7);
 		Owner7.setFocused(false);
 		Owner7.setMaxStringLength(50);
@@ -319,11 +319,18 @@ public class guiBasicTraderShop extends GuiContainer
         	{
         	this.tradeTypeString = "Sell";
         	}
-			if (this.tileentity.canTransact(this.tradeID, this.tileentity.attachedSafe.getStackInSlot(this.tradeID)))
+			if (this.tileentity.attachedSafe!=null)
 			{
-				this.doTransaction.enabled = true;
+				if (this.tileentity.canTransact(this.tradeID, this.tileentity.attachedSafe.getStackInSlot(this.tradeID)))
+				{
+					this.doTransaction.enabled = true;
+				}
+				else if (!this.tileentity.canTransact(this.tradeID, this.tileentity.attachedSafe.getStackInSlot(this.tradeID)))
+				{
+					this.doTransaction.enabled = false;
+				}
 			}
-			else if (!this.tileentity.canTransact(this.tradeID, this.tileentity.attachedSafe.getStackInSlot(this.tradeID)))
+			else if (this.tileentity.attachedSafe == null)
 			{
 				this.doTransaction.enabled = false;
 			}
@@ -368,7 +375,8 @@ public class guiBasicTraderShop extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) 
 	{
-			this.drawString(this.fontRenderer, "OWNERS" , 185, 10, 4210752);
+			this.drawCenteredString(this.fontRenderer, "Owner" , 215, 10, 0x66FF00);
+			this.drawCenteredString(this.fontRenderer, "Operators" , 215, 36, 0xFFFF00);
 			this.Owner1.drawTextBox();
 			this.Owner2.drawTextBox();
 			this.Owner3.drawTextBox();

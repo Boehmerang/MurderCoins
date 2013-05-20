@@ -6,6 +6,7 @@ import murdercoins.tileentity.tileEntityBasicVault;
 import murdercoins.tileentity.tileEntityPulverisor;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.input.Keyboard;
@@ -37,6 +38,8 @@ public class guiBasicVault extends GuiContainer
 	{
 		super(new containerBasicVault(tile_entity, player_inventory));
 		this.tileentity = tile_entity;
+		this.xSize += 158;
+		
 	}
 	
 	@Override
@@ -44,37 +47,37 @@ public class guiBasicVault extends GuiContainer
 	{
 		super.initGui();
 		Keyboard.enableRepeatEvents(true);
-		Owner1 = new GuiTextField(this.fontRenderer, 181, 25, 70, 13);
+		Owner1 = new GuiTextField(this.fontRenderer, 260, 20, 70, 13);
 		Owner1.setText(this.tileentity.vaultOwner1);
 		Owner1.setFocused(false);
 		Owner1.setMaxStringLength(50);
 		
-		Owner2 = new GuiTextField(this.fontRenderer, 181, 40, 70, 13);
+		Owner2 = new GuiTextField(this.fontRenderer, 260, 48, 70, 13);
 		Owner2.setText(this.tileentity.vaultOwner2);
 		Owner2.setFocused(false);
 		Owner2.setMaxStringLength(50);
 		
-		Owner3 = new GuiTextField(this.fontRenderer, 181, 55, 70, 13);
+		Owner3 = new GuiTextField(this.fontRenderer, 260, 63, 70, 13);
 		Owner3.setText(this.tileentity.vaultOwner3);
 		Owner3.setFocused(false);
 		Owner3.setMaxStringLength(50);
 		
-		Owner4 = new GuiTextField(this.fontRenderer, 181, 70, 70, 13);
+		Owner4 = new GuiTextField(this.fontRenderer, 260, 78, 70, 13);
 		Owner4.setText(this.tileentity.vaultOwner4);
 		Owner4.setFocused(false);
 		Owner4.setMaxStringLength(50);
 		
-		Owner5 = new GuiTextField(this.fontRenderer, 181, 85, 70, 13);
+		Owner5 = new GuiTextField(this.fontRenderer, 260, 93, 70, 13);
 		Owner5.setText(this.tileentity.vaultOwner5);
 		Owner5.setFocused(false);
 		Owner5.setMaxStringLength(50);
 		
-		Owner6 = new GuiTextField(this.fontRenderer, 181, 100, 70, 13);
+		Owner6 = new GuiTextField(this.fontRenderer, 260, 108, 70, 13);
 		Owner6.setText(this.tileentity.vaultOwner6);
 		Owner6.setFocused(false);
 		Owner6.setMaxStringLength(50);
 		
-		Owner7 = new GuiTextField(this.fontRenderer, 181, 115, 70, 13);
+		Owner7 = new GuiTextField(this.fontRenderer, 260, 123, 70, 13);
 		Owner7.setText(this.tileentity.vaultOwner7);
 		Owner7.setFocused(false);
 		Owner7.setMaxStringLength(50);
@@ -92,8 +95,9 @@ public class guiBasicVault extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) 
 	{
-		this.drawCenteredString(this.fontRenderer, "OWNERS" , 215, 10, 4210752);
-		this.drawCenteredString(this.fontRenderer, "MONEY" , -41, 10, 4210752);
+		this.drawCenteredString(this.fontRenderer, "Owner" , 294, 10, 0x66FF00);
+		this.drawCenteredString(this.fontRenderer, "Operators" , 294, 36, 0xFFFF00);
+		this.drawCenteredString(this.fontRenderer, "Money" , 38, 10, 0x66FF00);
 		this.Owner1.drawTextBox();
 		this.Owner2.drawTextBox();
 		this.Owner3.drawTextBox();
@@ -112,9 +116,9 @@ public class guiBasicVault extends GuiContainer
 
 		containerWidth = ((this.width - this.xSize) / 2);
 		containerHeight = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize+80, this.ySize);
-		this.drawTexturedModalRect(containerWidth-79, containerHeight+6, 26, 168, 77, 53);
-		this.drawTexturedModalRect(containerWidth-79, containerHeight+59, 26+77, 168, 77, 80);
+		this.drawTexturedModalRect(containerWidth+79, containerHeight, 0, 0, this.xSize-79, this.ySize);
+		this.drawTexturedModalRect(containerWidth, containerHeight+6, 26, 168, 77, 53);
+		this.drawTexturedModalRect(containerWidth, containerHeight+59, 26+77, 168, 77, 80);
 		
 		//this.drawTexturedModalRect(containerWidth-63, containerHeight + 14, 26, 168, 54, 36);
 		//this.drawTexturedModalRect(containerWidth-63, containerHeight + 54, 26, 168, 54, 36);

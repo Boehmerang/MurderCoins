@@ -29,7 +29,7 @@ public class containerBasicVault extends Container
 		int slot = 0;
 		for (var3 = 0; var3 < 9; ++var3)
 		{
-			this.addSlotToContainer(new Slot(tile_entity, slot, 8 + var3 * 18, 8));
+			this.addSlotToContainer(new Slot(tile_entity, slot, 87 + var3 * 18, 8));
 			slot++;
 		}
 		
@@ -37,7 +37,7 @@ public class containerBasicVault extends Container
 		{
 			for (int var4 = 0; var4 < 9; ++var4)
 			{
-				this.addSlotToContainer(new Slot(tile_entity, slot /*var4 + var3 * 9 + 98*/, 8 + var4 * 18, 36 + var3 * 18));
+				this.addSlotToContainer(new Slot(tile_entity, slot /*var4 + var3 * 9 + 98*/, 87 + var4 * 18, 36 + var3 * 18));
 				slot++;
 			}
 		}
@@ -45,7 +45,7 @@ public class containerBasicVault extends Container
 		{
 			for (int var4 = 0; var4 <3; ++var4)
 			{
-				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 21 + var3 * 18, itemGCoin.class));
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, 13 + var4 * 18, 21 + var3 * 18, itemGCoin.class));
 				slot++;
 			}
 		}
@@ -53,7 +53,7 @@ public class containerBasicVault extends Container
 		{
 			for (int var4 = 0; var4 < 3; ++var4)
 			{
-				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 61 + var3 * 18, itemDCoin.class));
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, 13 + var4 * 18, 61 + var3 * 18, itemDCoin.class));
 				slot++;
 			}
 		}
@@ -61,7 +61,7 @@ public class containerBasicVault extends Container
 		{
 			for (int var4 = 0; var4 < 3; ++var4)
 			{
-				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, -66 + var4 * 18, 100 + var3 * 18, itemECoin.class));
+				this.addSlotToContainer(new SlotSpecific(tile_entity, slot /*var4 + var3 * 9 + 98*/, 13 + var4 * 18, 100 + var3 * 18, itemECoin.class));
 				slot++;
 			}
 		}
@@ -71,13 +71,13 @@ public class containerBasicVault extends Container
 		{
 			for (int var4 = 0; var4 < 9; ++var4)
 			{
-				this.addSlotToContainer(new Slot(player_inventory, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+				this.addSlotToContainer(new Slot(player_inventory, var4 + var3 * 9 + 9, 87 + var4 * 18, 84 + var3 * 18));
 			}
 		}
 
 		for (var3 = 0; var3 < 9; ++var3)
 		{
-			this.addSlotToContainer(new Slot(player_inventory, var3, 8 + var3 * 18, 142));
+			this.addSlotToContainer(new Slot(player_inventory, var3, 87 + var3 * 18, 142));
 		}
 
 		tile_entity.openChest();

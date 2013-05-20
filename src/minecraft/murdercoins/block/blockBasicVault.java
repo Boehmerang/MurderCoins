@@ -78,37 +78,42 @@ public class blockBasicVault  extends BlockAdvanced
 			{
 				TileEntity temp = par1World.getBlockTileEntity(x, y, z);
 				boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
-				if(isPlayerOp)
+				/*if(isPlayerOp)
+				{
+					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					return true;
+				}*/
+				if (par5EntityPlayer.username.equalsIgnoreCase(  ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(1)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(1))// || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner2 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner3 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner4 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner5 || par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)temp).vaultOwner6)
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(2)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(2))
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(3)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(3))
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(4)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(4))
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(5)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(5))
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(6)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;
 				}
-				if (par5EntityPlayer.getEntityName() == ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(6))
+				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(7)) )
 				{
 					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
 					return true;

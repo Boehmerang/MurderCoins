@@ -37,13 +37,13 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		public tileEntityBasicVault attachedSafe;
 		
 		//Owners
-		public String botOwner1 = " ";
-		public String botOwner2 = " ";
-		public String botOwner3 = " ";
-		public String botOwner4 = " ";
-		public String botOwner5 = " ";
-		public String botOwner6 = " ";
-		public String botOwner7 = " ";
+		public String botOwner1 = "";
+		public String botOwner2 = "";
+		public String botOwner3 = "";
+		public String botOwner4 = "";
+		public String botOwner5 = "";
+		public String botOwner6 = "";
+		public String botOwner7 = "";
 		
 		//Prices
 		public int slot1GPrice = 0;
@@ -98,9 +98,10 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		@Override
 		public void updateEntity()
 		{	
+			super.updateEntity();
+			
 			if (!worldObj.isRemote)
 			{
-				super.updateEntity();
 				if (this.processWanted)
 				{
 					this.processTransaction(this.tradeWanted);
@@ -121,10 +122,13 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 						{
 							if(!this.safeAttached)
 							{
-								this.attachedSafe = tileEntity;
-								this.attachedSafe.updateEntity();
-								this.safeAttached = true;
-								break;
+								if (this.botOwner1.equalsIgnoreCase(tileEntity.vaultOwner1))
+								{
+									this.attachedSafe = tileEntity;
+									this.attachedSafe.updateEntity();
+									this.safeAttached = true;
+									break;
+								}
 							}
 							else if (this.safeAttached)
 							{
@@ -150,37 +154,70 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		}
 
 		
+		public Boolean isOwner(String name)
+		{
+			if (name == this.botOwner1)
+			{
+				return true;
+			}
+			else if (name == this.botOwner2)
+			{
+				return true;
+			}
+			else if (name == this.botOwner3)
+			{
+				return true;
+			}
+			else if (name == this.botOwner4)
+			{
+				return true;
+			}
+			else if (name == this.botOwner5)
+			{
+				return true;
+			}
+			else if (name == this.botOwner6)
+			{
+				return true;
+			}
+			else if (name == this.botOwner7)
+			{
+				return true;
+			}
+			return false;
+		}
+		
 		public void setOwners(String playerName, int ownerNumber)
 		{
 			switch (ownerNumber)
 			{
 				case 1:
 					this.botOwner1 = playerName;
-					System.out.println(this.botOwner1);
+					//System.out.println(this.botOwner1);
 					break;
 				case 2:
 					this.botOwner2 = playerName;
-					System.out.println(this.botOwner2);
+					//System.out.println(this.botOwner2);
 					break;
 				case 3:
 					this.botOwner3 = playerName;
-					System.out.println(this.botOwner3);
+					//System.out.println(this.botOwner3);
 					break;
 				case 4:
 					this.botOwner4 = playerName;
-					System.out.println(this.botOwner4);
+					//System.out.println(this.botOwner4);
 					break;
 				case 5:
 					this.botOwner5 = playerName;
-					System.out.println(this.botOwner5);
+					//System.out.println(this.botOwner5);
 					break;
 				case 6:
 					this.botOwner6 = playerName;
-					System.out.println(this.botOwner6);
+					//System.out.println(this.botOwner6);
 					break;
 				case 7:
 					this.botOwner7 = playerName;
-					System.out.println(this.botOwner7);
+					//System.out.println(this.botOwner7);
 					break;
 				default:
 					break;
@@ -1190,6 +1227,8 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 				
 				if (gPaid && dPaid && ePaid)
 				{
+					boolean paid = false;
+					ItemStack tempstack = new ItemStack(this.inventory[4].getItem(), qty);
 					if (this.inventory[4].stackSize == qty)
 					{
 						this.inventory[4] = null;
@@ -1198,6 +1237,27 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 					else if (this.inventory[4].stackSize - qty >= 1)
 					{
 						this.inventory[4].stackSize -= qty;
+					}
+					
+					if (this.attachedSafe.inventory[slotID+9] == null)
+					{
+						this.attachedSafe.inventory[slotID+9] = tempstack;
+						paid = true;
+					}
+					else if (!paid && this.attachedSafe.inventory[slotID+9] != null && this.attachedSafe.inventory[slotID+9].stackSize + qty <= 64)
+					{
+						this.attachedSafe.inventory[slotID+9].stackSize += qty;
+						paid = true;
+					}
+					else if (!paid && this.attachedSafe.inventory[slotID+18] == null)
+					{
+						this.attachedSafe.inventory[slotID+18] = tempstack;
+						paid = true;
+					}
+					else if (!paid && this.attachedSafe.inventory[slotID+18] != null && this.attachedSafe.inventory[slotID+18].stackSize + qty <= 64)
+					{
+						this.attachedSafe.inventory[slotID+18].stackSize += qty;
+						paid = true;
 					}
 				}
 					
@@ -1413,14 +1473,6 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		@Override
 		public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 		{	
-			int a1;
-			int a2;
-			int b1;
-			int b2;
-			int c1;
-			int c2;
-			int d1;
-			int d2;
 				if (this.worldObj.isRemote)
 				{
 					try
