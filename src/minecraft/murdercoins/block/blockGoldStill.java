@@ -16,22 +16,32 @@ public class blockGoldStill extends BlockFluid implements ILiquid
     {
         super(par1, par2Material);
         this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
-    	setLightOpacity(3);
-		setUnlocalizedName("GoldStill");
+        this.setHardness(100F);
+        this.setLightOpacity(3);
+        this.setUnlocalizedName("GoldStill");
+		//this.disableStats();
     }
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
+    	this.theIcon = new Icon[] {par1IconRegister.registerIcon("MurderCoins:goldFluid"),par1IconRegister.registerIcon("MurderCoins:goldFluid")};
     	this.blockIcon = par1IconRegister.registerIcon("MurderCoins:goldFluid");
     }
-    @SideOnly(Side.CLIENT)
+    
+    @Override
+    public int getRenderType()
+    {
+    	return 4;
+    }
 
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
+    @Override
     public Icon getIcon(int par1, int par2)//getBlockTextureFromSideAndMetadata(int side, int metadata) getBlockTextureFromSideAndMetadata(int par1, int par2)
     {
-        return par1 != 0 && par1 != 1 ? this.blockIcon : this.blockIcon;
+       return par1 != 0 && par1 != 1 ? this.blockIcon : this.blockIcon;
     }
 
     @Override

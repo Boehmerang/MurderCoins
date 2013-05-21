@@ -138,8 +138,16 @@ public class MurderCoins
 		if (Loader.isModLoaded("Mekanism")){	MekanismLoaded = true;	}
 		if (Loader.isModLoaded("Fluid Mechanics")){	fluidMechLoaded = true;	}
 		Config.loadConfig(e);
+		if (configLoader.GoldFlowingID + 1 != configLoader.GoldStillID)
+		{
+			throw new RuntimeException("Check the liquid ID's, Still must be one higher then Flowing.");
+		}
 		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());		
 		itemRegistration();
+		blockRegistration();
+		goldLiquid = LiquidDictionary.getOrCreateLiquid("Gold", new LiquidStack(GoldStill, 1));
+		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Gold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(MurderCoins.bucketGold), new ItemStack(Item.bucketEmpty)));
+	
 	}
 	
 	@Init
@@ -147,7 +155,7 @@ public class MurderCoins
 	{
 		LanguageRegistry.instance().addStringLocalization("itemGroup.murdercoins", "en_US", "Murder Coins");
 		proxy.registerRenderThings();
-		blockRegistration();
+	
 		addCraftingRecipes();
 		requestFromBC();
 		if (MekanismLoaded == true)
@@ -157,9 +165,6 @@ public class MurderCoins
 		networkRegisters();
 		tileEntityRegisters();
 		chestHooks();
-		goldLiquid = LiquidDictionary.getOrCreateLiquid("Gold", new LiquidStack(GoldStill, 1));
-		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Gold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(MurderCoins.bucketGold), new ItemStack(Item.bucketEmpty)));
-	
 		/**
 		 * Handle language support
 		 */
@@ -261,11 +266,11 @@ public class MurderCoins
 		GameRegistry.registerBlock(basicTrader, "basicTrader");
 		LanguageRegistry.addName(basicTrader, "Basic TraderBot");
 		
-		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
+		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.lava);//.setUnlocalizedName("GoldStill");
 		GameRegistry.registerBlock(GoldStill, "Gold_Still");
 		LanguageRegistry.addName(GoldStill, "Gold Still");
 		
-		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
+		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.lava);
 		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
 		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
 		

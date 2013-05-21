@@ -16,14 +16,17 @@ public class blockGoldFlowing extends BlockFlowing implements ILiquid
     public blockGoldFlowing(int par1, Material par2Material)
     {
         super(par1, par2Material);
-        //this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
-        setHardness(100F);
-    	setLightOpacity(3);
-		setUnlocalizedName("GoldFlowing");
+        this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
+        this.setHardness(100F);
+        this.setLightOpacity(3);
+        this.setUnlocalizedName("GoldFlowing");
+        this.setTickRandomly(true);
     }
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
+    	this.theIcon = new Icon[] {par1IconRegister.registerIcon("MurderCoins:goldFluid"),par1IconRegister.registerIcon("MurderCoins:goldFluid")};
     	this.blockIcon = par1IconRegister.registerIcon("MurderCoins:goldFluid");
     }
     @SideOnly(Side.CLIENT)
@@ -31,7 +34,7 @@ public class blockGoldFlowing extends BlockFlowing implements ILiquid
     @Override
     public int stillLiquidId()
     {
-        return this.blockID;
+        return this.blockID+1;
     }
 
     @Override
@@ -51,5 +54,10 @@ public class blockGoldFlowing extends BlockFlowing implements ILiquid
 	{
 		return true;
 	}
-
+	
+    @Override
+    public int getRenderType()
+    {
+    	return 4;
+    }
 }
