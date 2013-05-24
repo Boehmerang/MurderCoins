@@ -1,5 +1,6 @@
 package murdercoins.client;
 
+import murdercoins.common.MurderCoins;
 import murdercoins.container.containerBasicTrader;
 import murdercoins.container.containerBasicTraderShop;
 import murdercoins.container.containerBasicVault;
@@ -21,7 +22,9 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class guiHandler implements IGuiHandler{
 		@Override
 		public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-            TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
+            return MurderCoins.proxy.getServerGui(ID, player, world, x,y,z);
+			/*
+			TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 
             if(tile_entity instanceof tileEntityGoldForge)
             {
@@ -53,12 +56,16 @@ public class guiHandler implements IGuiHandler{
 					return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory, true);
 				}
 			}
-			return null;
+			*/
+			
+			//return null;
 		}
 
 		@Override
 		public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-            TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
+            
+			return MurderCoins.proxy.getClientGui(ID, player, world, x, y, z);
+			/*TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 
             if(tile_entity instanceof tileEntityGoldForge){
             	return new guiGoldForge(player.inventory,(tileEntityGoldForge) tile_entity);
@@ -90,7 +97,8 @@ public class guiHandler implements IGuiHandler{
 				default:
 					break;
 				}
-			}
-            return null;
+			}*/
+			
+            //return null;
 		}
 }

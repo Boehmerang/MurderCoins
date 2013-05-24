@@ -64,7 +64,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.7a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
-@NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false,/* connectionHandler = ConnectionHandler.class,*/ packetHandler = PacketManager.class)
+@NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
  * packetHandler =
@@ -157,7 +157,7 @@ public class MurderCoins
 		proxy.registerRenderThings();
 	
 		addCraftingRecipes();
-		requestFromBC();
+		//requestFromBC();
 		if (MekanismLoaded == true)
 		{
 			addMekanismRecipes();
@@ -266,11 +266,11 @@ public class MurderCoins
 		GameRegistry.registerBlock(basicTrader, "basicTrader");
 		LanguageRegistry.addName(basicTrader, "Basic TraderBot");
 		
-		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.lava);//.setUnlocalizedName("GoldStill");
+		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
 		GameRegistry.registerBlock(GoldStill, "Gold_Still");
 		LanguageRegistry.addName(GoldStill, "Gold Still");
 		
-		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.lava);
+		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
 		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
 		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
 		
@@ -354,7 +354,8 @@ public class MurderCoins
 	
 	public void networkRegisters()
 	{
-		NetworkRegistry.instance().registerGuiHandler(this, guiHandler);
+		NetworkRegistry.instance().registerGuiHandler(this, new guiHandler());
+		//NetworkRegistry.instance().registerGuiHandler(this, new CoreGuiHandler());
 	}
 	
 	public void tileEntityRegisters()

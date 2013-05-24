@@ -62,7 +62,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 			int metadata = par1World.getBlockMetadata(x, y, z);
 			if (!par1World.isRemote)
 			{
-				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+				par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
 				return true;
 			}
 			return true;

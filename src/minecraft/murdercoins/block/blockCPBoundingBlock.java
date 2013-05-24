@@ -57,69 +57,69 @@ public class blockCPBoundingBlock extends BlockAdvanced
 			if (block == MurderCoins.goldForge.blockID)
 			{
 				
-				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y-1, z);
+				par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y-1, z);
 				return true;
 			}
 		}
 	
 		else if (metadata == 2)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z+1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y, z+1);
 			return true;
 		}
 		else if (metadata == 3)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z+1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x+1, y, z+1);
 			return true;
 		}
 		else if (metadata == 4)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x+1, y, z);
 			return true;
 		}
 		else if (metadata == 5)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z+1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y, z+1);
 			return true;
 		}
 		else if (metadata == 6)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x-1, y, z+1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x-1, y, z+1);
 			return true;
 		}
 		else if (metadata == 7)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x-1, y, z);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x-1, y, z);
 			return true;
 		}
 		else if (metadata == 8)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z-1);
+			par5EntityPlayer.openGui(MurderCoins.instance,2, par1World, x, y, z-1);
 			return true;
 		}
 		else if (metadata == 9)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x-1, y, z-1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x-1, y, z-1);
 			return true;
 		}
 		else if (metadata == 10)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x-1, y, z);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x-1, y, z);
 			return true;
 		}
 		else if (metadata == 11)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z-1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y, z-1);
 			return true;
 		}
 		else if (metadata == 12)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z-1);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x+1, y, z-1);
 			return true;
 		}
 		else if (metadata == 13)
 		{
-			par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x+1, y, z);
+			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x+1, y, z);
 			return true;
 		}
 		return true;

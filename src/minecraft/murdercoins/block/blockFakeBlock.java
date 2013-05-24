@@ -65,7 +65,7 @@ public class blockFakeBlock extends BlockAdvanced
 			
 			if (block == MurderCoins.goldForge.blockID)
 			{
-				par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y-1, z);
+				par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y-1, z);
 				return true;
 			}
 		}

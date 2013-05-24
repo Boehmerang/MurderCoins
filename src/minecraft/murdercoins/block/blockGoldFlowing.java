@@ -19,17 +19,17 @@ public class blockGoldFlowing extends BlockFlowing implements ILiquid
         this.setCreativeTab(murdercoins.common.MurderCoins.murderTab);
         this.setHardness(100F);
         this.setLightOpacity(3);
-        this.setUnlocalizedName("GoldFlowing");
-        this.setTickRandomly(true);
+        //this.setUnlocalizedName("GoldFlowing");
+        //this.setTickRandomly(true);
     }
-    @Override
+   /* @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
     	this.theIcon = new Icon[] {par1IconRegister.registerIcon("MurderCoins:goldFluid"),par1IconRegister.registerIcon("MurderCoins:goldFluid")};
-    	this.blockIcon = par1IconRegister.registerIcon("MurderCoins:goldFluid");
-    }
-    @SideOnly(Side.CLIENT)
+    	//this.blockIcon = par1IconRegister.registerIcon("MurderCoins:goldFluid");
+    }*/
+
 
     @Override
     public int stillLiquidId()

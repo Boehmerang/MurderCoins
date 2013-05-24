@@ -90,7 +90,7 @@ public class blockManPress extends BlockAdvanced
 		if (!par1World.isRemote)
 		{
 			//System.out.println("debug");
-			par5EntityPlayer.openGui(MurderCoins.instance, 2, par1World, x, y, z);
+			par5EntityPlayer.openGui(MurderCoins.instance, 3, par1World, x, y, z);
 			return true;
 		}
 		return true;

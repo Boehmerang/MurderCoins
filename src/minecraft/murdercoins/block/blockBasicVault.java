@@ -85,37 +85,37 @@ public class blockBasicVault  extends BlockAdvanced
 				}*/
 				if (par5EntityPlayer.username.equalsIgnoreCase(  ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(1)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(2)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(3)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(4)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(5)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(6)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 				if (par5EntityPlayer.username.equalsIgnoreCase( ((tileEntityBasicVault)par1World.getBlockTileEntity(x, y, z)).getOwners(7)) )
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 5, par1World, x, y, z);
 					return true;
 				}
 			}

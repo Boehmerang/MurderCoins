@@ -82,12 +82,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -95,12 +95,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -108,12 +108,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -121,12 +121,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -134,12 +134,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -147,12 +147,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -160,12 +160,12 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
@@ -173,18 +173,18 @@ public class blockBasicTrader extends BlockAdvanced
 			{
 				if(!par5EntityPlayer.isSneaking())
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 0, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 6, par1World, x, y, z);
 					return true;
 				}
 				else
 				{
-					par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+					par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 					return true;
 				}
 			}
 			else
 			{
-				par5EntityPlayer.openGui(MurderCoins.instance, 1, par1World, x, y, z);
+				par5EntityPlayer.openGui(MurderCoins.instance, 7, par1World, x, y, z);
 				return true;
 			}
 		}
