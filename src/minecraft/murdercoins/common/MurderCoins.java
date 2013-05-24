@@ -63,7 +63,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.7a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
+@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.8a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
 @NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
@@ -81,7 +81,6 @@ public class MurderCoins
 	
 	@SidedProxy(clientSide = "murdercoins.client.ClientProxy", serverSide = "murdercoins.common.CommonProxy")
 	public static CommonProxy	proxy;
-	//public static CreativeTabs				murderTab			= new tabMurderCoins(CreativeTabs.getNextID(), "MurderCoins");
     public static CreativeTabs murderTab = new CreativeTabs("MurderCoins") 
     {
         public ItemStack getIconItemStack() 
@@ -132,7 +131,7 @@ public class MurderCoins
 	
 	Config									configLoader		= new Config();
 	
-	@PreInit()
+	@Mod.PreInit()
 	public void PreInitMurderCoins(FMLPreInitializationEvent e)
 	{
 		if (Loader.isModLoaded("Mekanism")){	MekanismLoaded = true;	}
@@ -145,15 +144,33 @@ public class MurderCoins
 		MinecraftForge.EVENT_BUS.register(new GoldBucketHandler());		
 		itemRegistration();
 		blockRegistration();
-		goldLiquid = LiquidDictionary.getOrCreateLiquid("Gold", new LiquidStack(GoldStill, 1));
+		liquidRegistration();
+		
+	}
+	
+	private void liquidRegistration() 
+	{
+		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
+		GameRegistry.registerBlock(GoldStill, "Gold_Still");
+		LanguageRegistry.addName(GoldStill, "Gold Still");
+		
+		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
+		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
+		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
+		
+		
+		goldLiquid = new LiquidStack(GoldStill, 1000);
+		LiquidDictionary.getOrCreateLiquid("Gold", goldLiquid);
 		LiquidContainerRegistry.registerLiquid(new LiquidContainerData(LiquidDictionary.getLiquid("Gold", LiquidContainerRegistry.BUCKET_VOLUME), new ItemStack(MurderCoins.bucketGold), new ItemStack(Item.bucketEmpty)));
 	
 	}
-	
-	@Init
+
+	@Mod.Init
 	public void load(FMLInitializationEvent event)
 	{
+		MinecraftForge.EVENT_BUS.register(proxy);
 		LanguageRegistry.instance().addStringLocalization("itemGroup.murdercoins", "en_US", "Murder Coins");
+		//NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
 		proxy.registerRenderThings();
 	
 		addCraftingRecipes();
@@ -265,14 +282,6 @@ public class MurderCoins
 		basicTrader = new blockBasicTrader(configLoader.basicTraderID).setUnlocalizedName("basicTrader");
 		GameRegistry.registerBlock(basicTrader, "basicTrader");
 		LanguageRegistry.addName(basicTrader, "Basic TraderBot");
-		
-		GoldStill = new blockGoldStill(configLoader.GoldStillID, Material.water);//.setUnlocalizedName("GoldStill");
-		GameRegistry.registerBlock(GoldStill, "Gold_Still");
-		LanguageRegistry.addName(GoldStill, "Gold Still");
-		
-		GoldFlowing = new blockGoldFlowing(configLoader.GoldFlowingID, Material.water);
-		GameRegistry.registerBlock(GoldFlowing, "Gold_Flowing;");
-		LanguageRegistry.addName(GoldFlowing, "Gold Flowing");
 		
 		if (MekanismLoaded == false)
 		{

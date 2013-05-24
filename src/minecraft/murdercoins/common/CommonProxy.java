@@ -1,5 +1,7 @@
 package murdercoins.common;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import murdercoins.container.containerBasicTrader;
 import murdercoins.container.containerBasicVault;
 import murdercoins.container.containerCoinPress;
@@ -17,6 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class CommonProxy
 {
@@ -55,4 +59,8 @@ public class CommonProxy
 		
 		//return null;
 	}
+	  @SideOnly(Side.CLIENT)
+	  @ForgeSubscribe
+	  public void initializeIcons(TextureStitchEvent.Post event) {
+	  }
 }
