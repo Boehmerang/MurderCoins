@@ -22,7 +22,28 @@ import cpw.mods.fml.common.network.IGuiHandler;
 public class guiHandler implements IGuiHandler{
 		@Override
 		public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-            return MurderCoins.proxy.getServerGui(ID, player, world, x,y,z);
+			TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
+			switch (ID)
+			{
+			case 1:
+	            return new containerGoldForge((tileEntityGoldForge) tile_entity, player.inventory);
+			case 2:
+	        	return new containerCoinPress((tileEntityCoinPress) tile_entity, player.inventory);
+			case 3:
+				return new containerManPress((tileEntityManPress) tile_entity, player.inventory);
+			case 4:
+				return new containerPulverisor((tileEntityPulverisor) tile_entity, player.inventory);
+			case 5:
+				return new containerBasicVault((tileEntityBasicVault) tile_entity, player.inventory);
+			case 6:
+				return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory, false);
+			case 7:
+				return new containerBasicTrader((tileEntityBasicTrader) tile_entity, player.inventory, true);
+			default:
+				return null;
+			}
+			
+			//return MurderCoins.proxy.getServerGui(ID, player, world, x,y,z);
 			/*
 			TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 
@@ -62,9 +83,38 @@ public class guiHandler implements IGuiHandler{
 		}
 
 		@Override
-		public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
+		{
             
-			return MurderCoins.proxy.getClientGui(ID, player, world, x, y, z);
+			TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
+			switch (ID)
+			{
+			case 1:
+					return new guiGoldForge(player.inventory,(tileEntityGoldForge) tile_entity);
+			case 2:
+            	return new guiCoinPress(player.inventory,(tileEntityCoinPress) tile_entity);
+            
+			case 3:
+				return new guiManPress(player.inventory,(tileEntityManPress) tile_entity);
+			
+			case 4:
+  				return new guiPulverisor(player.inventory,(tileEntityPulverisor) tile_entity);
+
+			case 5:
+				return new guiBasicVault(player.inventory,(tileEntityBasicVault) tile_entity);
+
+			case 6:
+					return new guiBasicTrader(player.inventory,(tileEntityBasicTrader) tile_entity);
+			case 7:
+					return new guiBasicTraderShop(player.inventory,(tileEntityBasicTrader) tile_entity);
+			default:
+					break;
+				
+			
+			}
+			return null;
+			
+			//return MurderCoins.proxy.getClientGui(ID, player, world, x, y, z);
 			/*TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 
             if(tile_entity instanceof tileEntityGoldForge){

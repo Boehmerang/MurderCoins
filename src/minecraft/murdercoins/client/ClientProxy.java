@@ -49,8 +49,8 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.bindTileEntitySpecialRenderer(tileEntityGoldForge.class, new RenderGoldForge());
 		
 	 }
-		@Override
-		public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
+    /* @Override
+	public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
 		{
 			TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 			switch (ID)
@@ -79,5 +79,5 @@ public class ClientProxy extends CommonProxy
 			
 			}
 			return null;
-		}
+		}*/
 }

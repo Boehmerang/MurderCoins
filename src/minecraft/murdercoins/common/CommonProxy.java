@@ -28,12 +28,12 @@ public class CommonProxy
 	{
 	}
 	
-	public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
+	/*public GuiScreen getClientGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		return null;
-	}
+	}/*
 	
-	public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
+	/*public Container getServerGui(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		TileEntity tile_entity = world.getBlockTileEntity(x, y, z);
 		switch (ID)
@@ -55,12 +55,10 @@ public class CommonProxy
 		default:
 			return null;
 		}
-		
-		
-		//return null;
-	}
+	}*/
 	  @SideOnly(Side.CLIENT)
 	  @ForgeSubscribe
-	  public void initializeIcons(TextureStitchEvent.Post event) {
+	  public void initializeIcons(TextureStitchEvent.Post event) 
+	  {
 	  }
 }
