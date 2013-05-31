@@ -62,6 +62,10 @@ public class Config
 	
 	public static int PprocessTicks;
 	public static double PjoulesPerUse;
+	
+	//		Crafting Booleans
+	
+	public static boolean canCraft;
 
 	public static void loadConfig(FMLPreInitializationEvent e)
 	{
@@ -70,6 +74,7 @@ public class Config
 
 		config.load(); // Loads it
 
+		canCraft = config.get("Crafting", "Can the Machines be crafted?", false).getBoolean(false);
 		// Property gCoin; //This is a property, see below
 		// gCoin = config.getItem("gCoin", 200); //This gets the property
 		// gCoin.comment = "Cold Coin ID"; //This adds a comment

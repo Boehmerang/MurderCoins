@@ -172,8 +172,10 @@ public class MurderCoins
 		LanguageRegistry.instance().addStringLocalization("itemGroup.murdercoins", "en_US", "Murder Coins");
 		//NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
 		proxy.registerRenderThings();
-	
-		addCraftingRecipes();
+		if(configLoader.canCraft)
+		{
+			addCraftingRecipes();
+		}
 		//requestFromBC();
 		if (MekanismLoaded == true)
 		{
@@ -298,19 +300,25 @@ public class MurderCoins
 	{
 		itemGoldCoin = new itemGCoin(configLoader.gCoinID).setUnlocalizedName("gCoin");
 		LanguageRegistry.addName(itemGoldCoin, "Gold Coin(s)");
+		GameRegistry.registerItem(itemGoldCoin, "GoldCoin");
 		itemDiamondCoin = new itemDCoin(configLoader.dCoinID).setUnlocalizedName("dCoin");
 		LanguageRegistry.addName(itemDiamondCoin, "Diamond Coin(s)");
+		GameRegistry.registerItem(itemDiamondCoin, "DiamondCoin");
 		itemEmeraldCoin = new itemECoin(configLoader.eCoinID).setUnlocalizedName("eCoin");
 		LanguageRegistry.addName(itemEmeraldCoin, "Emerald Coin(s)");
+		GameRegistry.registerItem(itemEmeraldCoin, "EmeraldCoin");
 		itemCoinMold = new itemCoinMold(configLoader.coinMoldID).setUnlocalizedName("coinMold").setMaxStackSize(1).setMaxDamage(configLoader.moldDamage);
 		LanguageRegistry.addName(itemCoinMold, "Coin Mold");
 		itemPressArm = new ItemPressArm(configLoader.pressArmID).setUnlocalizedName("pressArm").setMaxStackSize(1).setMaxDamage(configLoader.hPistonDamage);
 		LanguageRegistry.addName(itemPressArm, "Hydraulic Piston");
+		GameRegistry.registerItem(itemPressArm, "Hydraulic Piston");
 		itemGoldNugBucket = new itemNugBucket(configLoader.nugBucketID).setUnlocalizedName("nugBucket").setMaxStackSize(1);
 		LanguageRegistry.addName(itemGoldNugBucket, "Bucket of GoldNuggets");
+		GameRegistry.registerItem(itemGoldNugBucket, "Bucket of GoldNuggets");
 		bucketGold = new itemMeltedBucket(configLoader.meltedBucketID).setUnlocalizedName("meltedBucket").setMaxStackSize(1).setContainerItem(Item.bucketEmpty);
 		LanguageRegistry.addName(bucketGold, "Bucket of melted Gold");
 		itemEmeraldDust = new itemEDust(configLoader.eDustID).setUnlocalizedName("eDust");
+		GameRegistry.registerItem(bucketGold, "Bucket of metled Gold");
 		LanguageRegistry.addName(itemEmeraldDust, "Emerald Dust");
 		OreDictionary.registerOre("dustEmerald", new ItemStack(itemEmeraldDust));
 		if (MekanismLoaded == false)
