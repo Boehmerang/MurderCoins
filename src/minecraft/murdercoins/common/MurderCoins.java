@@ -63,7 +63,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.8a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
+@Mod(modid = "MurderCoins", name = "Murder Coins", version = "1.2.9a", dependencies = "after:Fluid_Mechanics;after:Mekanism;after:BasicComponents")
 @NetworkMod(channels = "MurderCoins", clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 /*
  * clientPacketHandlerSpec = @SidedPacketHandler(channels = {"MurderCoins" },
@@ -124,6 +124,8 @@ public class MurderCoins
 	public static Block						cpBoundingBlock;
 	public static Block						basicVault;
 	public static Block						basicTrader;
+	public static Block						adminTrader;
+	
 	
 	public static LiquidStack				goldLiquid;
 	public static boolean					MekanismLoaded		= false;
@@ -175,12 +177,12 @@ public class MurderCoins
 		if(configLoader.canCraft)
 		{
 			addCraftingRecipes();
+			if (MekanismLoaded == true)
+			{
+				addMekanismRecipes();
+			}
 		}
 		//requestFromBC();
-		if (MekanismLoaded == true)
-		{
-			addMekanismRecipes();
-		}
 		networkRegisters();
 		tileEntityRegisters();
 		chestHooks();

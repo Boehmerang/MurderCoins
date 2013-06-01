@@ -53,7 +53,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	public int ticksWithoutPower = 0;										// # of ticks machine has not had power
 	public int ticksTillFreeze = 1200;										// # of ticks until machine enters "Frozen" state
 	public int meltingTicks = 500;											// Ticks it takes to melt a gold ingot
-	//public int goldStored = 0;												// Amount of gold currently stored
 	public int maxGold = 20 * LiquidContainerRegistry.BUCKET_VOLUME;		// Max amount of gold the press can store
 	public int goldPerBucket = LiquidContainerRegistry.BUCKET_VOLUME;		// How much gold is in each bucket.
 	private int playersUsing = 0;											// Number of players using the machine
@@ -65,7 +64,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	private double tankJoules = 10.0D;										// Joules per tick to keep the gold tank liquid
 
 	public boolean isFrozen = false;										// If the machine's tank is Frozen.
-	//public boolean didFill = false;											// If the machine ran an auto fill in the last update tick.
 	
 	private ItemStack[] inventory = new ItemStack[8];						// Machine inventory
 	
@@ -87,8 +85,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public void updateEntity()
 	{
-		//if ( this.CPtank.getLiquid() == null){	 this.CPtank.setLiquid(MurderCoins.goldLiquid);}
-
 		super.updateEntity();
 		/**
 		 * Attempts to charge from battery in slot 1.
@@ -167,9 +163,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 							this.drainBucketTicks--;
 							if (this.drainBucketTicks < 1)
 			    			{
-								
-								//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
-								//this.setGold(goldPerBucket, true);
 								this.CPtank.fill(liquid, true);
 								this.decrStackSize(6, 1);
 								this.getEmptyBucket();
@@ -197,9 +190,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 						this.drainBucketTicks--;
 						if (this.drainBucketTicks < 1)
 		    			{
-							
-							//this.tank.setCapacity(this.tank.getCapacity()-this.goldPerBucket);
-							//this.setGold(goldPerBucket, true);
 							this.CPtank.setLiquid(liquid);
 							this.decrStackSize(6, 1);
 							this.getEmptyBucket();
@@ -408,55 +398,37 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		}
 		if(inventory[5]==null)
 		{
-			if(inventory[7] != null)
+			if(configLoader.gCoinsOn == true)
 			{
-				if(inventory[7].getItem() != MurderCoins.itemGoldCoin)
+				if(inventory[7] != null)
 				{
-				this.processTicks = 0;
+					if(inventory[7].getItem() != MurderCoins.itemGoldCoin)
+					{
+						this.processTicks = 0;
+						return false;
+					}
+				}
+			}
+			else if(configLoader.gCoinsOn == false)
+			{
 				return false;
-				}
 			}
 		}
-		if (MurderCoins.MekanismLoaded == false)
-		{
-		if (inventory[5]!=null)
-		{
-			if(inventory[5].getItem() == MurderCoins.itemDiamondDust)
-			{
-				if(inventory[7] != null)
-				{
-					if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
-					{
-					this.processTicks = 0;
-					return false;
-					}
-				}
-			}
-			if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
-			{
-				if(inventory[7] != null)
-				{
-					if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
-					{
-					this.processTicks = 0;
-					return false;
-					}
-				}
-			}
-		}
-		}
-		else if(MurderCoins.MekanismLoaded == true)
-		{
 			if (inventory[5]!=null)
 			{
-				ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
-				for (int i = 0; i < tList.size(); i++)
+				ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
+				ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
+				for (int i = 0; i < dList.size(); i++)
 				{
-					ItemStack tStack = tList.get(i);
-					tStack = tStack.copy();
-					tStack.stackSize = 1;
-					if(inventory[5].isItemEqual(tStack))
+					ItemStack dStack = dList.get(i);
+					dStack = dStack.copy();
+					dStack.stackSize = 1;
+					if(inventory[5].isItemEqual(dStack))
 					{
+						if(inventory[5].stackSize < 4)
+						{
+							return false;
+						}
 						if(inventory[7] != null)
 						{
 							if(inventory[7].getItem() != MurderCoins.itemDiamondCoin)
@@ -466,20 +438,32 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 							}
 						}
 					}
+				}
+				for (int i = 0; i < eList.size(); i++)
+				{
 					if(inventory[5].getItem() == MurderCoins.itemEmeraldDust)
 					{
-						if(inventory[7] != null)
+						ItemStack eStack = eList.get(i);
+						eStack = eStack.copy();
+						eStack.stackSize = 1;
+						if(inventory[5].isItemEqual(eStack))
 						{
-							if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+							if(inventory[5].stackSize < 4)
 							{
-							this.processTicks = 0;
-							return false;
+								return false;
+							}
+							if(inventory[7] != null)
+							{
+								if(inventory[7].getItem() != MurderCoins.itemEmeraldCoin)
+								{
+									this.processTicks = 0;
+									return false;
+								}
 							}
 						}
 					}
 				}
 			}
-		}
 		return true;
 	}
 
@@ -493,84 +477,34 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return;
 		}
-		if(MurderCoins.MekanismLoaded == false)
+		
+		if (!isDust)
 		{
-			if (!isDust)
+			ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
+			if (this.inventory[7] == null)
 			{
-				ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
-				if (this.inventory[7] == null)
-				{
-					this.inventory[7] = itemstack;
-				}
-				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
-				{
-					this.inventory[7].stackSize += 4;
-				}
-				//this.setGold(goldPerBucket, false);
-				this.CPtank.drain(goldPerBucket, true);
-				this.damageItems();
-				this.setJoules(this.getJoules() - this.joulesPerSmelt);
+				this.inventory[7] = itemstack;
 			}
-			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemDiamondDust)))
+			else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
 			{
-				ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
-				if (this.inventory[7] == null)
-				{
-					this.inventory[7] = itemstack;
-				}
-				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemDiamondCoin)))
-				{
-					this.inventory[7].stackSize += 4;
-				}
-				this.decrStackSize(5, 1);
-				//this.setGold(goldPerBucket, false);
-				this.CPtank.drain(goldPerBucket, true);
-				this.damageItems();
-				this.setJoules(this.getJoules() - this.joulesPerSmelt);
+				this.inventory[7].stackSize += 4;
 			}
-			else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
-			{
-				ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
-				if (this.inventory[7] == null)
-				{
-					this.inventory[7] = itemstack;
-				}
-				else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemEmeraldCoin)))
-				{
-					this.inventory[7].stackSize += 4;
-				}
-				this.decrStackSize(5, 1);
-				//this.setGold(goldPerBucket, false);
-				this.CPtank.drain(goldPerBucket, true);
-				this.damageItems();
-				this.setJoules(this.getJoules() - this.joulesPerSmelt);
-			}
+			this.CPtank.drain(goldPerBucket, true);
+			this.damageItems();
+			this.setJoules(this.getJoules() - this.joulesPerSmelt);
+			return;
 		}
 		else
 		{
-			ArrayList<ItemStack> tList = OreDictionary.getOres("dustDiamond");
-			for (int i = 0; i < tList.size(); i++)
+			ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
+			ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
+			for (int i = 0; i < dList.size(); i++)
 			{
-				ItemStack tStack = tList.get(i);
-				tStack = tStack.copy();
-				tStack.stackSize = 1;
-				if (!isDust)
-				{
-					ItemStack itemstack = new ItemStack(MurderCoins.itemGoldCoin, 4);
-					if (this.inventory[7] == null)
-					{
-						this.inventory[7] = itemstack;
-					}
-					else if (this.inventory[7].isItemEqual(new ItemStack(MurderCoins.itemGoldCoin)))
-					{
-						this.inventory[7].stackSize += 4;
-					}
-					this.CPtank.drain(goldPerBucket, true);
-					//this.setGold(goldPerBucket, false);
-					this.damageItems();
-					this.setJoules(this.getJoules() - this.joulesPerSmelt);
-				}
-				else if (this.inventory[5].isItemEqual(new ItemStack(MurderCoins.itemEmeraldDust)))
+				ItemStack eStack = eList.get(i);
+				eStack = eStack.copy();
+				eStack.stackSize = 1;
+
+				if (this.inventory[5].isItemEqual(eStack))
 				{
 					ItemStack itemstack = new ItemStack(MurderCoins.itemEmeraldCoin, 4);
 					if (this.inventory[7] == null)
@@ -581,13 +515,19 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					{
 						this.inventory[7].stackSize += 4;
 					}
-					this.decrStackSize(5, 1);
-					//this.setGold(goldPerBucket, false);
+					this.decrStackSize(5, 4);
 					this.CPtank.drain(goldPerBucket, true);
 					this.damageItems();
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
+					return;
 				}
-				else if (this.inventory[5].isItemEqual(tStack))
+			}
+			for (int i = 0; i < dList.size(); i++)
+			{
+				ItemStack dStack = dList.get(i);
+				dStack = dStack.copy();
+				dStack.stackSize = 1;
+				if (this.inventory[5].isItemEqual(dStack))
 				{
 					ItemStack itemstack = new ItemStack(MurderCoins.itemDiamondCoin, 4);
 					if (this.inventory[7] == null)
@@ -598,11 +538,11 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 					{
 						this.inventory[7].stackSize += 4;
 					}
-					this.decrStackSize(5, 1);
-					//this.setGold(goldPerBucket, false);
+					this.decrStackSize(5, 4);
 					this.CPtank.drain(goldPerBucket, true);
 					this.damageItems();
 					this.setJoules(this.getJoules() - this.joulesPerSmelt);
+					return;
 				}
 			}
 		}
@@ -829,7 +769,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		{
 			return 0;
 		}
-		//this.didFill = true;
 		return this.CPtank.fill(resource, doFill);
 	}
 
@@ -840,7 +779,8 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	@Override
-	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+	public LiquidStack drain(int tankIndex, int maxDrain, boolean doDrain) 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -878,7 +818,6 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
 	{
-		//return slotID == 3 ? itemStack.getItem() instanceof ItemCoinMold :(slotID == 4 ? itemStack.getItem() instanceof ItemCoinMold: (slotID == 0 ? itemStack.getItem() instanceof IItemElectric :(slotID==6 ? itemStack.getItem() instanceof ItemMeltedBucket: false)));
 		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
 		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
 		ItemStack meltedBuck = new ItemStack(MurderCoins.bucketGold);
