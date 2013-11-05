@@ -1602,7 +1602,7 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		}
 
 		@Override
-		public boolean isStackValidForSlot(int slotID, ItemStack itemStack) 
+		public boolean isItemValidForSlot(int slotID, ItemStack itemStack) 
 		{
 			if(itemStack.getItem() instanceof IItemElectric)
 			{
@@ -1620,7 +1620,7 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 		@Override
 		public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
 		{
-			return isStackValidForSlot(slotID, itemstack);
+			return isItemValidForSlot(slotID, itemstack);
 		}
 
 		@Override
@@ -1871,7 +1871,5 @@ public class tileEntityBasicTrader extends TileEntityAdvanced implements IInvent
 
 			par1NBTTagCompound.setTag("Items", var2);
 		}
-
-
 }
 

@@ -15,20 +15,20 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.block.IElectricityStorage;
+import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityPulverisor extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage
+public class tileEntityPulverisor extends TileEntityElectrical implements IInventory, ISidedInventory, IPacketReceiver, IElectricalStorage
 {
 	public int processTicks = 0;
 	public double joulesStored = 0.0D;
@@ -48,7 +48,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		/**
 	 	* Attempts to charge from battery in slot 1.
 	 	*/
-		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
+		this.setJoules(this.getJoules() + ElectricItemHelper.dischargeItem(this.inventory[0], (float) (this.getMaxJoules() - this.getJoules())));
 		/*
 		 * will attempt to crush the item.
 		 */
@@ -213,13 +213,13 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 			}
 		}
 	}
-	@Override
+	//@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
+		return new ElectricityPack((float) ((this.getMaxJoules() - this.getJoules()) / this.getVoltage()), this.getVoltage());
 	}
 
-	@Override
+	//@Override
 	public void onReceive(ElectricityPack electricityPack)
 	{
 		/**
@@ -236,17 +236,17 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 
 		this.setJoules(this.getJoules() + electricityPack.getWatts());
 	}
-	@Override
+	//@Override
 	public double getJoules()
 	{
 		return this.joulesStored;
 	}
-	@Override
+	//@Override
 	public void setJoules(double joules)
 	{
 		this.joulesStored = Math.max(Math.min(joules, getMaxJoules()), 0);
 	}
-	@Override
+	//@Override
 	public double getMaxJoules() 
 	{
 		return this.maxJoules;
@@ -455,7 +455,7 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 		return false;
 	}
 	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) 
+	public boolean isItemValidForSlot(int slotID, ItemStack itemstack) 
 	{
 		if(itemstack.getItem() instanceof IItemElectric)
 		{
@@ -483,15 +483,30 @@ public class tileEntityPulverisor extends TileEntityElectricityRunnable implemen
 	@Override
 	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
 	{
-		return this.isStackValidForSlot(slotID, itemstack);
+		return this.isItemValidForSlot(slotID, itemstack);
 	}
 	@Override
 	public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
 	{
-		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() == 0) 
+		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getElectricityStored(itemstack) == 0) 
 		{
 			return slotID==0;
 		}
 		return (slotID == 2);
+	}
+	@Override
+	public float getRequest(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getProvide(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMaxEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

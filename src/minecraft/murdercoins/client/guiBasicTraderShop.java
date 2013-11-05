@@ -18,6 +18,7 @@ import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.Icon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipeList;
 
 import org.lwjgl.input.Keyboard;
@@ -32,6 +33,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class guiBasicTraderShop extends GuiContainer 
 {
+	public static final ResourceLocation text = new ResourceLocation("murdercoins","textures/basictradershopgui.png");
 	private int containerWidth;
 	private int containerHeight;
 	private int tradeID;
@@ -400,7 +402,8 @@ public class guiBasicTraderShop extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		this.mc.renderEngine.bindTexture("/mods/MurderCoins/textures/basicTraderShopGui.png");
+		//ResourceLocation text = new ResourceLocation("/mods/MurderCoins/textures/basicTraderShopGui.png");
+		this.mc.renderEngine.bindTexture(text);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		containerWidth = ((this.width - this.xSize) / 2);

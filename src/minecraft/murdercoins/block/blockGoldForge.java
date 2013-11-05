@@ -13,6 +13,7 @@ import  murdercoins.client.Render.RenderGoldForge;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -25,10 +26,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
-import universalelectricity.prefab.implement.IRotatable;
+import universalelectricity.prefab.block.BlockTile;
+import universalelectricity.prefab.tile.IRotatable;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class blockGoldForge extends BlockAdvanced implements IRotatable
+public class blockGoldForge extends BlockTile implements IRotatable
 {
 	private Icon gFTop;
 	private Icon gFSide;
@@ -82,7 +84,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 		 * Called when the block is placed in the world.
 		 */
 		@Override
-		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
+		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack itemStack)
 		{
 		  int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		   switch (angle)
@@ -190,19 +192,7 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 	public TileEntity createNewTileEntity(World var1) {
 		return new tileEntityGoldForge();
 	}
-	@Override
-	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
-	{
-		// TODO Auto-generated method stub
 
-	}
-	
 	/**
 	* The type of render function that is called for this block
 	*/
@@ -228,5 +218,15 @@ public class blockGoldForge extends BlockAdvanced implements IRotatable
 	public boolean renderAsNormalBlock()
 	{
 	return false;
+	}
+	@Override
+	public ForgeDirection getDirection() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void setDirection(ForgeDirection direection) {
+		// TODO Auto-generated method stub
+		
 	}
 }

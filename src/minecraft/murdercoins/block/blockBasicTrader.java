@@ -6,8 +6,10 @@ import murdercoins.common.MurderCoins;
 import murdercoins.tileentity.tileEntityBasicTrader;
 import murdercoins.tileentity.tileEntityBasicVault;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,10 +22,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.block.BlockTile;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.common.FMLCommonHandler;
 
-public class blockBasicTrader extends BlockAdvanced
+public class blockBasicTrader extends BlockTile
 {
 	private String owner;
 	private Icon bTraderTop;
@@ -198,7 +201,7 @@ public class blockBasicTrader extends BlockAdvanced
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack itemStack)
 	{
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		switch (angle)

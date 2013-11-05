@@ -21,9 +21,10 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.block.BlockTile;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class blockFakeBlock extends BlockAdvanced
+public class blockFakeBlock extends BlockTile
 {
 	private Icon fillerTexture;
 	public int TeX;

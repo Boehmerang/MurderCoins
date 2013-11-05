@@ -4,6 +4,7 @@ import murdercoins.container.containerPulverisor;
 import murdercoins.tileentity.tileEntityPulverisor;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -15,6 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class guiPulverisor extends GuiContainer 
 {
+	public static final ResourceLocation text = new ResourceLocation("murdercoins","textures/pulverisorgui.png");
 	private int containerWidth;
 	private int containerHeight;
 	private tileEntityPulverisor tileentity;
@@ -27,14 +29,14 @@ public class guiPulverisor extends GuiContainer
 	}
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String capacityInfo = ElectricityDisplay.getDisplay(this.tileentity.getJoules(), ElectricUnit.JOULES);
+		String capacityInfo = ElectricityDisplay.getDisplay((float) this.tileentity.getJoules(), ElectricUnit.JOULES);
 		String displayText = "";
 		fontRenderer.drawString("Pulverisor", 62, 6, 0xffffff);
-		if (this.tileentity.isDisabled())
+		/*if (this.tileentity.isDisabled())
 		{
 			displayText = "Disabled!";
 		}
-		else if (this.tileentity.processTicks > 0) {
+		else*/ if (this.tileentity.processTicks > 0) {
 			displayText = "Working";
 		}
 		else
@@ -48,10 +50,10 @@ public class guiPulverisor extends GuiContainer
 		}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float par1, int par2,
-			int par3) {
-		this.mc.renderEngine
-				.bindTexture("/mods/MurderCoins/textures/pulverisorGui.png");
+	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
+		
+		//ResourceLocation text = new ResourceLocation("MurderCoins","pulverisorGui.png");
+		this.mc.renderEngine.bindTexture(text);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		containerWidth = (this.width - this.xSize) / 2;

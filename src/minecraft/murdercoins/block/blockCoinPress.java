@@ -12,6 +12,7 @@ import murdercoins.client.Render.BlockRenderingHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -24,9 +25,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.block.BlockTile;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class blockCoinPress extends BlockAdvanced
+public class blockCoinPress extends BlockTile
 {
 	private Icon cPTop;
 	private Icon cPSide;
@@ -72,7 +74,7 @@ public class blockCoinPress extends BlockAdvanced
 	public boolean canPlaceBlockAt(World par1World, int x, int y, int z)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
-		EntityLiving par5EntityLiving = par1World.getClosestPlayer(x, y, z, 10);
+		EntityPlayer par5EntityLiving = par1World.getClosestPlayer(x, y, z, 10);
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 							
 		if(angle == 0)
@@ -111,7 +113,7 @@ public class blockCoinPress extends BlockAdvanced
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack itemStack)
 	{
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		switch (angle)

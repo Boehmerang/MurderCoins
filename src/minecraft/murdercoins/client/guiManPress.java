@@ -4,11 +4,13 @@ import murdercoins.container.containerManPress;
 import murdercoins.tileentity.tileEntityManPress;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 public class guiManPress extends GuiContainer
 {
+	public static final ResourceLocation text = new ResourceLocation("murdercoins","textures/manpressgui.png");
 	private int containerWidth;
 	private int containerHeight;
 	private tileEntityManPress tileentity;
@@ -45,7 +47,8 @@ public class guiManPress extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		this.mc.renderEngine.bindTexture("/mods/MurderCoins/textures/manPressGui.png");
+		//ResourceLocation text = new ResourceLocation("/mods/MurderCoins/textures/manPressGui.png");
+		this.mc.renderEngine.bindTexture(text);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		containerWidth = (this.width - this.xSize) / 2;

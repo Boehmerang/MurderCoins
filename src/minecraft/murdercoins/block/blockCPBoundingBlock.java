@@ -16,8 +16,9 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.prefab.block.BlockAdvanced;
+import universalelectricity.prefab.block.BlockTile;
 
-public class blockCPBoundingBlock extends BlockAdvanced
+public class blockCPBoundingBlock extends BlockTile
 {
 	private Icon fillerTexture;
 

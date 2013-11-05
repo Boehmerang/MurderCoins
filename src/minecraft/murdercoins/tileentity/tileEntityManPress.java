@@ -6,16 +6,14 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRedstoneReceptor;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,7 +35,7 @@ import net.minecraftforge.liquids.LiquidContainerRegistry;
 import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class tileEntityManPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, ITankContainer, IRedstoneReceptor
+public class tileEntityManPress extends TileEntityElectrical implements IInventory, ISidedInventory, IPacketReceiver, ITankContainer//, IRedstoneReceptor
 {
 	public int processTicks = 0;
 	private int playersUsing = 0;
@@ -118,13 +116,13 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		return false;
 	}
 
-	@Override
+	//@Override
 	public ElectricityPack getRequest()
 	{
 		return new ElectricityPack();
 	}
 
-	@Override
+	//@Override
 	public void onReceive(ElectricityPack electricityPack)
 	{
 		/**
@@ -556,7 +554,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	 * the given slot.
 	 */
 	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
+	public boolean isItemValidForSlot(int slotID, ItemStack itemStack)
 	{
 		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
 		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
@@ -622,7 +620,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		return null;
 	}
 
-	@Override
+	//@Override
 	public void onPowerOn()
 	{
 		// TODO Auto-generated method stub
@@ -630,7 +628,7 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 		System.out.println("debug");
 	}
 
-	@Override
+	//@Override
 	public void onPowerOff()
 	{
 		// TODO Auto-generated method stub
@@ -656,12 +654,30 @@ public class tileEntityManPress extends TileEntityElectricityRunnable implements
 	@Override
 	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
 	{
-		return isStackValidForSlot(slotID, itemstack);
+		return isItemValidForSlot(slotID, itemstack);
 	}
 
 	@Override
 	public boolean canExtractItem(int slotID, ItemStack itemstack, int side) 
 	{
 		return (slotID == 0 || slotID == 5);
+	}
+
+	@Override
+	public float getRequest(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getProvide(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMaxEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

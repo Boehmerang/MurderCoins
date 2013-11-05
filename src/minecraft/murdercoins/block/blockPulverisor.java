@@ -7,6 +7,7 @@ import murdercoins.tileentity.tileEntityPulverisor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,10 +20,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.block.BlockAdvanced;
-import universalelectricity.prefab.implement.IRotatable;
+import universalelectricity.prefab.block.BlockTile;
+import universalelectricity.prefab.tile.IRotatable;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 
-public class blockPulverisor extends BlockAdvanced implements IRotatable
+public class blockPulverisor extends BlockTile implements IRotatable
 {
 	private Icon			pTop;
 	private Icon			pSide;
@@ -114,7 +116,7 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack itemStack)
 	{
 		tileEntityPulverisor tileEntity = (tileEntityPulverisor) par1World.getBlockTileEntity(x, y, z);
 		int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
@@ -230,16 +232,17 @@ public class blockPulverisor extends BlockAdvanced implements IRotatable
 	}
 	
 	@Override
-	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
+	public ForgeDirection getDirection()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
-	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
-	{
+	public void setDirection(ForgeDirection direction) {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
 }

@@ -154,7 +154,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	@Override
 	public boolean canInsertItem(int slotID, ItemStack itemstack, int side) 
 	{
-		return isStackValidForSlot(slotID, itemstack);
+		return isItemValidForSlot(slotID, itemstack);
 	}
 
 	@Override
@@ -279,7 +279,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemstack) 
+	public boolean isItemValidForSlot(int slotID, ItemStack itemstack) 
 	{
 		if(slotID >=27 && slotID <= 32) 
 		{
@@ -461,6 +461,7 @@ public class tileEntityBasicVault extends TileEntityAdvanced implements IInvento
 		
 		return false;
 	}
+
 	
 
 }

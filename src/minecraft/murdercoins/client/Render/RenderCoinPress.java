@@ -4,8 +4,10 @@ import org.lwjgl.opengl.GL11;
 
 import murdercoins.client.Model.ModelCoinPress;
 import murdercoins.tileentity.tileEntityCoinPress;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderCoinPress  extends TileEntitySpecialRenderer
 {	
@@ -39,7 +41,7 @@ public class RenderCoinPress  extends TileEntitySpecialRenderer
 				break;
 			}				
 		}
-		bindTextureByName("CoinPress.png"); //texture
+		bindTexture(new ResourceLocation("MurderCoins:CoinPress.png")); //texture
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
@@ -73,7 +75,8 @@ public class RenderCoinPress  extends TileEntitySpecialRenderer
 				break;
 			}				
 		}
-		bindTextureByName("/mods/MurderCoins/textures/models/CoinPress.png"); //texture
+		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("murdercoins","textures/models/coinpress.png"));
+		//bindTexture(new ResourceLocation("/assets/MurderCoins/textures/models/CoinPress.png")); //texture
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float)d0 + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);

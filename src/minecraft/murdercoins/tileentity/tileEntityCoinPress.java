@@ -2,7 +2,6 @@ package murdercoins.tileentity;
 
 import java.util.ArrayList;
 
-import mekanism.api.ITubeConnection;
 import murdercoins.common.Config;
 import murdercoins.common.MurderCoins;
 import murdercoins.common.helpers.IItemDust;
@@ -29,7 +28,7 @@ import net.minecraftforge.liquids.LiquidStack;
 import net.minecraftforge.liquids.LiquidTank;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.block.IElectricityStorage;
+import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
@@ -37,13 +36,13 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-public class tileEntityCoinPress extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, ITankContainer, ITubeConnection
+public class tileEntityCoinPress extends TileEntityElectrical implements IInventory, ISidedInventory, IPacketReceiver, IElectricalStorage, ITankContainer//, ITubeConnection
 {
 	public int processTicks = 0;
 	public int tankWarmingTicks = 0;										// # of ticks machine has been in "warming state"
@@ -89,7 +88,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		/**
 		 * Attempts to charge from battery in slot 1.
 		 */
-		this.setJoules(this.getJoules() + ElectricItemHelper.dechargeItem(this.inventory[0], this.getMaxJoules() - this.getJoules(), this.getVoltage()));
+		this.setJoules(this.getJoules() + ElectricItemHelper.dischargeItem(this.inventory[0], (float) (this.getMaxJoules() - this.getJoules())));
 
 		
 		/**
@@ -256,13 +255,11 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	}
 
 	
-	@Override
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
+		return new ElectricityPack((float) ((this.getMaxJoules() - this.getJoules()) / this.getVoltage()), this.getVoltage());
 	}
 
-	@Override
 	public void onReceive(ElectricityPack electricityPack)
 	{
 		/**
@@ -279,6 +276,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 
 		this.setJoules(this.getJoules() + electricityPack.getWatts());
 	}
+	
 	public LiquidStack getStoredGold()
 	{
 		return CPtank.getLiquid();
@@ -734,19 +732,19 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		return true;
 	}
 
-	@Override
+	//@Override
 	public double getJoules()
 	{
 		return this.joulesStored;
 	}
 
-	@Override
+	//@Override
 	public void setJoules(double joules)
 	{
 		this.joulesStored = Math.max(Math.min(joules, getMaxJoules()), 0);
 	}
 
-	@Override
+	//@Override
 	public double getMaxJoules()
 	{
 		return this.maxJoules;
@@ -805,7 +803,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 		return null;
 	}
 
-	@Override
+	//@Override
 	public boolean canTubeConnect(ForgeDirection side) 
 	{
 		return true;
@@ -816,7 +814,7 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	 * the given slot.
 	 */
 	@Override
-	public boolean isStackValidForSlot(int slotID, ItemStack itemStack)
+	public boolean isItemValidForSlot(int slotID, ItemStack itemStack)
 	{
 		ArrayList<ItemStack> dList = OreDictionary.getOres("dustDiamond");
 		ArrayList<ItemStack> eList = OreDictionary.getOres("dustEmerald");
@@ -867,16 +865,34 @@ public class tileEntityCoinPress extends TileEntityElectricityRunnable implement
 	@Override
 	public boolean canInsertItem(int slotID, ItemStack itemstack, int side)
 	{
-		return isStackValidForSlot(slotID, itemstack);
+		return isItemValidForSlot(slotID, itemstack);
 	}
 
 	@Override
 	public boolean canExtractItem(int slotID, ItemStack itemstack, int side)
 	{
-		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getProvideRequest(itemstack).getWatts() == 0) 
+		if (itemstack.getItem() instanceof IItemElectric && ((IItemElectric)itemstack.getItem()).getElectricityStored(itemstack) == 0) 
 		{
 			return slotID==0;
 		}
 		return (slotID == 2 || slotID == 7);
+	}
+
+	@Override
+	public float getRequest(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getProvide(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public float getMaxEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

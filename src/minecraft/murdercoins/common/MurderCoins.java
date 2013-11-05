@@ -2,7 +2,6 @@ package murdercoins.common;
 
 import java.io.File;
 
-import basiccomponents.common.BasicComponents;
 
 import murdercoins.block.blockBasicTrader;
 import murdercoins.block.blockBasicVault;
@@ -222,12 +221,13 @@ public class MurderCoins
 		System.out.println("MurderCoins" + ": Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
 	}
 	
+	/*
 	private void requestFromBC()
 	{	
 		
 		BasicComponents.requestAll();
 		BasicComponents.register(this, "MurderCoins");
-	}
+	}*/
 
 	private void chestHooks()
 	{
@@ -397,7 +397,7 @@ public class MurderCoins
 		}
 		else if (!MinecraftServer.getServer().isDedicatedServer())
 		{
-			folderDir = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "BiotechLanguages";
+			folderDir = Minecraft.getMinecraft() + File.separator + "mods" + File.separator + "BiotechLanguages";
 		}
 		
 		File folder = new File(folderDir);

@@ -5,7 +5,9 @@ import murdercoins.block.blockGoldForge;
 import murdercoins.client.Model.ModelCoinPress;
 import murdercoins.client.Model.ModelGoldForge;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -34,7 +36,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 
 			if (block instanceof blockGoldForge)
 			{   
-		        GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/GoldForge.png"));
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("murdercoins","textures/models/goldforge.png"));
+		        //GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(new ResourceLocation("murdercoins","textures/models/goldforge.png")));
 				GL11.glTranslatef((float) 0.0F, (float) 0.3F, (float) 0.0F);
 				GL11.glRotatef(180f, 90f, 0f, 1f);
 		        goldForge.render(0.0400F);
@@ -42,7 +45,8 @@ public class BlockRenderingHandler implements ISimpleBlockRenderingHandler
 			}
 			else if (block instanceof blockCoinPress)
 			{
-		        GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture("/mods/MurderCoins/textures/models/CoinPress.png"));
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("murdercoins","textures/models/coinpress.png"));
+		        //GL11.glBindTexture(GL11.GL_TEXTURE_2D, FMLClientHandler.instance().getClient().renderEngine.getTexture(new ResourceLocation("murdercoins","textures/models/coinpress.png")));
 		        GL11.glTranslatef((float)-1.F, (float)1.2F, (float)0.5F);
 		        GL11.glRotatef(180f, 180.0F, 1.0F, 0.0F);
 				coinPress.render(0.0400F);

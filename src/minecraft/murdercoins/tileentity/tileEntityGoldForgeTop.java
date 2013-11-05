@@ -6,9 +6,9 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 
-public class tileEntityGoldForgeTop extends TileEntityElectricityRunnable
+public class tileEntityGoldForgeTop extends TileEntityElectrical
 {
 	TileEntity mainTE;	
 	public tileEntityGoldForgeTop()
@@ -31,19 +31,19 @@ public class tileEntityGoldForgeTop extends TileEntityElectricityRunnable
 		}
 		return false;
 	}
-	@Override
+	//@Override
 	public ElectricityPack getRequest()
 	{
 		ForgeDirection orientation = ForgeDirection.getOrientation(0);
 		TileEntity tileentity = VectorHelper.getTileEntityFromSide(worldObj, new Vector3(xCoord, yCoord, zCoord), orientation);
 		if (tileentity instanceof tileEntityGoldForge)
 		{
-			return new ElectricityPack((((tileEntityGoldForge)tileentity).getMaxJoules() - ((tileEntityGoldForge)tileentity).getJoules()) / ((tileEntityGoldForge)tileentity).getVoltage(), ((tileEntityGoldForge)tileentity).getVoltage());
+			return new ElectricityPack((float) ((((tileEntityGoldForge)tileentity).getMaxJoules() - ((tileEntityGoldForge)tileentity).getJoules()) / ((tileEntityGoldForge)tileentity).getVoltage()), ((tileEntityGoldForge)tileentity).getVoltage());
 		}
 		return new ElectricityPack();
 	}
 
-	@Override
+	//@Override
 	public void onReceive(ElectricityPack electricityPack)
 	{
 		/**
@@ -63,5 +63,20 @@ public class tileEntityGoldForgeTop extends TileEntityElectricityRunnable
 		{
 			((tileEntityGoldForge)tileentity).setJoules(((tileEntityGoldForge)tileentity).getJoules() + electricityPack.getWatts());
 		}
+	}
+	@Override
+	public float getRequest(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getProvide(ForgeDirection direction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public float getMaxEnergyStored() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
